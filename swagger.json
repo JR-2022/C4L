@@ -4109,41 +4109,6 @@
             "$ref": "#/components/responses/DefaultErrorResponse"
           }
         }
-      },
-      "post": {
-        "summary": "Create organization",
-        "description": "Create a new organization.\n",
-        "operationId": "postOrganization",
-        "x-dls-requiredUserPermission": "organization_create",
-        "tags": [
-          "organizations",
-          "administration"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PostOrganizationRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Created organization",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Organization"
-                }
-              }
-            }
-          },
-          "default": {
-            "$ref": "#/components/responses/DefaultErrorResponse"
-          }
-        }
       }
     },
     "/organizations/{organizationKey}": {
@@ -4393,6 +4358,95 @@
         "responses": {
           "204": {
             "description": "The user password was reset with the provided password.\nAny active session is removed.\n"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/service-provider/organizations": {
+      "post": {
+        "summary": "Create organization",
+        "description": "Create a new organization and the first admin for this organization.\nThis endpoint is for the service provider.\n",
+        "operationId": "postServiceProviderOrganization",
+        "x-dls-requiredUserPermission": "service_provider_organizations_create",
+        "tags": [
+          "service provider"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostOrganizationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Organization and admin user created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      },
+      "get": {
+        "summary": "get list of all organizations on the platform",
+        "description": "Get a list of all organizations that are on the platform.\n",
+        "operationId": "getServiceProviderOrganizations",
+        "x-dls-requiredUserPermission": "service_provider_organizations_read",
+        "tags": [
+          "service provider"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all organizations on the platform.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organizations"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/service-provider/organizations/{organizationKey}": {
+      "patch": {
+        "summary": "Update organization",
+        "description": "Update a organization. All properties are optional.\nThe property phone numbers is replaced with the new property.\n",
+        "operationId": "patchServiceProviderOrganization",
+        "x-dls-requiredUserPermission": "service_provider_organizations_update",
+        "tags": [
+          "service provider"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchServiceProviderOrganizationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The Organization was updated."
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -4761,7 +4815,7 @@
     "/organization-sites/{organizationSiteKey}/consignee/tours": {
       "get": {
         "summary": "Get tour list as consignee",
-        "description": "Get overview list of all tors from a consignee.\n",
+        "description": "Get overview list of all tours from a consignee.\n",
         "operationId": "getConsigneeTours",
         "x-dls-requiredOrganizationSitePermission": "consignee_tour_read",
         "tags": [
@@ -4778,7 +4832,41 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetConsigneeTourOverview"
+                  "$ref": "#/components/schemas/GetConsigneeTours"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/consignee/tours/{tourKey}": {
+      "get": {
+        "summary": "Get a tour as consignee",
+        "description": "Get a specific tour by the tourKey from a consignee.\n",
+        "operationId": "getConsigneeTour",
+        "x-dls-requiredOrganizationSitePermission": "consignee_tour_read",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/tourKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result from operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTourResponse"
                 }
               }
             }
@@ -5597,10 +5685,7 @@
             }
           },
           "organizations": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Organization"
-            }
+            "$ref": "#/components/schemas/Organizations"
           }
         }
       },
@@ -6692,60 +6777,136 @@
         "additionalProperties": false,
         "required": [
           "_key",
+          "dateCreated",
           "name",
-          "gln",
           "address",
-          "color",
+          "gln",
+          "phoneNumbers",
           "sites"
         ],
         "properties": {
           "_key": {
             "$ref": "#/components/schemas/KeyType"
           },
-          "name": {
-            "type": "string"
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
           },
-          "gln": {
-            "type": "string"
+          "name": {
+            "$ref": "#/components/schemas/NameType"
           },
           "address": {
-            "type": "string"
+            "$ref": "#/components/schemas/NameType"
           },
-          "color": {
-            "$ref": "#/components/schemas/ColorType"
+          "gln": {
+            "$ref": "#/components/schemas/NameType"
           },
-          "permissions": {
-            "$ref": "#/components/schemas/OrganizationPermissionsType"
+          "phoneNumbers": {
+            "type": "array",
+            "items": {
+              "minItems": 1,
+              "$ref": "#/components/schemas/NameType"
+            }
           },
           "sites": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/OrganizationSite"
             }
+          },
+          "contact": {
+            "type": "object"
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/OrganizationPermissionsType"
           }
+        }
+      },
+      "Organizations": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Organization"
         }
       },
       "PostOrganizationRequest": {
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "name",
-          "gln",
-          "address"
+          "organization",
+          "adminUser"
         ],
         "properties": {
-          "name": {
-            "type": "string"
+          "organization": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "address",
+              "gln",
+              "phoneNumbers"
+            ],
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/NameType"
+              },
+              "address": {
+                "$ref": "#/components/schemas/NameType"
+              },
+              "gln": {
+                "$ref": "#/components/schemas/NameType"
+              },
+              "phoneNumbers": {
+                "type": "array",
+                "items": {
+                  "minItems": 1,
+                  "$ref": "#/components/schemas/NameType"
+                }
+              }
+            }
           },
-          "gln": {
-            "type": "string"
+          "adminUser": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "emailAddress"
+            ],
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/NameType"
+              },
+              "emailAddress": {
+                "$ref": "#/components/schemas/EmailAddressType"
+              }
+            }
           },
-          "address": {
-            "type": "string"
-          },
-          "color": {
-            "$ref": "#/components/schemas/ColorType",
-            "default": "#ea0a8e"
+          "contact": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "address",
+              "emailAddress",
+              "phoneNumbers"
+            ],
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/NameType"
+              },
+              "address": {
+                "$ref": "#/components/schemas/NameType"
+              },
+              "emailAddress": {
+                "$ref": "#/components/schemas/EmailAddressType",
+                "default": ""
+              },
+              "phoneNumbers": {
+                "type": "array",
+                "items": {
+                  "minItems": 1,
+                  "$ref": "#/components/schemas/NameType"
+                }
+              }
+            }
           }
         }
       },
@@ -6764,6 +6925,28 @@
           },
           "color": {
             "$ref": "#/components/schemas/ColorType"
+          }
+        }
+      },
+      "PatchServiceProviderOrganizationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "address": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "gln": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "phoneNumbers": {
+            "type": "array",
+            "items": {
+              "minItems": 1,
+              "$ref": "#/components/schemas/NameType"
+            }
           }
         }
       },
@@ -7873,7 +8056,7 @@
           "$ref": "#/components/schemas/TourResponse"
         }
       },
-      "GetConsigneeTourOverview": {
+      "GetConsigneeTours": {
         "type": "array",
         "items": {
           "type": "object",
@@ -8237,7 +8420,8 @@
       },
       "NameType": {
         "type": "string",
-        "maxLength": 1024
+        "maxLength": 1024,
+        "default": ""
       },
       "NameArrayType": {
         "type": "array",
@@ -8319,7 +8503,8 @@
       },
       "ColorType": {
         "type": "string",
-        "pattern": "^#[0-9a-f]{6}$"
+        "pattern": "^#[0-9a-f]{6}$",
+        "default": "ffffff"
       },
       "PermissionsType": {
         "description": "for detailed permission descriptions consult the documentation",
@@ -8333,6 +8518,18 @@
         "type": "object",
         "additionalProperties": true,
         "properties": {
+          "service_provider_organizations_create": {
+            "type": "boolean",
+            "description": "This permission is needed to create organizations"
+          },
+          "service_provider_organizations_read": {
+            "type": "boolean",
+            "description": "This permission is needed to read organizations"
+          },
+          "service_provider_organizations_update": {
+            "type": "boolean",
+            "description": "This permission is needed to update organizations"
+          },
           "organization_read": {
             "type": "boolean",
             "description": "This permission is need for reading all own organizations"
@@ -8340,10 +8537,6 @@
           "user_read": {
             "type": "boolean",
             "description": "This permission is need for getting information of users"
-          },
-          "organization_create": {
-            "type": "boolean",
-            "description": "This permission is need for creating new organizations"
           },
           "user_permissions_modify": {
             "type": "boolean",
