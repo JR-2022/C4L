@@ -1,4 +1,4 @@
-# C4L- Cloud4Log - pre-release v0.1.0
+# C4L- Cloud4Log
 ## Share delivery notes with partners via an API solution (Paperless)!
 ## Make delivery notes visible / usable in digital format in the cloud for partners of your logistics processes.
  
