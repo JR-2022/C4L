@@ -13,7 +13,7 @@ In the API, you can set up and use the following roles and functions:
 3. consignee/ receiver, stationary trade
 ### Functions of a company or location:
 - Outgoing goods (consignor)
-- Forwarding agent / contract logistics
+- Carrier / contract logistics
 - Logistician / Driver
 - Incoming goods (consignee)
 ### Roles: 
