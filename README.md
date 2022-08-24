@@ -21,3 +21,5 @@ In the API, you can set up and use the following roles and functions:
 * Admin Location
 * User OU or location
 * Driver / carrier
+
+You can find a solution overwiew at: [Systemüberblick],(https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1&title=C4l%20Systemdesign.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1ZgyjjVKgR4EoMwbgwfXX4AM-fBNV5M0A%26export%3Ddownload)
