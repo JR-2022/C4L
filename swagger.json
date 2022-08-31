@@ -512,6 +512,178 @@
         }
       }
     },
+    "/administration/organizations/{organizationKey}/api-keys": {
+      "post": {
+        "summary": "creates a API key",
+        "description": "Creates an API user for the specified organization sites with\nthe specified permissions.\nReturns a sessionId that can't received a second time.\n",
+        "operationId": "createApiKeyForOrganizationSites",
+        "x-dls-requiredOrganizationPermission": "api_keys_create",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "API key successful created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostApiUserResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get list of all API keys for organization",
+        "description": "Get a list of all API keys for the given organization\n",
+        "operationId": "getApiKeysForOrganization",
+        "x-dls-requiredOrganizationPermission": "api_keys_read",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result from operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiUsers"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organizations/{organizationKey}/api-keys/{userKey}": {
+      "put": {
+        "summary": "Set new permissions for API key",
+        "description": "New permissions are set based on the given roles and organization sites.\nYou can also edit the API key user properties.\n",
+        "operationId": "putApiKeyForOrganization",
+        "x-dls-requiredOrganizationPermission": "api_keys_modify",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/userKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "API key successfully patched"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organizations/{organizationKey}/users": {
+      "get": {
+        "summary": "Get organization users information",
+        "description": "Return all users of an organization. The organization must\nbelong to the calling user.\nPermissions are returned.\n",
+        "operationId": "getAdministrationOrganizationUsers",
+        "x-dls-requiredOrganizationPermission": "administration_users_read",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All users of the requested organization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdministrationUsersInformation"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organizations/{organizationKey}/users/{userKey}": {
+      "get": {
+        "summary": "Get information details for one organization user",
+        "description": "Return one user of an organization. The organization must\nbelong to the calling user.\nPermissions are returned.\n",
+        "operationId": "getAdministrationOrganizationUser",
+        "x-dls-requiredOrganizationPermission": "administration_users_read",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/userKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All users of the requested organization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdministrationUserDetails"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/organization-sites/{organizationSiteKey}/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/attachments/file/{fileName}": {
       "post": {
         "description": "Add a new attachment to a existing delivery note.\nThe delivery note bundle must be in status 'open'.\nAccepted Formats are jpg, png, heic and heif.\n",
@@ -2022,7 +2194,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConsigneeDeliveryNotesInPool"
+                  "$ref": "#/components/schemas/CarrierDeliveryNotesInPool"
                 }
               }
             }
@@ -4299,7 +4471,7 @@
     "/service-provider/organizations": {
       "post": {
         "summary": "Create organization",
-        "description": "Create a new organization and the first admin for this organization.\nThis endpoint is for the service provider.\n",
+        "description": "Create a new organization and the first admin for this organization.\nThis endpoint is for the service provider.\nThe quotas are returned.\n",
         "operationId": "postServiceProviderOrganization",
         "x-dls-requiredUserPermission": "service_provider_organizations_create",
         "tags": [
@@ -4333,7 +4505,7 @@
       },
       "get": {
         "summary": "get list of all organizations on the platform",
-        "description": "Get a list of all organizations that are on the platform.\n",
+        "description": "Get a list of all organizations that are on the platform.\nThe quotas are returned.\n",
         "operationId": "getServiceProviderOrganizations",
         "x-dls-requiredUserPermission": "service_provider_organizations_read",
         "tags": [
@@ -4842,19 +5014,14 @@
         }
       }
     },
-    "/users/{userKey}": {
+    "/me": {
       "get": {
-        "summary": "Get information of user",
-        "description": "Get user information.\nYou can only read the users you have access via an organization.\n",
-        "operationId": "getUser",
-        "x-dls-requiredUserPermission": "user_read",
+        "summary": "Get information of user the logged in user",
+        "description": "Get user information of the logged in user.\n",
+        "operationId": "getMe",
+        "x-dls-requiredUserPermission": "user_me_read",
         "tags": [
           "users"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/userKeyParam"
-          }
         ],
         "responses": {
           "200": {
@@ -5776,6 +5943,90 @@
           }
         }
       },
+      "ApiUserRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Post Api key",
+        "required": [
+          "organizationSiteKeys",
+          "roles",
+          "emailAddress",
+          "dateExpired",
+          "fullName"
+        ],
+        "properties": {
+          "organizationSiteKeys": {
+            "$ref": "#/components/schemas/KeyArrayType"
+          },
+          "roles": {
+            "$ref": "#/components/schemas/UserRolesArray"
+          },
+          "emailAddress": {
+            "$ref": "#/components/schemas/EmailAddressType"
+          },
+          "dateExpired": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "fullName": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
+      "PostApiUserResponse": {
+        "type": "object",
+        "required": [
+          "sessionId"
+        ],
+        "properties": {
+          "sessionId": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
+      "ApiUser": {
+        "type": "object",
+        "required": [
+          "_key",
+          "dateCreated",
+          "dateExpired",
+          "emailAddress",
+          "fullName",
+          "roles",
+          "sites"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "emailAddress": {
+            "$ref": "#/components/schemas/EmailAddressType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateExpired": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "fullName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "roles": {
+            "$ref": "#/components/schemas/UserRolesArray"
+          },
+          "sites": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrganizationSiteWithRoles"
+            }
+          }
+        }
+      },
+      "ApiUsers": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ApiUser"
+        }
+      },
       "SupplyChain": {
         "type": "object",
         "additionalProperties": false,
@@ -6340,7 +6591,8 @@
           "discrepancies",
           "palletTickets",
           "consignorLoadCarrierExchange",
-          "consigneeLoadCarrierExchange"
+          "consigneeLoadCarrierExchange",
+          "areDeliveryNotesNotInTours"
         ],
         "properties": {
           "_key": {
@@ -6402,6 +6654,9 @@
             "type": "boolean"
           },
           "consigneeLoadCarrierExchange": {
+            "type": "boolean"
+          },
+          "areDeliveryNotesNotInTours": {
             "type": "boolean"
           }
         }
@@ -6757,6 +7012,117 @@
           "$ref": "#/components/schemas/ConsigneeDeliveryNoteInPool"
         }
       },
+      "CarrierDeliveryNoteInPool": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "dateCreated",
+          "dateShipped",
+          "dateReceived",
+          "fileName",
+          "number",
+          "loadCarriers",
+          "discrepancies",
+          "fineDiscrepancies",
+          "palletTickets",
+          "consignorLoadCarrierImages",
+          "consigneeLoadCarrierImages",
+          "consignorLoadCarrierExchange",
+          "consigneeLoadCarrierExchange",
+          "partOfTour",
+          "consignorName",
+          "carrierName",
+          "consigneeName",
+          "deliveryNoteBundleKey",
+          "deliveryNoteBundleName",
+          "deliveryNoteBundleStatus",
+          "checkinKey"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateShipped": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateReceived": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "fileName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "announcedDate": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "orderNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "number": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "loadCarriers": {
+            "$ref": "#/components/schemas/LoadCarriers"
+          },
+          "discrepancies": {
+            "type": "boolean"
+          },
+          "fineDiscrepancies": {
+            "type": "boolean"
+          },
+          "palletTickets": {
+            "type": "boolean"
+          },
+          "consignorLoadCarrierImages": {
+            "type": "boolean"
+          },
+          "consigneeLoadCarrierImages": {
+            "type": "boolean"
+          },
+          "consignorLoadCarrierExchange": {
+            "type": "boolean"
+          },
+          "consigneeLoadCarrierExchange": {
+            "type": "boolean"
+          },
+          "partOfTour": {
+            "type": "boolean"
+          },
+          "consignorName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "carrierName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "consigneeName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "deliveryNoteBundleKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "deliveryNoteBundleName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "deliveryNoteBundleStatus": {
+            "enum": [
+              "sent",
+              "closed"
+            ]
+          },
+          "checkinKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          }
+        }
+      },
+      "CarrierDeliveryNotesInPool": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/CarrierDeliveryNoteInPool"
+        }
+      },
       "Organization": {
         "type": "object",
         "description": "one organization the user belongs to",
@@ -6788,8 +7154,8 @@
           },
           "phoneNumbers": {
             "type": "array",
+            "minItems": 1,
             "items": {
-              "minItems": 1,
               "$ref": "#/components/schemas/NameType"
             }
           },
@@ -6801,6 +7167,9 @@
           },
           "contact": {
             "type": "object"
+          },
+          "quotas": {
+            "$ref": "#/components/schemas/Quotas"
           },
           "permissions": {
             "$ref": "#/components/schemas/OrganizationPermissionsType"
@@ -6828,7 +7197,8 @@
               "name",
               "address",
               "gln",
-              "phoneNumbers"
+              "phoneNumbers",
+              "quotas"
             ],
             "properties": {
               "name": {
@@ -6842,10 +7212,13 @@
               },
               "phoneNumbers": {
                 "type": "array",
+                "minItems": 1,
                 "items": {
-                  "minItems": 1,
                   "$ref": "#/components/schemas/NameType"
                 }
+              },
+              "quotas": {
+                "$ref": "#/components/schemas/Quotas"
               }
             }
           },
@@ -6866,33 +7239,85 @@
             }
           },
           "contact": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "name",
-              "address",
-              "emailAddress",
-              "phoneNumbers"
-            ],
-            "properties": {
-              "name": {
-                "$ref": "#/components/schemas/NameType"
-              },
-              "address": {
-                "$ref": "#/components/schemas/NameType"
-              },
-              "emailAddress": {
-                "$ref": "#/components/schemas/EmailAddressType",
-                "default": ""
-              },
-              "phoneNumbers": {
-                "type": "array",
-                "items": {
-                  "minItems": 1,
-                  "$ref": "#/components/schemas/NameType"
-                }
-              }
+            "$ref": "#/components/schemas/ServiceProviderOrganizationContact"
+          }
+        }
+      },
+      "ServiceProviderOrganizationContact": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "address",
+          "emailAddress",
+          "phoneNumbers"
+        ],
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "address": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "emailAddress": {
+            "$ref": "#/components/schemas/EmailAddressType",
+            "default": ""
+          },
+          "phoneNumbers": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/NameType"
             }
+          }
+        }
+      },
+      "Quotas": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "quotas per organization",
+        "required": [
+          "maxUsers",
+          "maxOrganizationSites",
+          "maxDeliveryNotesPerMonth",
+          "maxDeliveryNoteAttachments",
+          "maxBundlesPerMonth",
+          "maxCheckoutsPerMonth",
+          "maxToursPerMonth",
+          "maxCheckinsPerMonth"
+        ],
+        "properties": {
+          "maxUsers": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxOrganizationSites": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxDeliveryNotesPerMonth": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxDeliveryNoteAttachments": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxBundlesPerMonth": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxCheckoutsPerMonth": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxToursPerMonth": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxCheckinsPerMonth": {
+            "type": "number",
+            "minimum": 0
           }
         }
       },
@@ -6929,10 +7354,16 @@
           },
           "phoneNumbers": {
             "type": "array",
+            "minItems": 1,
             "items": {
-              "minItems": 1,
               "$ref": "#/components/schemas/NameType"
             }
+          },
+          "contact": {
+            "$ref": "#/components/schemas/ServiceProviderOrganizationContact"
+          },
+          "quotas": {
+            "$ref": "#/components/schemas/Quotas"
           }
         }
       },
@@ -6977,6 +7408,57 @@
           },
           "consignee": {
             "type": "boolean"
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/OrganizationSitePermissionsType"
+          }
+        }
+      },
+      "OrganizationSiteWithRoles": {
+        "type": "object",
+        "description": "one site of an organization",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "address",
+          "gln",
+          "name",
+          "phoneNumbers",
+          "consignor",
+          "carrier",
+          "consignee",
+          "roles"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "address": {
+            "type": "string"
+          },
+          "gln": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phoneNumbers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "consignor": {
+            "type": "boolean"
+          },
+          "carrier": {
+            "type": "boolean"
+          },
+          "consignee": {
+            "type": "boolean"
+          },
+          "roles": {
+            "$ref": "#/components/schemas/UserRolesArray"
           },
           "permissions": {
             "$ref": "#/components/schemas/OrganizationSitePermissionsType"
@@ -7377,6 +7859,7 @@
         "additionalProperties": false,
         "required": [
           "_key",
+          "dateCreated",
           "fullName",
           "emailAddress"
         ],
@@ -7384,14 +7867,162 @@
           "_key": {
             "$ref": "#/components/schemas/KeyType"
           },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
           "fullName": {
-            "type": "string"
+            "$ref": "#/components/schemas/NameType"
           },
           "emailAddress": {
-            "type": "string"
+            "$ref": "#/components/schemas/EmailAddressType"
           },
           "permissions": {
             "$ref": "#/components/schemas/UserPermissionsType"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UsersInformation": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/UserInformation"
+        }
+      },
+      "AdministrationUserInformation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "dateCreated",
+          "fullName",
+          "emailAddress",
+          "numberOfOrganizationSites",
+          "hasRoleOrganizationAdministrator",
+          "hasRoleSiteAdministrator"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "fullName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "emailAddress": {
+            "$ref": "#/components/schemas/EmailAddressType"
+          },
+          "numberOfOrganizationSites": {
+            "type": "number",
+            "minimum": 0
+          },
+          "hasRoleOrganizationAdministrator": {
+            "type": "boolean"
+          },
+          "hasRoleSiteAdministrator": {
+            "type": "boolean"
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/UserPermissionsType"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "AdministrationUsersInformation": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/AdministrationUserInformation"
+        }
+      },
+      "AdministrationUserDetails": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "dateCreated",
+          "fullName",
+          "emailAddress",
+          "organizationSites",
+          "organizationRoles"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "fullName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "emailAddress": {
+            "$ref": "#/components/schemas/EmailAddressType"
+          },
+          "organizationSites": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "_key",
+                "dateCreated",
+                "name",
+                "gln",
+                "roles"
+              ],
+              "properties": {
+                "_key": {
+                  "$ref": "#/components/schemas/KeyType"
+                },
+                "dateCreated": {
+                  "$ref": "#/components/schemas/TimestampType"
+                },
+                "name": {
+                  "$ref": "#/components/schemas/NameType"
+                },
+                "gln": {
+                  "$ref": "#/components/schemas/NameType"
+                },
+                "roles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "permissions": {
+                  "$ref": "#/components/schemas/UserPermissionsType"
+                }
+              }
+            }
+          },
+          "organizationRoles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/UserPermissionsType"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "organizationPermissions": {
+            "$ref": "#/components/schemas/OrganizationPermissionsType"
           }
         }
       },
@@ -8554,431 +9185,830 @@
         }
       },
       "UserPermissionsType": {
-        "description": "All user permissions and if user has this permission. This permissions are set directly to the user and operate globally.",
+        "description": "All user permissions. If set to true user has this permission. This permissions are set directly to the user and operate globally.",
         "type": "object",
         "additionalProperties": true,
         "properties": {
           "service_provider_organizations_create": {
             "type": "boolean",
-            "description": "This permission is needed to create organizations"
+            "description": "This permission is needed to create organizations",
+            "x-roles": [
+              "service_provider"
+            ]
           },
           "service_provider_organizations_read": {
             "type": "boolean",
-            "description": "This permission is needed to read organizations"
+            "description": "This permission is needed to read organizations",
+            "x-roles": [
+              "service_provider"
+            ]
           },
           "service_provider_organizations_update": {
             "type": "boolean",
-            "description": "This permission is needed to update organizations"
+            "description": "This permission is needed to update organizations",
+            "x-roles": [
+              "service_provider"
+            ]
           },
           "organization_read": {
             "type": "boolean",
-            "description": "This permission is need for reading all own organizations"
+            "description": "This permission is needed for reading all own organizations",
+            "x-roles": [
+              "service_provider",
+              "organization_admin",
+              "site_admin",
+              "consignor",
+              "carrier",
+              "consignee"
+            ]
           },
           "user_read": {
             "type": "boolean",
-            "description": "This permission is need for getting information of users"
+            "description": "This permission is need for getting information of users",
+            "x-roles": [
+              "organization_admin"
+            ]
           },
           "user_permissions_modify": {
             "type": "boolean",
-            "description": "This permission is need for modifying permissions of a user"
+            "description": "This permission is needed for modifying permissions of a user",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
           },
           "user_modify": {
             "type": "boolean",
-            "description": "This permission is need for modifying basic global user information, like name, password or email"
+            "description": "This permission is needed for modifying basic global user information, like name, password or email (of own user)",
+            "x-roles": [
+              "service_provider",
+              "organization_admin",
+              "site_admin",
+              "consignor",
+              "carrier",
+              "consignee"
+            ]
           },
           "user_signature_replace": {
             "type": "boolean",
-            "description": "This permission is need to replace the user signature"
+            "description": "This permission is needed to replace the user signature",
+            "x-roles": [
+              "consignee"
+            ]
           },
           "user_signature_read": {
             "type": "boolean",
-            "description": "This permission is need to read the user signature"
+            "description": "This permission is needed to read the user signature",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "user_me_read": {
+            "type": "boolean",
+            "description": "This permission is needed to read the own user information",
+            "x-roles": [
+              "service_provider",
+              "organization_admin",
+              "site_admin",
+              "consignee",
+              "carrier",
+              "consignor",
+              "remote_consignor",
+              "remote_carrier",
+              "remote_consignee"
+            ]
           }
         }
       },
       "OrganizationPermissionsType": {
-        "description": "all organization permissions and if user has this permission for the organization",
+        "description": "all organization permissions. If set to true user has this permission for the organization",
         "type": "object",
         "additionalProperties": true,
         "properties": {
+          "administration_users_read": {
+            "type": "boolean",
+            "description": "This permission is needed to get all users of the calling user's organization"
+          },
           "loadcarrier_templates_read": {
             "type": "boolean",
-            "description": "This permission is need for getting all permitted load carrier types"
+            "description": "This permission is needed for getting all permitted load carrier types",
+            "x-roles": [
+              "service_provider",
+              "organization_admin",
+              "consignor",
+              "consignee",
+              "remote_consignor",
+              "remote_consignee"
+            ]
           },
           "loadcarrier_templates_create": {
             "type": "boolean",
-            "description": "This permission is need for creating a new load carrier type"
+            "description": "This permission is need for creating a new load carrier type",
+            "x-roles": [
+              "service_provider"
+            ]
           },
           "loadcarrier_templates_modify": {
             "type": "boolean",
-            "description": "This permission is need for modifying a load carrier type"
+            "description": "This permission is needed for modifying a load carrier type",
+            "x-roles": [
+              "service_provider"
+            ]
           },
           "loadcarrier_templates_delete": {
             "type": "boolean",
-            "description": "This permission is need for deleting a load carrier type"
+            "description": "This permission is needed for deleting a load carrier type",
+            "x-roles": [
+              "service_provider"
+            ]
           },
           "organization_read": {
             "type": "boolean",
-            "description": "This permission is need for reading this organization"
+            "description": "This permission is needed for reading this organization",
+            "x-roles": [
+              "service_provider",
+              "organization_admin"
+            ]
           },
           "organization_modify": {
             "type": "boolean",
-            "description": "This permission is need for modifying the specific organization"
+            "description": "This permission is needed for modifying the specific organization",
+            "x-roles": [
+              "service_provider"
+            ]
           },
           "organization_delete": {
             "type": "boolean",
-            "description": "This permission is need for deleting the specific organization"
+            "description": "This permission is needed for deleting the specific organization",
+            "x-roles": [
+              "service_provider"
+            ]
           },
           "organization_site_create": {
             "type": "boolean",
-            "description": "This permission is need for creating new sites for the organization"
+            "description": "This permission is needed for creating new sites for the organization",
+            "x-roles": [
+              "organization_admin"
+            ]
           },
           "user_organization_permissions_modify": {
             "type": "boolean",
-            "description": "This permission is need for modifying permissions of a user on organization level"
+            "description": "This permission is needed for modifying permissions of a user on organization level",
+            "x-roles": [
+              "service_provider",
+              "organization_admin"
+            ]
           },
           "user_assign": {
             "type": "boolean",
-            "description": "This permission is need for assigning users to the organization"
+            "description": "This permission is needed for assigning users to the organization",
+            "x-roles": [
+              "service_provider"
+            ]
           },
           "user_unassign": {
             "type": "boolean",
-            "description": "This permission is need for unassigning users from the organization"
+            "description": "This permission is needed for unassigning users from the organization",
+            "x-roles": [
+              "organization_admin"
+            ]
           },
           "users_create": {
             "type": "boolean",
-            "description": "This permission is needed to create a new user and add this user to the organization"
+            "description": "This permission is needed to create a new user and add this user to the organization",
+            "x-roles": [
+              "service_provider",
+              "organization_admin"
+            ]
           },
           "user_read": {
             "type": "boolean",
-            "description": "This permission is need for getting information of users from the organization"
+            "description": "This permission is needed for getting information of users from the organization",
+            "x-roles": [
+              "organization_admin"
+            ]
           },
           "user_delete": {
             "type": "boolean",
-            "description": "This permission is need for deleting users from a organization"
+            "description": "This permission is need for deleting users from a organization",
+            "x-roles": [
+              "organization_admin"
+            ]
+          },
+          "api_keys_create": {
+            "type": "boolean",
+            "description": "The permission to create API keys",
+            "x-roles": [
+              "organization_admin"
+            ]
+          },
+          "api_keys_read": {
+            "type": "boolean",
+            "description": "The permission to read API keys",
+            "x-roles": [
+              "organization_admin"
+            ]
+          },
+          "api_keys_modify": {
+            "type": "boolean",
+            "description": "The permission to modify API keys",
+            "x-roles": [
+              "organization_admin"
+            ]
           }
         }
       },
       "OrganizationSitePermissionsType": {
-        "description": "all organization site permissions and if user has this permission for the organization site",
+        "description": "all organization site permissions. If set to true user has this permission for the organization site",
         "type": "object",
         "additionalProperties": true,
         "properties": {
           "supplychain_read": {
             "type": "boolean",
-            "description": "This permission is need for getting all permitted supply chain of the executing user"
+            "description": "This permission is need for getting all permitted supply chain of the executing user",
+            "x-roles": [
+              "consignor",
+              "remote_consignor"
+            ]
           },
           "supplychain_create": {
             "type": "boolean",
-            "description": "This permission is need for creating a new supply chain connection between two organization sites"
+            "description": "This permission is need for creating a new supply chain connection between two organization sites",
+            "x-roles": [
+              "site_admin"
+            ]
           },
           "supplychain_delete": {
             "type": "boolean",
-            "description": "This permission is need for deleting a connection of a supply chain between two organization sites"
+            "description": "This permission is needed for deleting a connection of a supply chain between two organization sites",
+            "x-roles": [
+              "site_admin"
+            ]
           },
           "managed_supply_chains_create": {
             "type": "boolean",
-            "description": "This permission is needed for creating a new managed supply chain for the organization site"
+            "description": "This permission is needed for creating a new managed supply chain for the organization site",
+            "x-roles": [
+              "site_admin"
+            ]
           },
           "managed_supply_chains_read": {
             "type": "boolean",
-            "description": "This permission is needed for reading managed supply chain for the organization site"
+            "description": "This permission is needed for reading managed supply chain for the organization site",
+            "x-roles": [
+              "site_admin"
+            ]
           },
           "managed_supply_chains_delete": {
             "type": "boolean",
-            "description": "This permission is needed for deleting managed supply chains for the organization site"
-          },
-          "loadcarrier_read": {
-            "type": "boolean",
-            "description": "This permission is need for getting all permitted load carriers"
-          },
-          "loadcarrier_create": {
-            "type": "boolean",
-            "description": "This permission is need for creating a new load carrier"
-          },
-          "loadcarrier_delete": {
-            "type": "boolean",
-            "description": "This permission is need for deleting a load carrier"
-          },
-          "loadcarrier_modify": {
-            "type": "boolean",
-            "description": "This permission is need for modifying a load carrier"
-          },
-          "consignee_load_carriers_create": {
-            "type": "boolean",
-            "description": "This permission is needed to create new consignee load carriers"
-          },
-          "consignee_load_carriers_replace": {
-            "type": "boolean",
-            "description": "This permission is needed to replace all consignee load carriers with new ones"
-          },
-          "consignee_load_carriers_read": {
-            "type": "boolean",
-            "description": "This permission is needed to get all consignee load carriers"
-          },
-          "consignee_discrepancies_create": {
-            "type": "boolean",
-            "description": "This permission is needed to create new consignee discrepancies"
-          },
-          "consignee_discrepancies_read": {
-            "type": "boolean",
-            "description": "This permission is needed to read consignee discrepancies"
-          },
-          "consignee_discrepancies_update": {
-            "type": "boolean",
-            "description": "This permission is needed to update consignee discrepancies"
-          },
-          "consignee_discrepancies_replace": {
-            "type": "boolean",
-            "description": "This permission is needed to replace all consignee discrepancies with new ones"
-          },
-          "consignee_discrepancies_delete": {
-            "type": "boolean",
-            "description": "This permission is needed to delete consignee discrepancies"
-          },
-          "attachment_create": {
-            "type": "boolean",
-            "description": "This permission is need for creating a new attachment"
-          },
-          "attachment_read": {
-            "type": "boolean",
-            "description": "This permission is need for getting all permitted attachments"
-          },
-          "attachment_delete": {
-            "type": "boolean",
-            "description": "This permission is need for deleting a attachment"
-          },
-          "consignee_discrepancy_images_create": {
-            "type": "boolean",
-            "description": "This permission is need for creating a new discrepancy image"
-          },
-          "consignee_discrepancy_images_read": {
-            "type": "boolean",
-            "description": "This permission is need for reading a discrepancy image"
-          },
-          "consignee_discrepancy_images_delete": {
-            "type": "boolean",
-            "description": "This permission is need for deleting a discrepancy image"
-          },
-          "consignee_load_carrier_file_create": {
-            "type": "boolean",
-            "description": "This permission is need for creating a new load carrier file"
-          },
-          "consignee_load_carrier_file_read": {
-            "type": "boolean",
-            "description": "This permission is need for reading a load carrier file"
-          },
-          "consignee_load_carrier_file_delete": {
-            "type": "boolean",
-            "description": "This permission is need for deleting a load carrier file"
-          },
-          "consignee_receipts_create": {
-            "type": "boolean",
-            "description": "This permission is need for creating a new consignee receipts"
-          },
-          "consignee_receipts_read": {
-            "type": "boolean",
-            "description": "This permission is need for reading a consignee receipts"
-          },
-          "consignee_receipts_delete": {
-            "type": "boolean",
-            "description": "This permission is need for deleting a consignee receipts"
-          },
-          "discrepancies_create": {
-            "type": "boolean",
-            "description": "This permission is need for creating a new discrepancy"
-          },
-          "discrepancies_update": {
-            "type": "boolean",
-            "description": "This permission is need for getting all permitted discrepancies"
-          },
-          "discrepancies_read": {
-            "type": "boolean",
-            "description": "This permission is need for getting all permitted discrepancies"
-          },
-          "discrepancies_delete": {
-            "type": "boolean",
-            "description": "This permission is need for deleting a discrepancy"
-          },
-          "consignee_fine_discrepancies_create": {
-            "type": "boolean",
-            "description": "This permission is need for creating a new fine discrepancy"
-          },
-          "consignee_fine_discrepancies_read": {
-            "type": "boolean",
-            "description": "This permission is need for getting all permitted fine discrepancies"
-          },
-          "consignee_fine_discrepancies_delete": {
-            "type": "boolean",
-            "description": "This permission is need for deleting a fine discrepancy"
-          },
-          "delivery_note_bundles_create": {
-            "type": "boolean",
-            "description": "user can create delivery note bundles"
-          },
-          "delivery_note_bundles_read": {
-            "type": "boolean",
-            "description": "user can read delivery note bundles"
-          },
-          "delivery_note_bundles_update": {
-            "type": "boolean",
-            "description": "user can update delivery note bundles"
-          },
-          "delivery_note_bundles_delete": {
-            "type": "boolean",
-            "description": "user can delete delivery note bundles"
-          },
-          "delivery_note_bundles_merge": {
-            "type": "boolean",
-            "description": "User can merge multiple delivery note bundles into a new one"
-          },
-          "delivery_note_bundles_checkout": {
-            "type": "boolean",
-            "description": "User can checkout a delivery note bundle"
-          },
-          "delivery_note_bundles_checkout_multiple": {
-            "type": "boolean",
-            "description": "User can checkout multiple delivery note bundles at once"
-          },
-          "delivery_note_bundles_checkin": {
-            "type": "boolean",
-            "description": "User can checkin multiple delivery note bundles at once"
-          },
-          "carrier_tours_create": {
-            "type": "boolean",
-            "description": "user can create a new tour"
-          },
-          "carrier_tours_read": {
-            "type": "boolean",
-            "description": "user can read site tours"
-          },
-          "carrier_tours_update": {
-            "type": "boolean",
-            "description": "user can update a tour"
-          },
-          "carrier_tours_delete": {
-            "type": "boolean",
-            "description": "user can delete a tour"
-          },
-          "carrier_tours_checkout": {
-            "type": "boolean",
-            "description": "user can checkout a tour"
-          },
-          "consignee_tour_read": {
-            "type": "boolean",
-            "description": "consignee can read incoming tours"
-          },
-          "carrier_delivery_notes_share_rights": {
-            "type": "boolean",
-            "description": "Shares the rights of delivery notes to another carrier site"
-          },
-          "delivery_notes_create": {
-            "type": "boolean",
-            "description": "user can add new pdf file to a delivery note bundle"
-          },
-          "delivery_notes_read": {
-            "type": "boolean",
-            "description": "user can read pdf file from a delivery note bundle"
-          },
-          "delivery_notes_update": {
-            "type": "boolean",
-            "description": "user can update the metadata from a delivery note"
-          },
-          "delivery_notes_delete": {
-            "type": "boolean",
-            "description": "user can delete delivery notes (pdfs)"
-          },
-          "delivery_notes_add_to_bundle": {
-            "type": "boolean",
-            "description": "User can add existing delivery notes to an existing delivery note bundle."
-          },
-          "delivery_notes_in_bundles_delete": {
-            "type": "boolean",
-            "description": "user can delete delivery notes (pdf) in bundles"
-          },
-          "consignor_delivery_notes_complete_pdf_read": {
-            "type": "boolean",
-            "description": "User can read a compelte pdf from a delivery note."
-          },
-          "carrier_delivery_notes_complete_pdf_read": {
-            "type": "boolean",
-            "description": "User can read a compelte pdf from a delivery note."
-          },
-          "consignee_delivery_notes_complete_pdf_read": {
-            "type": "boolean",
-            "description": "User can read a compelte pdf from a delivery note."
-          },
-          "carrier_delivery_note_keys_lookup": {
-            "type": "boolean",
-            "description": "User can lookup as a carrier organization site delivery note keys by consignor gln, deliveryNote number and optional deliveryNote orderNumber"
-          },
-          "consignee_checkins_create": {
-            "type": "boolean",
-            "description": "User can create a checkin"
-          },
-          "consignee_checkins_read": {
-            "type": "boolean",
-            "description": "User can get a checkin document."
-          },
-          "consignee_checkins_finish": {
-            "type": "boolean",
-            "description": "User can finish a checkin"
-          },
-          "consignee_checkin_driver_details_update": {
-            "type": "boolean",
-            "description": "User can set driver information of checkins"
-          },
-          "consignee_delivery_notes_lookup_with_token": {
-            "type": "boolean",
-            "description": "User can get a list of checkinable delivery notes by wallet token"
+            "description": "This permission is needed for deleting managed supply chains for the organization site",
+            "x-roles": [
+              "site_admin"
+            ]
           },
           "organization_site_modify": {
             "type": "boolean",
-            "description": "This permission is need for modifying the site of an organization"
+            "description": "This permission is needed for modifying the site of an organization",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
           },
           "organization_site_delete": {
             "type": "boolean",
-            "description": "This permission is need for deleting the specified organization site"
-          },
-          "consignee_pallet_tickets_create": {
-            "type": "boolean",
-            "description": "This permission is need for to modify a pallet ticket"
-          },
-          "consignee_pallet_tickets_read": {
-            "type": "boolean",
-            "description": "This permission is need for to create a pallet ticket"
-          },
-          "consignee_pallet_tickets_delete": {
-            "type": "boolean",
-            "description": "This permission is need for to delete a pallet ticket"
-          },
-          "user_organization_site_permissions_modify": {
-            "type": "boolean",
-            "description": "This permission is need for modifying permissions of a user on organization site level"
-          },
-          "user_assign": {
-            "type": "boolean",
-            "description": "This permission is need for assigning users to the organization"
+            "description": "This permission is needed for deleting the specified organization site",
+            "x-roles": [
+              "organization_admin"
+            ]
           },
           "user_read": {
             "type": "boolean",
-            "description": "This permission is need for getting information of users from the organization site"
+            "description": "This permission is needed for getting information of users from the organization site",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "user_assign": {
+            "type": "boolean",
+            "description": "This permission is needed for assigning users to an organization site",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
           },
           "user_unassign": {
             "type": "boolean",
-            "description": "This permission is need for unassigning users from the organization"
+            "description": "This permission is needed for unassigning users from the organization site",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
           },
-          "signature_pads_create": {
+          "user_organization_site_permissions_modify": {
             "type": "boolean",
-            "description": "create a new signature pad for checkout or checkin"
+            "description": "This permission is needed for modifying permissions of a user on organization site level",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
           },
-          "signature_pads_read": {
+          "loadcarrier_read": {
             "type": "boolean",
-            "description": "read data from a signature pad"
+            "description": "This permission is needed for getting all permitted load carriers",
+            "x-roles": [
+              "consignor",
+              "remote_consignor"
+            ]
+          },
+          "loadcarrier_create": {
+            "type": "boolean",
+            "description": "This permission is needed for creating a new load carrier",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "loadcarrier_delete": {
+            "type": "boolean",
+            "description": "This permission is needed for deleting a load carrier",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "loadcarrier_modify": {
+            "type": "boolean",
+            "description": "This permission is needed for modifying a load carrier",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "consignee_load_carriers_create": {
+            "type": "boolean",
+            "description": "This permission is needed to create new consignee load carriers",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_load_carriers_replace": {
+            "type": "boolean",
+            "description": "This permission is needed to replace all consignee load carriers with new ones",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_load_carriers_read": {
+            "type": "boolean",
+            "description": "This permission is needed to get all consignee load carriers",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "consignee_discrepancies_create": {
+            "type": "boolean",
+            "description": "This permission is needed to create new consignee discrepancies",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_discrepancies_read": {
+            "type": "boolean",
+            "description": "This permission is needed to read consignee discrepancies",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "consignee_discrepancies_update": {
+            "type": "boolean",
+            "description": "This permission is needed to update consignee discrepancies",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_discrepancies_replace": {
+            "type": "boolean",
+            "description": "This permission is needed to replace all consignee discrepancies with new ones",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_discrepancies_delete": {
+            "type": "boolean",
+            "description": "This permission is needed to delete consignee discrepancies",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "attachment_create": {
+            "type": "boolean",
+            "description": "This permission is needed for creating a new attachment",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "attachment_read": {
+            "type": "boolean",
+            "description": "This permission is needed for getting all permitted attachments",
+            "x-roles": [
+              "consignor",
+              "remote_consignor"
+            ]
+          },
+          "attachment_delete": {
+            "type": "boolean",
+            "description": "This permission is needed for deleting a attachment",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "consignee_discrepancy_images_create": {
+            "type": "boolean",
+            "description": "This permission is needed for creating a new discrepancy image",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_discrepancy_images_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a discrepancy image",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "consignee_discrepancy_images_delete": {
+            "type": "boolean",
+            "description": "This permission is needed for deleting a discrepancy image",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_load_carrier_file_create": {
+            "type": "boolean",
+            "description": "This permission is needed for creating a new load carrier file",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_load_carrier_file_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a load carrier file",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "consignee_load_carrier_file_delete": {
+            "type": "boolean",
+            "description": "This permission is needed for deleting a load carrier file",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_receipts_create": {
+            "type": "boolean",
+            "description": "This permission is needed for creating a new consignee receipts",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_receipts_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a consignee receipts",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "consignee_receipts_delete": {
+            "type": "boolean",
+            "description": "This permission is needed for deleting a consignee receipts",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "discrepancies_create": {
+            "type": "boolean",
+            "description": "This permission is needed for creating a new discrepancy",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "discrepancies_update": {
+            "type": "boolean",
+            "description": "This permission is needed for getting all permitted discrepancies",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "discrepancies_read": {
+            "type": "boolean",
+            "description": "This permission is needed for getting all permitted discrepancies",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "discrepancies_delete": {
+            "type": "boolean",
+            "description": "This permission is needed for deleting a discrepancy",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_fine_discrepancies_create": {
+            "type": "boolean",
+            "description": "This permission is needed for creating a new fine discrepancy",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_fine_discrepancies_read": {
+            "type": "boolean",
+            "description": "This permission is needed for getting all permitted fine discrepancies",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "consignee_fine_discrepancies_delete": {
+            "type": "boolean",
+            "description": "This permission is needed for deleting a fine discrepancy",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "delivery_note_bundles_create": {
+            "type": "boolean",
+            "description": "user can create delivery note bundles",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_note_bundles_read": {
+            "type": "boolean",
+            "description": "user can read delivery note bundles",
+            "x-roles": [
+              "consignor",
+              "carrier",
+              "consignee",
+              "remote_consignor",
+              "remote_carrier",
+              "remote_consignee"
+            ]
+          },
+          "delivery_note_bundles_update": {
+            "type": "boolean",
+            "description": "user can update delivery note bundles",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_note_bundles_delete": {
+            "type": "boolean",
+            "description": "user can delete delivery note bundles",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_note_bundles_merge": {
+            "type": "boolean",
+            "description": "User can merge multiple delivery note bundles into a new one",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_note_bundles_checkout": {
+            "type": "boolean",
+            "description": "User can checkout a delivery note bundle",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_note_bundles_checkout_multiple": {
+            "type": "boolean",
+            "description": "User can checkout multiple delivery note bundles at once",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_note_bundles_checkin": {
+            "type": "boolean",
+            "description": "User can checkin multiple delivery note bundles at once",
+            "x-roles": [
+              "consignee"
+            ]
           },
           "send_wallet_invite_emails": {
             "type": "boolean",
-            "description": "User can send the wallet invite link to an email address."
+            "description": "User can send the wallet invite link to an email address.",
+            "x-roles": [
+              "consignor",
+              "carrier"
+            ]
+          },
+          "carrier_tours_create": {
+            "type": "boolean",
+            "description": "user can create a new tour",
+            "x-roles": [
+              "carrier"
+            ]
+          },
+          "carrier_tours_read": {
+            "type": "boolean",
+            "description": "user can read site tours",
+            "x-roles": [
+              "carrier",
+              "remote_carrier"
+            ]
+          },
+          "carrier_tours_update": {
+            "type": "boolean",
+            "description": "user can update a tour",
+            "x-roles": [
+              "carrier"
+            ]
+          },
+          "carrier_tours_delete": {
+            "type": "boolean",
+            "description": "user can delete a tour",
+            "x-roles": [
+              "carrier"
+            ]
+          },
+          "carrier_tours_checkout": {
+            "type": "boolean",
+            "description": "user can checkout a tour",
+            "x-roles": [
+              "carrier"
+            ]
+          },
+          "consignee_tour_read": {
+            "type": "boolean",
+            "description": "consignee can read incoming tours",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "carrier_delivery_notes_share_rights": {
+            "type": "boolean",
+            "description": "Shares the rights of delivery notes to another carrier site",
+            "x-roles": [
+              "carrier"
+            ]
+          },
+          "delivery_notes_create": {
+            "type": "boolean",
+            "description": "user can add new pdf file to a delivery note bundle",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_notes_read": {
+            "type": "boolean",
+            "description": "user can read pdf file from a delivery note bundle",
+            "x-roles": [
+              "consignor",
+              "carrier",
+              "consignee",
+              "remote_consignor",
+              "remote_carrier",
+              "remote_consignee"
+            ]
+          },
+          "delivery_notes_update": {
+            "type": "boolean",
+            "description": "user can update the metadata from a delivery note",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_notes_delete": {
+            "type": "boolean",
+            "description": "user can delete delivery notes (pdfs)",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_notes_add_to_bundle": {
+            "type": "boolean",
+            "description": "User can add existing delivery notes to an existing delivery note bundle.",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_notes_in_bundles_delete": {
+            "type": "boolean",
+            "description": "user can delete delivery notes (pdf) in bundles",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "consignor_delivery_notes_complete_pdf_read": {
+            "type": "boolean",
+            "description": "User can read a compelte pdf from a delivery note.",
+            "x-roles": [
+              "consignor",
+              "remote_consignor"
+            ]
+          },
+          "carrier_delivery_notes_complete_pdf_read": {
+            "type": "boolean",
+            "description": "User can read a compelte pdf from a delivery note.",
+            "x-roles": [
+              "carrier",
+              "remote_carrier"
+            ]
+          },
+          "consignee_delivery_notes_complete_pdf_read": {
+            "type": "boolean",
+            "description": "User can read a compelte pdf from a delivery note.",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "carrier_delivery_note_keys_lookup": {
+            "type": "boolean",
+            "description": "User can lookup as a carrier organization site delivery note keys by consignor gln, deliveryNote number and optional deliveryNote orderNumber",
+            "x-roles": [
+              "carrier"
+            ]
+          },
+          "consignee_checkins_create": {
+            "type": "boolean",
+            "description": "User can create a checkin",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_checkins_read": {
+            "type": "boolean",
+            "description": "User can get a checkin document.",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_checkins_finish": {
+            "type": "boolean",
+            "description": "User can finish a checkin",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_checkin_driver_details_update": {
+            "type": "boolean",
+            "description": "User can set driver information of checkins",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_delivery_notes_lookup_with_token": {
+            "type": "boolean",
+            "description": "User can get a list of checkinable delivery notes by wallet token",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_pallet_tickets_create": {
+            "type": "boolean",
+            "description": "This permission is needed to create a pallet ticket",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_pallet_tickets_read": {
+            "type": "boolean",
+            "description": "This permission is needed to read a pallet ticket",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "consignee_pallet_tickets_delete": {
+            "type": "boolean",
+            "description": "This permission is needed to delete a pallet ticket",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "signature_pads_create": {
+            "type": "boolean",
+            "description": "create a new signature pad for checkout or checkin",
+            "x-roles": [
+              "consignor",
+              "consignee"
+            ]
+          },
+          "signature_pads_read": {
+            "type": "boolean",
+            "description": "read data from a signature pad",
+            "x-roles": [
+              "consignor",
+              "consignee"
+            ]
           }
         }
       },
@@ -9035,6 +10065,26 @@
           "pallet_ticket",
           "receipt"
         ]
+      },
+      "UserRoles": {
+        "type": "string",
+        "enum": [
+          "carrier",
+          "consignee",
+          "consignor",
+          "organization_admin",
+          "service_provider",
+          "site_admin",
+          "remote_consignor",
+          "remote_consignee",
+          "remote_carrier"
+        ]
+      },
+      "UserRolesArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/UserRoles"
+        }
       }
     },
     "parameters": {
