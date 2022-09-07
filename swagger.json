@@ -5919,7 +5919,8 @@
           "consignor",
           "carrier",
           "consignee",
-          "organizationKey"
+          "organizationKey",
+          "roles"
         ],
         "properties": {
           "_key": {
@@ -5948,6 +5949,9 @@
           },
           "organizationKey": {
             "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "roles": {
+            "$ref": "#/components/schemas/UserRolesArray"
           },
           "permissions": {
             "$ref": "#/components/schemas/OrganizationSitePermissionsType"
