@@ -132,7 +132,7 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-note-bundles/{deliveryNoteBundleKey}/signature-pads/checkout/signature": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/signature-pads/checkout/signature": {
       "get": {
         "summary": "Get signature pad for checkout",
         "description": "Get a signature from a signature pad for checkout.\nThe token is the getToken from the signature pad creation request.\n",
@@ -796,7 +796,7 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/attachments/file/{fileName}": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/attachments/file/{fileName}": {
       "post": {
         "description": "Add a new attachment to a existing delivery note.\nThe delivery note bundle must be in status 'open'.\nAccepted Formats are jpg, png, heic and heif.\n",
         "summary": "Add attachment to open delivery note",
@@ -839,7 +839,7 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/attachments/{attachmentKey}": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/attachments/{attachmentKey}": {
       "get": {
         "description": "Get a single attachment of a delivery note.\n",
         "summary": "Get one attachment of delivery note",
@@ -904,7 +904,7 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/attachments": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/attachments": {
       "get": {
         "description": "Get a list of attachments of single delivery note.\n",
         "summary": "All attachments of a delivery note",
@@ -1833,7 +1833,7 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-note-bundles": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles": {
       "post": {
         "summary": "Create bundle",
         "description": "Create new delivery note bundle.\nThe consignor key in the payload and the path parameter\norganizationSiteKey must be equal.\nSo the consignor site is the site where the bundle will be created in.\n",
@@ -1874,7 +1874,7 @@
         }
       },
       "get": {
-        "summary": "Get bundle list as consigneur",
+        "summary": "Get bundle list as consignor",
         "description": "Get overview list of all delivery note bundles.\n",
         "operationId": "getBundles",
         "x-dls-requiredOrganizationSitePermission": "delivery_note_bundles_read",
@@ -1903,7 +1903,7 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-note-bundles/{deliveryNoteBundleKey}": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}": {
       "get": {
         "summary": "Get a bundle by key",
         "description": "Get one delivery note bundle by delivery note bundle key.\n",
@@ -1997,7 +1997,7 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-note-bundles-merge": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles-merge": {
       "post": {
         "summary": "Merge open bundles",
         "description": "Merge multiple delivery note bundles into a new one. All bundles\nmust have status 'open'. The supply chain and name are taken from\nthe first bundle in the array\n",
@@ -2096,7 +2096,7 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-note-bundles-checkout": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles-checkout": {
       "post": {
         "summary": "Checkout one or more delivery note bundles.",
         "description": "Checkout one or more delivery note bundles. All bundles must be in status 'open'.\nThe checkout is only possible when every bundle to checkout has at least one delivery note.\n",
@@ -2268,6 +2268,40 @@
         }
       }
     },
+    "/organization-sites/{organizationSiteKey}/carrier/delivery-notes/{deliveryNoteKey}": {
+      "get": {
+        "summary": "Get meta data for a delivery note w/o loadcarrier as carrier",
+        "description": "Get meta data as a carrier for a single delivery note from delivery note pool.\nDoes not include load carriers.\n",
+        "operationId": "getCarrierSingleDeliveryNoteMetaData",
+        "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
+        "tags": [
+          "delivery notes"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "body contains delivery note metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarrierDeliveryNoteInPool"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/organization-sites/{organizationSiteKey}/carrier/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/pdf": {
       "get": {
         "description": "Get the PDF of a carrier delivery note.\n",
@@ -2402,6 +2436,40 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ConsigneeDeliveryNotesInPool"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/consignee/delivery-notes/{deliveryNoteKey}": {
+      "get": {
+        "summary": "Get meta data for a delivery note w/o loadcarrier as consignee",
+        "description": "Get meta data as a consignee for a single delivery note from delivery note pool.\nDoes not include load carriers.\n",
+        "operationId": "getConsigneeDeliveryNoteMetadataInPool",
+        "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
+        "tags": [
+          "delivery notes"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "body contains meta data of a delivery note",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsigneeDeliveryNoteInPool"
                 }
               }
             }
@@ -2598,9 +2666,38 @@
             "$ref": "#/components/responses/DefaultErrorResponse"
           }
         }
+      },
+      "get": {
+        "summary": "Get delivery note data w/o load carriers",
+        "description": "Get delivery notes metadata from delivery note pool.\nDoes not include load carriers.\n",
+        "operationId": "getDeliveryNotesMetadataInPool",
+        "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
+        "tags": [
+          "delivery notes"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "body contains list of delivery notes metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryNoteInPoolArray"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-note-pdfs": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-note-pdfs": {
       "get": {
         "summary": "Get bundle PDF from bundle",
         "description": "Get all delivery note PDF's as merged PDF from delivery note bundle.\nIf the delivery note bundle does not have any delivery note an HTTP\nstatus code 400 is returned.\n",
@@ -2635,38 +2732,7 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-notes": {
-      "get": {
-        "summary": "Get delivery note data w/o load carriers",
-        "description": "Get delivery notes metadata from delivery note pool.\nDoes not include load carriers.\n",
-        "operationId": "getDeliveryNotesMetadataInPool",
-        "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
-        "tags": [
-          "delivery notes"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/organizationSiteKeyParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "body contains list of delivery notes metadata",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeliveryNoteInPoolArray"
-                }
-              }
-            }
-          },
-          "default": {
-            "$ref": "#/components/responses/DefaultErrorResponse"
-          }
-        }
-      }
-    },
-    "/organization-sites/{organizationSiteKey}/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes": {
       "post": {
         "summary": "Add delivery note to open bundle",
         "description": "Add existing delivery notes into an existing delivery note bundle.\nThe delivery note must not in any bundle when adding.\nThe delivery note bundle must be in status 'open'.\n",
@@ -2772,7 +2838,7 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-notes/{deliveryNoteKey}/pdf": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-notes/{deliveryNoteKey}/pdf": {
       "get": {
         "summary": "Get PDF from pool",
         "description": "Get delivery note PDF from delivery note pool.\n",
@@ -2842,9 +2908,7 @@
             "$ref": "#/components/responses/DefaultErrorResponse"
           }
         }
-      }
-    },
-    "/organization-sites/{organizationSiteKey}/delivery-notes/{deliveryNoteKey}": {
+      },
       "delete": {
         "summary": "Delete delivery note from pool",
         "description": "Delete a delivery note with its PDF. The delivery note must not in\na delivery note bundle. Remaining load carriers or attachments are\nalso deleted.\n",
@@ -2869,9 +2933,42 @@
             "$ref": "#/components/responses/DefaultErrorResponse"
           }
         }
+      },
+      "get": {
+        "summary": "Get meta data for a delivery note w/o loadcarrier as consignor",
+        "description": "Get meta data as a consignor for a single delivery note from delivery note pool.\nDoes not include load carriers.\n",
+        "operationId": "getConsignorSingleDeliveryNoteMetaData",
+        "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
+        "tags": [
+          "delivery notes",
+          "pdf"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delivery note metata data as json",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryNoteInPool"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}": {
       "delete": {
         "summary": "Detach delivery note from open bundle and delete load carrier",
         "description": "Detaches a delivery note from a bundle. Deletes also the load\ncarriers that hang on the delivery note. The bundles must be in\nstatus 'open'.\n",
@@ -3812,7 +3909,7 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/load-carriers": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/load-carriers": {
       "post": {
         "summary": "Add a load carrier to a delivery note.",
         "description": "Add a load carrier to a delivery note.\nThe delivery note bundle must be in status 'open'.\n",
@@ -3935,7 +4032,7 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/load-carriers/{loadCarrierKey}": {
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/load-carriers/{loadCarrierKey}": {
       "patch": {
         "summary": "Update a load carrier.",
         "description": "Update a load carrier.\nThe delivery note bundle must be in status 'open'.\n",
@@ -5015,7 +5112,9 @@
         "additionalProperties": false,
         "required": [
           "_key",
-          "dateCreated"
+          "dateCreated",
+          "number",
+          "orderNumber"
         ],
         "properties": {
           "_key": {
@@ -5023,6 +5122,12 @@
           },
           "dateCreated": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "number": {
+            "$ref": "#/components/schemas/DeliveryNoteNumber"
+          },
+          "orderNumber": {
+            "$ref": "#/components/schemas/OrderNoteNumberAsStringType"
           }
         }
       },
@@ -6623,7 +6728,7 @@
         "additionalProperties": false,
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/NameType"
+            "$ref": "#/components/schemas/OrgNameType"
           },
           "address": {
             "$ref": "#/components/schemas/NameType"
