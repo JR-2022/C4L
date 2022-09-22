@@ -3384,7 +3384,7 @@
     "/external/wallet-invite": {
       "get": {
         "summary": "Get data for wallet invite page",
-        "description": "Returns all data that is necessary to build the wallet invite page.\nThe token is the accessToken from the checkout response.\n",
+        "description": "Returns all data that is necessary to build the wallet invite page.\nThe token is the accessToken from the checkout response.\nThe access token expires 2 days after checkin or 10 weeks after checkout.\n",
         "operationId": "externalGetBundleWalletInviteData",
         "security": [],
         "tags": [
@@ -3416,7 +3416,7 @@
     "/external/tour/wallet-invite": {
       "get": {
         "summary": "Get tour data for wallet invite page",
-        "description": "Returns all data that is necessary to build the tour wallet invite page.\nThe token is the accessToken from the checkout response.\n",
+        "description": "Returns all data that is necessary to build the tour wallet invite page.\nThe token is the accessToken from the checkout response.\nThe access token expires 2 days after checkin or 10 weeks after checkout.\n",
         "operationId": "externalGetTourWalletInviteData",
         "security": [],
         "tags": [
@@ -8685,11 +8685,15 @@
         "description": "consignee signature data",
         "additionalProperties": false,
         "required": [
-          "base64"
+          "base64",
+          "name"
         ],
         "properties": {
           "base64": {
             "$ref": "#/components/schemas/Base64Type"
+          },
+          "name": {
+            "$ref": "#/components/schemas/NameType"
           }
         }
       },
