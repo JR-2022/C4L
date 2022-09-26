@@ -5008,11 +5008,11 @@
         }
       }
     },
-    "/me/terms-of-service": {
+    "/users/terms-of-service": {
       "post": {
         "summary": "Accept ToS",
         "description": "Accept latest version of terms of of service\n",
-        "operationId": "postMeAcceptTermsOfService",
+        "operationId": "postAcceptTermsOfService",
         "tags": [
           "users"
         ],
@@ -5230,8 +5230,7 @@
             "required": [
               "version",
               "accepted",
-              "dateAccepted",
-              "dateAcceptUntil"
+              "dateAccepted"
             ],
             "properties": {
               "version": {
@@ -5242,9 +5241,6 @@
                 "type": "boolean"
               },
               "dateAccepted": {
-                "$ref": "#/components/schemas/TimestampType"
-              },
-              "dateAcceptUntil": {
                 "$ref": "#/components/schemas/TimestampType"
               }
             }
