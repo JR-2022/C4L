@@ -2550,20 +2550,15 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/consignee/delivery-notes/checkin": {
+    "/organization-sites/consignee/delivery-notes/checkin": {
       "get": {
         "summary": "get delivery note keys from wallet for checkin",
-        "description": "Get delivery notes for a checkin.\nThe token from the checkout wallet or from the tour wallet.\nReturns list of delivery note keys that can be used to create a checkin.\n",
+        "description": "Get delivery notes for a checkin.\nThe token from the checkout wallet or from the tour wallet.\nReturns list of delivery note keys that can be used to create a checkin.\nThe requesting user must have the permission\nconsignee_delivery_notes_lookup_with_token on all organization sites.\n",
         "operationId": "getConsigneeDeliveryNoteKeysForToken",
-        "x-dls-requiredOrganizationSitePermission": "consignee_delivery_notes_lookup_with_token",
         "tags": [
-          "delivery notes",
           "checkins"
         ],
         "parameters": [
-          {
-            "$ref": "#/components/parameters/organizationSiteKeyParam"
-          },
           {
             "$ref": "#/components/parameters/TokenTypeParam"
           }
@@ -3381,7 +3376,7 @@
         }
       }
     },
-    "/external/wallet-invite": {
+    "/external/bundle/wallet-invite": {
       "get": {
         "summary": "Get data for wallet invite page",
         "description": "Returns all data that is necessary to build the wallet invite page.\nThe token is the accessToken from the checkout response.\nThe access token expires 2 days after checkin or 10 weeks after checkout.\n",
@@ -5008,11 +5003,11 @@
         }
       }
     },
-    "/users/terms-of-service": {
+    "/me/terms-of-service": {
       "post": {
         "summary": "Accept ToS",
         "description": "Accept latest version of terms of of service\n",
-        "operationId": "postAcceptTermsOfService",
+        "operationId": "postMeAcceptTermsOfService",
         "tags": [
           "users"
         ],
@@ -5230,7 +5225,8 @@
             "required": [
               "version",
               "accepted",
-              "dateAccepted"
+              "dateAccepted",
+              "dateAcceptUntil"
             ],
             "properties": {
               "version": {
@@ -5241,6 +5237,9 @@
                 "type": "boolean"
               },
               "dateAccepted": {
+                "$ref": "#/components/schemas/TimestampType"
+              },
+              "dateAcceptUntil": {
                 "$ref": "#/components/schemas/TimestampType"
               }
             }
