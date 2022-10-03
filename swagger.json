@@ -5393,7 +5393,7 @@
             "$ref": "#/components/schemas/NameType"
           },
           "carrierEmailAddressOutgoing": {
-            "$ref": "#/components/schemas/NameType"
+            "$ref": "#/components/schemas/EmailAddressType"
           }
         }
       },
@@ -5719,7 +5719,7 @@
             "type": "string"
           },
           "carrierEmailAddressOutgoing": {
-            "type": "string"
+            "$ref": "#/components/schemas/EmailAddressType"
           },
           "deliveryNotes": {
             "$ref": "#/components/schemas/DeliveryNoteArray"
@@ -5852,6 +5852,7 @@
           "carrierName",
           "consigneeName",
           "status",
+          "carrierEmailAddressOutgoing",
           "carrierNumberPlateOutgoing",
           "carrierNameOutgoing",
           "dateShipped",
@@ -5897,6 +5898,9 @@
               "sent",
               "closed"
             ]
+          },
+          "carrierEmailAddressOutgoing": {
+            "$ref": "#/components/schemas/EmailAddressType"
           },
           "carrierNumberPlateOutgoing": {
             "$ref": "#/components/schemas/NameType"
@@ -6155,6 +6159,95 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/DeliveryNote"
+        }
+      },
+      "DeliveryNoteInTour": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "dateCreated",
+          "dateShipped",
+          "fileName",
+          "orderNumber",
+          "number",
+          "loadCarriers",
+          "discrepancies",
+          "fineDiscrepancies",
+          "palletTickets",
+          "consignorLoadCarrierImages",
+          "consigneeLoadCarrierImages",
+          "consignorLoadCarrierExchange",
+          "consigneeLoadCarrierExchange",
+          "dateAnnounced",
+          "consignorName",
+          "carrierName",
+          "consigneeName"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateReceived": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateShipped": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "dateAnnounced": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "orderNumber": {
+            "$ref": "#/components/schemas/OrderNoteNumberAsStringType"
+          },
+          "number": {
+            "$ref": "#/components/schemas/DeliveryNoteNumber"
+          },
+          "loadCarriers": {
+            "$ref": "#/components/schemas/LoadCarriers"
+          },
+          "discrepancies": {
+            "type": "boolean"
+          },
+          "fineDiscrepancies": {
+            "type": "boolean"
+          },
+          "palletTickets": {
+            "type": "boolean"
+          },
+          "consignorLoadCarrierImages": {
+            "type": "boolean"
+          },
+          "consigneeLoadCarrierImages": {
+            "type": "boolean"
+          },
+          "consignorLoadCarrierExchange": {
+            "type": "boolean"
+          },
+          "consigneeLoadCarrierExchange": {
+            "type": "boolean"
+          },
+          "consignorName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "carrierName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "consigneeName": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
+      "DeliveryNoteArrayInTour": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/DeliveryNoteInTour"
         }
       },
       "DeliveryNoteInPool": {
@@ -7550,7 +7643,8 @@
                 "required": [
                   "_key",
                   "fileName",
-                  "consigneeName"
+                  "consigneeName",
+                  "number"
                 ],
                 "properties": {
                   "_key": {
@@ -7561,6 +7655,9 @@
                   },
                   "consigneeName": {
                     "$ref": "#/components/schemas/NameType"
+                  },
+                  "number": {
+                    "$ref": "#/components/schemas/DeliveryNoteNumber"
                   }
                 }
               }
@@ -7592,7 +7689,8 @@
                 "additionalProperties": false,
                 "required": [
                   "_key",
-                  "fileName"
+                  "fileName",
+                  "number"
                 ],
                 "properties": {
                   "_key": {
@@ -7600,6 +7698,9 @@
                   },
                   "fileName": {
                     "$ref": "#/components/schemas/NameType"
+                  },
+                  "number": {
+                    "$ref": "#/components/schemas/DeliveryNoteNumber"
                   }
                 }
               }
@@ -7740,7 +7841,7 @@
               "type": "string"
             },
             "carrierEmailAddressOutgoing": {
-              "type": "string"
+              "$ref": "#/components/schemas/EmailAddressType"
             },
             "consignorName": {
               "$ref": "#/components/schemas/NameType"
@@ -8246,7 +8347,7 @@
             "$ref": "#/components/schemas/KeyType"
           },
           "deliveryNotes": {
-            "$ref": "#/components/schemas/DeliveryNoteArray"
+            "$ref": "#/components/schemas/DeliveryNoteArrayInTour"
           },
           "status": {
             "$ref": "#/components/schemas/TourStatus"
@@ -8301,7 +8402,7 @@
             "$ref": "#/components/schemas/KeyType"
           },
           "deliveryNotes": {
-            "$ref": "#/components/schemas/DeliveryNoteArray"
+            "$ref": "#/components/schemas/DeliveryNoteArrayInTour"
           },
           "status": {
             "$ref": "#/components/schemas/TourStatus"
@@ -8507,6 +8608,8 @@
         "required": [
           "_key",
           "nr",
+          "number",
+          "orderNumber",
           "ls",
           "bundlenr",
           "tournr",
@@ -8529,6 +8632,12 @@
             "$ref": "#/components/schemas/KeyType"
           },
           "nr": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "number": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "orderNumber": {
             "$ref": "#/components/schemas/NameType"
           },
           "ls": {
