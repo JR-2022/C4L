@@ -7793,7 +7793,8 @@
           "receiptsAttachments",
           "palletTicketsAttachments",
           "loadCarriersAttachments",
-          "discrepanciesAttachments"
+          "discrepanciesAttachments",
+          "attachmentsCount"
         ],
         "properties": {
           "_key": {
@@ -7828,6 +7829,9 @@
           },
           "loadCarriersAttachments": {
             "$ref": "#/components/schemas/GetConsigneeAttachmentsResponse"
+          },
+          "attachmentsCount": {
+            "$ref": "#/components/schemas/AttachmentsCount"
           }
         }
       },
