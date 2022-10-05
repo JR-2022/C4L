@@ -6061,7 +6061,8 @@
           "dateAnnounced",
           "fileName",
           "number",
-          "orderNumber"
+          "orderNumber",
+          "attachmentsCount"
         ],
         "properties": {
           "_key": {
@@ -6081,6 +6082,9 @@
           },
           "orderNumber": {
             "$ref": "#/components/schemas/OrderNoteNumberAsStringType"
+          },
+          "attachmentsCount": {
+            "$ref": "#/components/schemas/AttachmentsCount"
           }
         }
       },
@@ -6099,7 +6103,8 @@
           "consignorLoadCarrierImages",
           "consigneeLoadCarrierImages",
           "consignorLoadCarrierExchange",
-          "consigneeLoadCarrierExchange"
+          "consigneeLoadCarrierExchange",
+          "attachmentsCount"
         ],
         "properties": {
           "_key": {
@@ -6128,6 +6133,9 @@
           },
           "carrierNumberPlateIncoming": {
             "$ref": "#/components/schemas/NameType"
+          },
+          "attachmentsCount": {
+            "$ref": "#/components/schemas/AttachmentsCount"
           },
           "loadCarriers": {
             "$ref": "#/components/schemas/LoadCarriers"
@@ -6182,7 +6190,8 @@
           "dateAnnounced",
           "consignorName",
           "carrierName",
-          "consigneeName"
+          "consigneeName",
+          "attachmentsCount"
         ],
         "properties": {
           "_key": {
@@ -6241,6 +6250,9 @@
           },
           "consigneeName": {
             "$ref": "#/components/schemas/NameType"
+          },
+          "attachmentsCount": {
+            "$ref": "#/components/schemas/AttachmentsCount"
           }
         }
       },
@@ -6277,7 +6289,8 @@
           "deliveryNoteBundleKey",
           "deliveryNoteBundleName",
           "deliveryNoteBundleNumber",
-          "deliveryNoteBundleStatus"
+          "deliveryNoteBundleStatus",
+          "attachmentsCount"
         ],
         "properties": {
           "_key": {
@@ -6356,6 +6369,9 @@
               "sent",
               "closed"
             ]
+          },
+          "attachmentsCount": {
+            "$ref": "#/components/schemas/AttachmentsCount"
           }
         }
       },
@@ -6395,7 +6411,8 @@
           "deliveryNoteBundleName",
           "deliveryNoteBundleNumber",
           "deliveryNoteBundleStatus",
-          "checkinKey"
+          "checkinKey",
+          "attachmentsCount"
         ],
         "properties": {
           "_key": {
@@ -6484,6 +6501,9 @@
           },
           "checkinKey": {
             "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "attachmentsCount": {
+            "$ref": "#/components/schemas/AttachmentsCount"
           }
         }
       },
@@ -6525,7 +6545,8 @@
           "deliveryNoteBundleName",
           "deliveryNoteBundleNumber",
           "deliveryNoteBundleStatus",
-          "checkinKey"
+          "checkinKey",
+          "attachmentsCount"
         ],
         "properties": {
           "_key": {
@@ -6620,6 +6641,9 @@
           },
           "checkinKey": {
             "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "attachmentsCount": {
+            "$ref": "#/components/schemas/AttachmentsCount"
           }
         }
       },
@@ -9019,6 +9043,10 @@
         "maxLength": 60,
         "minLength": 3,
         "pattern": "^[A-Za-z0-9]+$"
+      },
+      "AttachmentsCount": {
+        "type": "number",
+        "minimum": 0
       },
       "PhoneNumbersArray": {
         "type": "array",
