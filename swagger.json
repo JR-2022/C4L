@@ -2268,40 +2268,6 @@
         }
       }
     },
-    "/organization-sites/{organizationSiteKey}/carrier/delivery-notes/{deliveryNoteKey}": {
-      "get": {
-        "summary": "Get meta data for a delivery note w/o loadcarrier as carrier",
-        "description": "Get meta data as a carrier for a single delivery note from delivery note pool.\nDoes not include load carriers.\n",
-        "operationId": "getCarrierSingleDeliveryNoteMetaData",
-        "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
-        "tags": [
-          "delivery notes"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/organizationSiteKeyParam"
-          },
-          {
-            "$ref": "#/components/parameters/deliveryNoteKeyParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "body contains delivery note metadata",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CarrierDeliveryNoteInPool"
-                }
-              }
-            }
-          },
-          "default": {
-            "$ref": "#/components/responses/DefaultErrorResponse"
-          }
-        }
-      }
-    },
     "/organization-sites/{organizationSiteKey}/carrier/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/pdf": {
       "get": {
         "description": "Get the PDF of a carrier delivery note.\n",
@@ -2436,40 +2402,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ConsigneeDeliveryNotesInPool"
-                }
-              }
-            }
-          },
-          "default": {
-            "$ref": "#/components/responses/DefaultErrorResponse"
-          }
-        }
-      }
-    },
-    "/organization-sites/{organizationSiteKey}/consignee/delivery-notes/{deliveryNoteKey}": {
-      "get": {
-        "summary": "Get meta data for a delivery note w/o loadcarrier as consignee",
-        "description": "Get meta data as a consignee for a single delivery note from delivery note pool.\nDoes not include load carriers.\n",
-        "operationId": "getConsigneeDeliveryNoteMetadataInPool",
-        "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
-        "tags": [
-          "delivery notes"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/organizationSiteKeyParam"
-          },
-          {
-            "$ref": "#/components/parameters/deliveryNoteKeyParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "body contains meta data of a delivery note",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConsigneeDeliveryNoteInPool"
                 }
               }
             }
@@ -2928,39 +2860,6 @@
             "$ref": "#/components/responses/DefaultErrorResponse"
           }
         }
-      },
-      "get": {
-        "summary": "Get meta data for a delivery note w/o loadcarrier as consignor",
-        "description": "Get meta data as a consignor for a single delivery note from delivery note pool.\nDoes not include load carriers.\n",
-        "operationId": "getConsignorSingleDeliveryNoteMetaData",
-        "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
-        "tags": [
-          "delivery notes",
-          "pdf"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/organizationSiteKeyParam"
-          },
-          {
-            "$ref": "#/components/parameters/deliveryNoteKeyParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Delivery note metata data as json",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeliveryNoteInPool"
-                }
-              }
-            }
-          },
-          "default": {
-            "$ref": "#/components/responses/DefaultErrorResponse"
-          }
-        }
       }
     },
     "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}": {
@@ -2986,6 +2885,36 @@
         "responses": {
           "204": {
             "description": "the delivery note was removed from the bundle"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/delivery-notes/{deliveryNoteKey}": {
+      "get": {
+        "summary": "Get meta data for a delivery note w/o loadcarrier",
+        "description": "Get meta data for a single delivery note from delivery note pool.\nDoes not include load carriers.\n",
+        "operationId": "getSingleDeliveryNoteMetaData",
+        "tags": [
+          "delivery notes"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delivery note metata data as json",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SingleDeliveryNote"
+                }
+              }
+            }
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -5046,6 +4975,32 @@
           }
         }
       }
+    },
+    "/me/quotas": {
+      "get": {
+        "summary": "Get organization quotas for the calling user",
+        "description": "Get organization quotas for the calling user for the current month.\nAPI users count into users.\n",
+        "operationId": "getMeQuotas",
+        "x-dls-requiredUserPermission": "user_me_read",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Quotas for the organization for the current month.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMeQuotasResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -6379,6 +6334,146 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/DeliveryNoteInPool"
+        }
+      },
+      "SingleDeliveryNote": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "dateCreated",
+          "dateAnnounced",
+          "dateShipped",
+          "dateReceived",
+          "fileName",
+          "number",
+          "orderNumber",
+          "loadCarriers",
+          "discrepancies",
+          "fineDiscrepancies",
+          "palletTickets",
+          "consignorLoadCarrierImages",
+          "consigneeLoadCarrierImages",
+          "consignorLoadCarrierExchange",
+          "consigneeLoadCarrierExchange",
+          "consignorKey",
+          "partOfTour",
+          "tourKey",
+          "externalTourName",
+          "tourNumber",
+          "consignorName",
+          "carrierName",
+          "consigneeName",
+          "carrierNumberPlateOutgoing",
+          "carrierNumberPlateIncoming",
+          "deliveryNoteBundleKey",
+          "deliveryNoteBundleName",
+          "deliveryNoteBundleNumber",
+          "deliveryNoteBundleStatus",
+          "attachmentsCount"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateAnnounced": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateShipped": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateReceived": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "fileName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "orderNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "number": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "loadCarriers": {
+            "$ref": "#/components/schemas/LoadCarriers"
+          },
+          "discrepancies": {
+            "type": "boolean"
+          },
+          "fineDiscrepancies": {
+            "type": "boolean"
+          },
+          "palletTickets": {
+            "type": "boolean"
+          },
+          "consignorLoadCarrierImages": {
+            "type": "boolean"
+          },
+          "consigneeLoadCarrierImages": {
+            "type": "boolean"
+          },
+          "consignorLoadCarrierExchange": {
+            "type": "boolean"
+          },
+          "consigneeLoadCarrierExchange": {
+            "type": "boolean"
+          },
+          "partOfTour": {
+            "type": "boolean"
+          },
+          "tourKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "externalTourName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "tourNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "consignorKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "consignorName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "carrierName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "consigneeName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "carrierNumberPlateOutgoing": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "carrierNumberPlateIncoming": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "deliveryNoteBundleKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "deliveryNoteBundleName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "deliveryNoteBundleNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "deliveryNoteBundleStatus": {
+            "enum": [
+              "-",
+              "open",
+              "sent",
+              "closed"
+            ]
+          },
+          "checkinKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "attachmentsCount": {
+            "$ref": "#/components/schemas/AttachmentsCount"
+          }
         }
       },
       "ConsigneeDeliveryNoteInPool": {
@@ -8937,6 +9032,74 @@
               "type": "integer",
               "minimum": 0,
               "maximum": 100
+            }
+          }
+        }
+      },
+      "GetMeQuotasResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "year",
+          "month",
+          "maxQuotas",
+          "usedQuotas"
+        ],
+        "properties": {
+          "year": {
+            "type": "number",
+            "minimum": 2022,
+            "maximum": 2099
+          },
+          "month": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "maxQuotas": {
+            "$ref": "#/components/schemas/Quotas"
+          },
+          "usedQuotas": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "usedUsers",
+              "usedOrganizationSites",
+              "usedDeliveryNotesPerMonth",
+              "usedBundlesPerMonth",
+              "usedCheckoutsPerMonth",
+              "usedToursPerMonth",
+              "usedCheckinsPerMonth"
+            ],
+            "properties": {
+              "usedUsers": {
+                "type": "number",
+                "minimum": 0
+              },
+              "usedOrganizationSites": {
+                "type": "number",
+                "minimum": 0
+              },
+              "usedDeliveryNotesPerMonth": {
+                "type": "number",
+                "minimum": 0
+              },
+              "usedBundlesPerMonth": {
+                "type": "number",
+                "minimum": 0
+              },
+              "usedCheckoutsPerMonth": {
+                "type": "number",
+                "minimum": 0
+              },
+              "usedToursPerMonth": {
+                "type": "number",
+                "minimum": 0
+              },
+              "usedCheckinsPerMonth": {
+                "type": "number",
+                "minimum": 0
+              }
             }
           }
         }
