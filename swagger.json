@@ -3712,6 +3712,80 @@
         }
       }
     },
+    "/feedbacks": {
+      "post": {
+        "summary": "Post new feedback.",
+        "description": "Post a new feedback element to the database.\n",
+        "operationId": "postFeedback",
+        "x-dls-requiredUserPermission": "user_feedbacks_create",
+        "tags": [
+          "feedback"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostFeedbackRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Feedback object stored in database"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/me/last-feedback-to-now": {
+      "put": {
+        "summary": "Set last time of feedback to now into user.",
+        "description": "Set last time of feedback to now into user.\n",
+        "operationId": "putLastTimeUserGaveFeedbackIntoUser",
+        "x-dls-requiredUserPermission": "user_feedbacks_last_modify",
+        "tags": [
+          "feedback"
+        ],
+        "responses": {
+          "204": {
+            "description": "Last time from feedback patched into user."
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/service-provider/feedbacks": {
+      "get": {
+        "summary": "Get a list with all feedbacks.",
+        "description": "Get a list with all feedbacks.\n",
+        "operationId": "getFeedbacks",
+        "x-dls-requiredUserPermission": "service_provider_user_feedbacks_read",
+        "tags": [
+          "feedback"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of feedbacks.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetFeedbackResponseArray"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/organization-sites/{organizationSiteKey}/consignee/delivery-notes/{deliveryNoteKey}/load-carriers": {
       "post": {
         "summary": "Add a new load carrier to delivery note.",
@@ -5159,7 +5233,8 @@
           "organizations",
           "organizationSites",
           "permissions",
-          "roles"
+          "roles",
+          "dateLastFeedback"
         ],
         "properties": {
           "_key": {
@@ -5213,6 +5288,9 @@
           },
           "roles": {
             "$ref": "#/components/schemas/UserRolesArray"
+          },
+          "dateLastFeedback": {
+            "$ref": "#/components/schemas/TimestampType"
           }
         }
       },
@@ -8050,6 +8128,83 @@
           }
         }
       },
+      "PostFeedbackRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "feedback",
+          "text"
+        ],
+        "properties": {
+          "feedback": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "text": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
+      "GetFeedbackResponseArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GetFeedbackResponse"
+        }
+      },
+      "GetFeedbackResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "feedback",
+          "text",
+          "dateCreated",
+          "user"
+        ],
+        "properties": {
+          "feedback": {
+            "type": "number",
+            "minimum": 0
+          },
+          "text": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "user": {
+            "$ref": "#/components/schemas/FeedbackUser"
+          }
+        }
+      },
+      "FeedbackUser": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "fullName",
+          "emailAddress",
+          "roles",
+          "dateLastFeedback"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "emailAddress": {
+            "$ref": "#/components/schemas/EmailAddressType"
+          },
+          "fullName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "roles": {
+            "$ref": "#/components/schemas/UserRolesArray"
+          },
+          "dateLastFeedback": {
+            "$ref": "#/components/schemas/TimestampType"
+          }
+        }
+      },
       "UserForOrganizationAdminRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -9105,6 +9260,7 @@
         }
       },
       "KeyType": {
+        "description": "one _key",
         "type": "string",
         "pattern": "^\\d+$"
       },
@@ -9262,6 +9418,13 @@
               "service_provider"
             ]
           },
+          "service_provider_user_feedbacks_read": {
+            "type": "boolean",
+            "description": "This permission is needed to get all feedbacks",
+            "x-roles": [
+              "service_provider"
+            ]
+          },
           "organization_read": {
             "type": "boolean",
             "description": "This permission is needed for reading all own organizations",
@@ -9272,13 +9435,6 @@
               "consignor",
               "carrier",
               "consignee"
-            ]
-          },
-          "user_read": {
-            "type": "boolean",
-            "description": "This permission is need for getting information of users",
-            "x-roles": [
-              "organization_admin"
             ]
           },
           "user_permissions_modify": {
@@ -9312,6 +9468,30 @@
             "type": "boolean",
             "description": "This permission is needed to read the user signature",
             "x-roles": [
+              "consignee"
+            ]
+          },
+          "user_feedbacks_create": {
+            "type": "boolean",
+            "description": "This permission is needed to create a feedback entry",
+            "x-roles": [
+              "service_provider",
+              "organization_admin",
+              "site_admin",
+              "consignor",
+              "carrier",
+              "consignee"
+            ]
+          },
+          "user_feedbacks_last_modify": {
+            "type": "boolean",
+            "description": "This permission is needed to modify the date of last feedback",
+            "x-roles": [
+              "service_provider",
+              "organization_admin",
+              "site_admin",
+              "consignor",
+              "carrier",
               "consignee"
             ]
           },
@@ -9436,13 +9616,6 @@
               "organization_admin"
             ]
           },
-          "user_read": {
-            "type": "boolean",
-            "description": "This permission is needed for getting information of users from the organization",
-            "x-roles": [
-              "organization_admin"
-            ]
-          },
           "user_delete": {
             "type": "boolean",
             "description": "This permission is need for deleting users from a organization",
@@ -9536,14 +9709,6 @@
           "administration_organization_sites_users_modify": {
             "type": "boolean",
             "description": "This permission is needed to modify a users for a organization site",
-            "x-roles": [
-              "organization_admin",
-              "site_admin"
-            ]
-          },
-          "user_read": {
-            "type": "boolean",
-            "description": "This permission is needed for getting information of users from the organization site",
             "x-roles": [
               "organization_admin",
               "site_admin"
