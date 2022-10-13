@@ -3453,7 +3453,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SignaturePadBundles"
+                  "$ref": "#/components/schemas/SignaturePadBundlesCheckout"
                 }
               }
             }
@@ -4452,7 +4452,7 @@
     "/service-provider/billing/csv": {
       "get": {
         "summary": "Get billing CSV.",
-        "description": "Get billing CSV for a specified timeframe.\nFrom and to must have millisecond resolution.\nConstrain: from <= timestamp < to\n",
+        "description": "Get billing CSV for a specified timeframe.\nFrom and to must have millisecond resolution.\nConstrain: from <= timestamp < to\nAll times are in UTC.\n",
         "operationId": "getServiceProviderBillingCsv",
         "x-dls-requiredUserPermission": "service_provider_billing_csv_read",
         "tags": [
@@ -7172,6 +7172,30 @@
           "$ref": "#/components/schemas/AttachmentResponse"
         }
       },
+      "CarrierAttachmentResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "dateCreated",
+          "contentType",
+          "fileName"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "contentType": {
+            "$ref": "#/components/schemas/FileTypes"
+          },
+          "fileName": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
       "ConsigneeAttachmentResponse": {
         "type": "object",
         "additionalProperties": false,
@@ -7206,6 +7230,13 @@
           "includes_discrepancies": {
             "type": "boolean"
           }
+        }
+      },
+      "GetCarrierAttachmentsResponse": {
+        "type": "array",
+        "additionalProperties": false,
+        "items": {
+          "$ref": "#/components/schemas/CarrierAttachmentResponse"
         }
       },
       "GetConsigneeAttachmentsResponse": {
@@ -7947,13 +7978,13 @@
             "deliveryNotes": {
               "type": "array",
               "items": {
-                "$ref": "#/components/schemas/SignaturePadBundlesDeliveryNote"
+                "$ref": "#/components/schemas/SignaturePadBundlesDeliveryNoteCheckin"
               }
             }
           }
         }
       },
-      "SignaturePadBundlesDeliveryNote": {
+      "SignaturePadBundlesDeliveryNoteCheckin": {
         "type": "object",
         "additionalProperties": false,
         "required": [
@@ -8008,7 +8039,47 @@
           }
         }
       },
-      "SignaturePadBundles": {
+      "SignaturePadBundlesDeliveryNoteCheckout": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "dateCreated",
+          "fileName",
+          "number",
+          "orderNumber",
+          "loadCarriers",
+          "loadCarriersAttachments",
+          "attachmentsCount"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "fileName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "orderNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "number": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "loadCarriers": {
+            "$ref": "#/components/schemas/LoadCarriers"
+          },
+          "loadCarriersAttachments": {
+            "$ref": "#/components/schemas/GetCarrierAttachmentsResponse"
+          },
+          "attachmentsCount": {
+            "$ref": "#/components/schemas/AttachmentsCount"
+          }
+        }
+      },
+      "SignaturePadBundlesCheckout": {
         "type": "array",
         "items": {
           "type": "object",
@@ -8054,7 +8125,10 @@
               "$ref": "#/components/schemas/NameType"
             },
             "deliveryNotes": {
-              "$ref": "#/components/schemas/DeliveryNoteArray"
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/SignaturePadBundlesDeliveryNoteCheckout"
+              }
             }
           }
         }
