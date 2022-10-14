@@ -3326,7 +3326,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BundleWalletInviteData"
+                  "$ref": "#/components/schemas/MultiBundleWalletInviteData"
                 }
               }
             }
@@ -7709,7 +7709,8 @@
         "additionalProperties": false,
         "required": [
           "deliveryNoteBundles",
-          "accessToken"
+          "accessToken",
+          "checkinToken"
         ],
         "properties": {
           "deliveryNoteBundles": {
@@ -7749,6 +7750,9 @@
           },
           "accessToken": {
             "$ref": "#/components/schemas/Token64LengthType"
+          },
+          "checkinToken": {
+            "$ref": "#/components/schemas/Token64LengthType"
           }
         }
       },
@@ -7764,9 +7768,7 @@
           "consigneeAddress",
           "deliveryNoteBundleKey",
           "deliveryNoteBundleName",
-          "deliveryNoteBundleNumber",
-          "iosWallet",
-          "googlePlayJwt"
+          "deliveryNoteBundleNumber"
         ],
         "properties": {
           "consignorName": {
@@ -7795,6 +7797,23 @@
           },
           "deliveryNoteBundleNumber": {
             "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
+      "MultiBundleWalletInviteData": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "bundles",
+          "iosWallet",
+          "googlePlayJwt"
+        ],
+        "properties": {
+          "bundles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BundleWalletInviteData"
+            }
           },
           "iosWallet": {
             "type": "string"
@@ -8817,7 +8836,8 @@
         "additionalProperties": false,
         "required": [
           "tour",
-          "accessToken"
+          "accessToken",
+          "checkinToken"
         ],
         "properties": {
           "tour": {
@@ -8857,6 +8877,9 @@
             }
           },
           "accessToken": {
+            "$ref": "#/components/schemas/Token64LengthType"
+          },
+          "checkinToken": {
             "$ref": "#/components/schemas/Token64LengthType"
           }
         }
