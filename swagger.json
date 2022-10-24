@@ -10181,6 +10181,13 @@
               "carrier"
             ]
           },
+          "carrier_delivery_notes_read": {
+            "type": "boolean",
+            "description": "user can read pdf file from a delivery note bundle",
+            "x-roles": [
+              "carrier"
+            ]
+          },
           "delivery_notes_create": {
             "type": "boolean",
             "description": "user can add new pdf file to a delivery note bundle",
