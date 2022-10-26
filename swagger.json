@@ -2268,6 +2268,41 @@
         }
       }
     },
+    "/organization-sites/{organizationSiteKey}/carrier/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-note-pdfs": {
+      "get": {
+        "summary": "Get bundle PDF as carrier",
+        "description": "Get all delivery note PDF's as merged PDF from carrier delivery\nnote bundle. If the delivery note bundle does not have any delivery\nnotes an HTTP status code 400 is returned.\n",
+        "operationId": "getCarrierDeliveryNotePdfsForBundle",
+        "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
+        "tags": [
+          "delivery notes",
+          "pdf"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/deliveryNoteBundleKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "body contains array of pdfs in binary format",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/BinaryFileType"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/organization-sites/{organizationSiteKey}/carrier/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/pdf": {
       "get": {
         "description": "Get the PDF of a carrier delivery note.\n",
@@ -2291,14 +2326,7 @@
         ],
         "responses": {
           "200": {
-            "description": "body contains pdf in binary format",
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "$ref": "#/components/schemas/BinaryFileType"
-                }
-              }
-            }
+            "$ref": "#/components/responses/PDFFileResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -2432,14 +2460,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The body contains the delivery note pdf in binary format.\n",
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "$ref": "#/components/schemas/BinaryFileType"
-                }
-              }
-            }
+            "$ref": "#/components/responses/PDFFileResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -2785,14 +2806,7 @@
         ],
         "responses": {
           "200": {
-            "description": "body contains pdf in binary format",
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "$ref": "#/components/schemas/BinaryFileType"
-                }
-              }
-            }
+            "$ref": "#/components/responses/PDFFileResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
