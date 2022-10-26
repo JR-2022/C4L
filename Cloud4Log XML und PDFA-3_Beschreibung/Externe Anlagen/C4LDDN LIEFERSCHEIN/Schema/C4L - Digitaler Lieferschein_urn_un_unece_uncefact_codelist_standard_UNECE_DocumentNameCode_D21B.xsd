@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:clm61001="urn:un:unece:uncefact:codelist:standard:UNECE:DocumentNameCode:D21B"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:DocumentNameCode:D21B"
+    elementFormDefault="qualified"
+    version="3.16">
+  <xs:simpleType name="DocumentNameCodeContentType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="270"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

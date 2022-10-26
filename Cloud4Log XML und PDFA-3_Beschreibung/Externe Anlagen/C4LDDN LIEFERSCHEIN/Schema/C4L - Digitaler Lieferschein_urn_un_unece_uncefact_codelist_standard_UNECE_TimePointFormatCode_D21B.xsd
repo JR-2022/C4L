@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:clm62379="urn:un:unece:uncefact:codelist:standard:UNECE:TimePointFormatCode:D21B"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:TimePointFormatCode:D21B"
+    elementFormDefault="qualified"
+    version="4.3">
+  <xs:simpleType name="TimePointFormatCodeContentType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="102"/>
+      <xs:enumeration value="203"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

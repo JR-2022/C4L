@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:131"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:clm63139ContactTypeCode="urn:un:unece:uncefact:codelist:standard:UNECE:ContactFunctionCode:D21B"
+    xmlns:clm61001="urn:un:unece:uncefact:codelist:standard:UNECE:DocumentNameCode:D21B"
+    xmlns:clm6Recommendation20Weight="urn:un:unece:uncefact:codelist:standard:UNECE:MeasurementUnitCommonCodeWeight:4"
+    xmlns:clm62379="urn:un:unece:uncefact:codelist:standard:UNECE:TimePointFormatCode:D21B"
+    xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:131"
+    xmlns:ids5ISO316612A="urn:un:unece:uncefact:identifierlist:standard:ISO:ISOTwo-letterCountryCode:SecondEdition2006"
+    targetNamespace="urn:un:unece:uncefact:data:standard:QualifiedDataType:131"
+    elementFormDefault="qualified"
+    version="131.D22A">
+  <xs:import namespace="urn:un:unece:uncefact:codelist:standard:UNECE:ContactFunctionCode:D21B" schemaLocation="C4L%20-%20Digitaler%20Lieferschein_urn_un_unece_uncefact_codelist_standard_UNECE_ContactFunctionCode_D21B.xsd"/>
+  <xs:import namespace="urn:un:unece:uncefact:codelist:standard:UNECE:DocumentNameCode:D21B" schemaLocation="C4L%20-%20Digitaler%20Lieferschein_urn_un_unece_uncefact_codelist_standard_UNECE_DocumentNameCode_D21B.xsd"/>
+  <xs:import namespace="urn:un:unece:uncefact:codelist:standard:UNECE:MeasurementUnitCommonCodeWeight:4" schemaLocation="C4L%20-%20Digitaler%20Lieferschein_urn_un_unece_uncefact_codelist_standard_UNECE_MeasurementUnitCommonCodeWeight_4.xsd"/>
+  <xs:import namespace="urn:un:unece:uncefact:codelist:standard:UNECE:TimePointFormatCode:D21B" schemaLocation="C4L%20-%20Digitaler%20Lieferschein_urn_un_unece_uncefact_codelist_standard_UNECE_TimePointFormatCode_D21B.xsd"/>
+  <xs:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:131" schemaLocation="C4L%20-%20Digitaler%20Lieferschein_urn_un_unece_uncefact_data_standard_UnqualifiedDataType_131.xsd"/>
+  <xs:import namespace="urn:un:unece:uncefact:identifierlist:standard:ISO:ISOTwo-letterCountryCode:SecondEdition2006" schemaLocation="C4L%20-%20Digitaler%20Lieferschein_urn_un_unece_uncefact_identifierlist_standard_ISO_ISOTwo-letterCountryCode_SecondEdition2006.xsd"/>
+  <xs:complexType name="ContactTypeCodeType">
+    <xs:simpleContent>
+      <xs:extension base="clm63139ContactTypeCode:ContactFunctionCodeContentType"/>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="CountryIDType">
+    <xs:simpleContent>
+      <xs:extension base="ids5ISO316612A:ISOTwoletterCountryCodeContentType"/>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DocumentCodeType">
+    <xs:simpleContent>
+      <xs:extension base="clm61001:DocumentNameCodeContentType"/>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="FormattedDateTimeType">
+    <xs:sequence>
+      <xs:element name="DateTimeString">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="format" type="clm62379:TimePointFormatCodeContentType" use="required"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="WeightUnitMeasureType">
+    <xs:simpleContent>
+      <xs:extension base="xs:decimal">
+        <xs:attribute name="unitCode" type="clm6Recommendation20Weight:MeasurementUnitCommonCodeWeightContentType" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>

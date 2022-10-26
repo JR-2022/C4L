@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:clm62379timeonly="urn:un:unece:uncefact:codelist:standard:UNECE:TimeOnlyFormatCode:D21B"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:TimeOnlyFormatCode:D21B"
+    elementFormDefault="qualified"
+    version="4.1">
+  <xs:simpleType name="TimeOnlyFormatCodeContentType">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+</xs:schema>

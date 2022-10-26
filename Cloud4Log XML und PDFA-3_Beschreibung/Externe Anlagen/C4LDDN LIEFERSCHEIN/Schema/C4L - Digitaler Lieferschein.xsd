@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryDespatchAdvice:131"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:131"
+    xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:131"
+    xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:131"
+    targetNamespace="urn:un:unece:uncefact:data:standard:CrossIndustryDespatchAdvice:131"
+    elementFormDefault="qualified">
+  <xs:import namespace="urn:un:unece:uncefact:data:standard:QualifiedDataType:131" schemaLocation="C4L%20-%20Digitaler%20Lieferschein_urn_un_unece_uncefact_data_standard_QualifiedDataType_131.xsd"/>
+  <xs:import namespace="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:131" schemaLocation="C4L%20-%20Digitaler%20Lieferschein_urn_un_unece_uncefact_data_standard_ReusableAggregateBusinessInformationEntity_131.xsd"/>
+  <xs:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:131" schemaLocation="C4L%20-%20Digitaler%20Lieferschein_urn_un_unece_uncefact_data_standard_UnqualifiedDataType_131.xsd"/>
+  <xs:element name="CrossIndustryDespatchAdvice" type="rsm:CrossIndustryDespatchAdviceType"/>
+  <xs:complexType name="CrossIndustryDespatchAdviceType">
+    <xs:sequence>
+      <xs:element name="ExchangedDocumentContext" type="ram:ExchangedDocumentContextType"/>
+      <xs:element name="ExchangedDocument" type="ram:ExchangedDocumentType"/>
+      <xs:element name="SupplyChainTradeTransaction" type="ram:SupplyChainTradeTransactionType"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

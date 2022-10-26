@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:131"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:131"
+    xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:131"
+    targetNamespace="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:131"
+    elementFormDefault="qualified"
+    version="131.D22A">
+  <xs:import namespace="urn:un:unece:uncefact:data:standard:QualifiedDataType:131" schemaLocation="C4L%20-%20Digitaler%20Lieferschein_urn_un_unece_uncefact_data_standard_QualifiedDataType_131.xsd"/>
+  <xs:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:131" schemaLocation="C4L%20-%20Digitaler%20Lieferschein_urn_un_unece_uncefact_data_standard_UnqualifiedDataType_131.xsd"/>
+  <xs:complexType name="DocumentContextParameterType">
+    <xs:sequence>
+      <xs:element name="ID" type="udt:IDType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DocumentLineDocumentType">
+    <xs:sequence>
+      <xs:element name="LineID" type="udt:IDType"/>
+      <xs:element name="IncludedNote" type="ram:NoteType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ExchangedDocumentContextType">
+    <xs:sequence>
+      <xs:element name="TestIndicator" type="udt:IndicatorType" minOccurs="0"/>
+      <xs:element name="BusinessProcessSpecifiedDocumentContextParameter" type="ram:DocumentContextParameterType" minOccurs="0"/>
+      <xs:element name="GuidelineSpecifiedDocumentContextParameter" type="ram:DocumentContextParameterType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ExchangedDocumentType">
+    <xs:sequence>
+      <xs:element name="ID" type="udt:IDType"/>
+      <xs:element name="Name" type="udt:TextType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="TypeCode" type="qdt:DocumentCodeType"/>
+      <xs:element name="IssueDateTime" type="udt:DateTimeType"/>
+      <xs:element name="IncludedNote" type="ram:NoteType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="HeaderTradeAgreementType">
+    <xs:sequence>
+      <xs:element name="SellerTradeParty" type="ram:TradePartyType" minOccurs="0"/>
+      <xs:element name="BuyerTradeParty" type="ram:TradePartyType" minOccurs="0"/>
+      <xs:element name="BuyerOrderReferencedDocument" type="ram:ReferencedDocumentType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="HeaderTradeDeliveryType">
+    <xs:sequence>
+      <xs:element name="ShipToTradeParty" type="ram:TradePartyType"/>
+      <xs:element name="UltimateShipToTradeParty" type="ram:TradePartyType" minOccurs="0"/>
+      <xs:element name="ShipFromTradeParty" type="ram:TradePartyType"/>
+      <xs:element name="ActualDespatchSupplyChainEvent" type="ram:SupplyChainEventType" minOccurs="0"/>
+      <xs:element name="PlannedDeliverySupplyChainEvent" type="ram:SupplyChainEventType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LegalOrganizationType">
+    <xs:sequence>
+      <xs:element name="ID" type="udt:IDType" minOccurs="0"/>
+      <xs:element name="TradingBusinessName" type="udt:TextType" minOccurs="0"/>
+      <xs:element name="PostalTradeAddress" type="ram:TradeAddressType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LineTradeDeliveryType">
+    <xs:sequence>
+      <xs:element name="PackageQuantity" type="udt:QuantityType" minOccurs="0"/>
+      <xs:element name="GrossWeightMeasure" type="qdt:WeightUnitMeasureType" minOccurs="0"/>
+      <xs:element name="DespatchedQuantity" type="udt:QuantityType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LogisticsPackageType">
+    <xs:sequence>
+      <xs:element name="ItemQuantity" type="udt:QuantityType" minOccurs="0"/>
+      <xs:element name="Description" type="udt:TextType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="NoteType">
+    <xs:sequence>
+      <xs:element name="ContentCode" type="udt:CodeType" minOccurs="0"/>
+      <xs:element name="Content" type="udt:TextType"/>
+      <xs:element name="SubjectCode" type="udt:CodeType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProductCharacteristicType">
+    <xs:sequence>
+      <xs:element name="Description" type="udt:TextType" minOccurs="0"/>
+      <xs:element name="Value" type="udt:TextType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ReferencedDocumentType">
+    <xs:sequence>
+      <xs:element name="IssuerAssignedID" type="udt:IDType"/>
+      <xs:element name="FormattedIssueDateTime" type="qdt:FormattedDateTimeType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SupplyChainEventType">
+    <xs:sequence>
+      <xs:element name="OccurrenceDateTime" type="udt:DateTimeType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SupplyChainTradeLineItemType">
+    <xs:sequence>
+      <xs:element name="AssociatedDocumentLineDocument" type="ram:DocumentLineDocumentType"/>
+      <xs:element name="SpecifiedTradeProduct" type="ram:TradeProductType"/>
+      <xs:element name="SpecifiedLineTradeDelivery" type="ram:LineTradeDeliveryType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SupplyChainTradeTransactionType">
+    <xs:sequence>
+      <xs:element name="IncludedSupplyChainTradeLineItem" type="ram:SupplyChainTradeLineItemType" maxOccurs="unbounded"/>
+      <xs:element name="SpecifiedLogisticsPackage" type="ram:LogisticsPackageType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ApplicableHeaderTradeAgreement" type="ram:HeaderTradeAgreementType"/>
+      <xs:element name="ApplicableHeaderTradeDelivery" type="ram:HeaderTradeDeliveryType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TaxRegistrationType">
+    <xs:sequence>
+      <xs:element name="ID" type="udt:IDType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TradeAddressType">
+    <xs:sequence>
+      <xs:element name="PostcodeCode" type="udt:CodeType" minOccurs="0"/>
+      <xs:element name="LineOne" type="udt:TextType" minOccurs="0"/>
+      <xs:element name="LineTwo" type="udt:TextType" minOccurs="0"/>
+      <xs:element name="LineThree" type="udt:TextType" minOccurs="0"/>
+      <xs:element name="CityName" type="udt:TextType" minOccurs="0"/>
+      <xs:element name="CountryID" type="qdt:CountryIDType"/>
+      <xs:element name="CountrySubDivisionName" type="udt:TextType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TradeContactType">
+    <xs:sequence>
+      <xs:element name="PersonName" type="udt:TextType" minOccurs="0"/>
+      <xs:element name="DepartmentName" type="udt:TextType" minOccurs="0"/>
+      <xs:element name="TypeCode" type="qdt:ContactTypeCodeType" minOccurs="0"/>
+      <xs:element name="TelephoneUniversalCommunication" type="ram:UniversalCommunicationType" minOccurs="0"/>
+      <xs:element name="FaxUniversalCommunication" type="ram:UniversalCommunicationType" minOccurs="0"/>
+      <xs:element name="EmailURIUniversalCommunication" type="ram:UniversalCommunicationType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TradePartyType">
+    <xs:sequence>
+      <xs:element name="ID" type="udt:IDType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="GlobalID" type="udt:IDType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Name" type="udt:TextType" minOccurs="0"/>
+      <xs:element name="Description" type="udt:TextType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="SpecifiedLegalOrganization" type="ram:LegalOrganizationType" minOccurs="0"/>
+      <xs:element name="DefinedTradeContact" type="ram:TradeContactType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="PostalTradeAddress" type="ram:TradeAddressType" minOccurs="0"/>
+      <xs:element name="URIUniversalCommunication" type="ram:UniversalCommunicationType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="SpecifiedTaxRegistration" type="ram:TaxRegistrationType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TradeProductInstanceType">
+    <xs:sequence>
+      <xs:element name="BatchID" type="udt:IDType" minOccurs="0"/>
+      <xs:element name="BestBeforeDateTime" type="udt:DateTimeType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TradeProductType">
+    <xs:sequence>
+      <xs:element name="ID" type="udt:IDType" minOccurs="0"/>
+      <xs:element name="GlobalID" type="udt:IDType" minOccurs="0"/>
+      <xs:element name="SellerAssignedID" type="udt:IDType" minOccurs="0"/>
+      <xs:element name="Name" type="udt:TextType"/>
+      <xs:element name="Description" type="udt:TextType" minOccurs="0"/>
+      <xs:element name="ApplicableProductCharacteristic" type="ram:ProductCharacteristicType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="IndividualTradeProductInstance" type="ram:TradeProductInstanceType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="UniversalCommunicationType">
+    <xs:sequence>
+      <xs:element name="URIID" type="udt:IDType" minOccurs="0"/>
+      <xs:element name="CompleteNumber" type="udt:TextType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
