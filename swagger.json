@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.0.0",
+    "version": "1.0.5",
     "description": "The documented API is used by the frontend hosted on cloud4log.de. If you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}. Endpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/majuss/cloud4log-swagger"
   },
   "servers": [
@@ -194,8 +194,9 @@
     },
     "/administration/organizations/{organizationKey}/api-keys": {
       "post": {
+        "deprecated": true,
         "summary": "creates a API key",
-        "description": "Creates an API user for the specified organization sites with\nthe specified permissions.\nReturns a sessionId that can't received a second time.\n",
+        "description": "Deprecated: Please use /administration/organizations/{organizationKey}/api-users-keys\nCreates an API user for the specified organization sites with\nthe specified permissions.\nReturns a sessionId that can't received a second time.\n",
         "operationId": "createApiKeyForOrganizationSites",
         "x-dls-requiredOrganizationPermission": "api_keys_create",
         "tags": [
@@ -262,10 +263,52 @@
         }
       }
     },
+    "/administration/organizations/{organizationKey}/api-users-keys": {
+      "post": {
+        "summary": "creates a API key",
+        "description": "Create a new api user and add this api user to the organization and the given organization sites\nand equip the new api user with permissions according to the given roles for each site.\nThe requesting user must have access to the organization the api new user is added.\nReturns a sessionId that can't received a second time.\n",
+        "operationId": "createApiKeyForOrganizationSitesWithRoles",
+        "x-dls-requiredOrganizationPermission": "api_keys_create",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiUserForOrganizationAdminRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "API key successful created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostApiUserResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/administration/organizations/{organizationKey}/api-keys/{userKey}": {
       "put": {
+        "deprecated": true,
         "summary": "Set new permissions for API key",
-        "description": "New permissions are set based on the given roles and organization sites.\nYou can also edit the API key user properties.\n",
+        "description": "Deprecated: Please use /administration/organizations/{organizationKey}/api-users-keys/{userKey}\nNew permissions are set based on the given roles and organization sites.\nYou can also edit the API key user properties.\n",
         "operationId": "putApiKeyForOrganization",
         "x-dls-requiredOrganizationPermission": "api_keys_modify",
         "tags": [
@@ -285,6 +328,43 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ApiUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "API key successfully patched"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organizations/{organizationKey}/api-users-keys/{userKey}": {
+      "put": {
+        "summary": "Set new permissions for API key",
+        "description": "New permissions are set based on the given roles and organization sites.\nYou can also edit the API key user properties.\n",
+        "operationId": "putApiKeyForOrganizationWithRoles",
+        "x-dls-requiredOrganizationPermission": "api_keys_modify",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/userKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiUserForOrganizationAdminRequest"
               }
             }
           }
@@ -2002,7 +2082,7 @@
         "summary": "Merge open bundles",
         "description": "Merge multiple delivery note bundles into a new one. All bundles\nmust have status 'open'. The supply chain and name are taken from\nthe first bundle in the array\n",
         "operationId": "postMergeBundles",
-        "x-dls-requiredOprganizationSitePermission": "delivery_note_bundles_merge",
+        "x-dls-requiredOrganizationSitePermission": "delivery_note_bundles_merge",
         "tags": [
           "delivery note bundles"
         ],
@@ -2505,6 +2585,7 @@
     },
     "/organization-sites/consignee/delivery-notes/checkin": {
       "get": {
+        "deprecated": true,
         "summary": "get delivery note keys from wallet for checkin",
         "description": "Get delivery notes for a checkin.\nThe token from the checkout wallet or from the tour wallet.\nReturns list of delivery note keys that can be used to create a checkin.\nThe requesting user must have the permission\nconsignee_delivery_notes_lookup_with_token on all organization sites.\n",
         "operationId": "getConsigneeDeliveryNoteKeysForToken",
@@ -2523,6 +2604,36 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/KeyArrayType"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/consignee/delivery-notes/for-checkin": {
+      "get": {
+        "summary": "get delivery note keys from wallet for checkin",
+        "description": "Get delivery notes for a checkin.\nThe token from the checkout wallet or from the tour wallet.\nReturns list of delivery note keys and their organization site key\nthat can be used to create a checkin.\nThe requesting user must have the permission\nconsignee_delivery_notes_lookup_with_token on all organization sites.\n",
+        "operationId": "getConsigneeDeliveryNotesForToken",
+        "tags": [
+          "checkins"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TokenTypeParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of delivery note keys that can be used to create a checkin.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetConsigneeDeliveryNotesForToken"
                 }
               }
             }
@@ -3546,6 +3657,75 @@
         }
       }
     },
+    "/external/signature-pads/checkin/delivery-note/{deliveryNoteKey}/pdf": {
+      "get": {
+        "summary": "Get a delivery note PDF by deliveryNoteKey",
+        "description": "Return a PDF for a deliveryNoteKey for the checkin with carrier access key\n",
+        "operationId": "externalGetSinglePdfForSignature",
+        "security": [],
+        "tags": [
+          "external",
+          "signature pads",
+          "pdf"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/TokenTypeParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the delivery note pdf\n",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/BinaryFileType"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/external/signature-pads/checkin/delivery-note/{deliveryNoteKey}/attachments/{attachmentKey}": {
+      "get": {
+        "summary": "Get a attachment by the attachmentKey for a checkin",
+        "description": "Return a attachment by the attachmentKey for the checkin with carrier access key and the deliveryNoteKey\n",
+        "operationId": "externalGetSingleAttachmentForSignature",
+        "security": [],
+        "tags": [
+          "external",
+          "signature pads",
+          "pdf"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/attachmentKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/TokenTypeParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Attachment",
+            "$ref": "#/components/requestBodies/AttachmentFile"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/external/test-string-length": {
       "post": {
         "summary": "DEBUG - test accepted string length",
@@ -4478,6 +4658,63 @@
           },
           {
             "$ref": "#/components/parameters/ToTimestampTypeParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CSVFileResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/service-provider/billing/csv-grouped-by-site/timestamp": {
+      "get": {
+        "summary": "Get billing CSV grouped by site transactions for a year and month.",
+        "description": "Get billing CSV for a specified timestamp grouped by organization sites.\nAll times are in UTC.\n",
+        "operationId": "getServiceProviderBillingCsvGroupedBySiteTimestamp",
+        "x-dls-requiredUserPermission": "service_provider_billing_csv_read",
+        "tags": [
+          "service provider"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ZipTypeParam"
+          },
+          {
+            "$ref": "#/components/parameters/MonthAndYearTimestampTypeParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CSVFileResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/service-provider/billing/csv-grouped-by-site/timeframe": {
+      "get": {
+        "summary": "Get billing CSV grouped by site transactions.",
+        "description": "Get billing CSV for a specified timeframe grouped by organization sites.\nFrom and to must have millisecond resolution.\nConstrain: from <= timestamp < to\nAll times are in UTC.\nThe maximum range between from and to is 35 days.\n",
+        "operationId": "getServiceProviderBillingCsvGroupedBySite",
+        "x-dls-requiredUserPermission": "service_provider_billing_csv_read",
+        "tags": [
+          "service provider"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/FromTimestampTypeParam"
+          },
+          {
+            "$ref": "#/components/parameters/ToTimestampTypeParam"
+          },
+          {
+            "$ref": "#/components/parameters/ZipTypeParam"
           }
         ],
         "responses": {
@@ -8335,6 +8572,30 @@
           }
         }
       },
+      "ApiUserForOrganizationAdminRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fullName",
+          "emailAddress",
+          "dateExpired",
+          "organizationSiteKeysAndRoles"
+        ],
+        "properties": {
+          "fullName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "emailAddress": {
+            "$ref": "#/components/schemas/EmailAddressType"
+          },
+          "dateExpired": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "organizationSiteKeysAndRoles": {
+            "$ref": "#/components/schemas/OrganitazionSiteRolesArray"
+          }
+        }
+      },
       "UserForOrganizationSiteAdminRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -9366,6 +9627,25 @@
                 "type": "number",
                 "minimum": 0
               }
+            }
+          }
+        }
+      },
+      "GetConsigneeDeliveryNotesForToken": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "deliveryNoteKey",
+            "organizationSiteKey"
+          ],
+          "properties": {
+            "deliveryNoteKey": {
+              "$ref": "#/components/schemas/KeyType"
+            },
+            "organizationSiteKey": {
+              "$ref": "#/components/schemas/KeyType"
             }
           }
         }
@@ -10632,6 +10912,22 @@
         "in": "query",
         "required": true,
         "name": "to",
+        "schema": {
+          "$ref": "#/components/schemas/TimestampType"
+        }
+      },
+      "ZipTypeParam": {
+        "in": "query",
+        "required": false,
+        "name": "zip",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "MonthAndYearTimestampTypeParam": {
+        "in": "query",
+        "required": true,
+        "name": "yearMonth",
         "schema": {
           "$ref": "#/components/schemas/TimestampType"
         }
