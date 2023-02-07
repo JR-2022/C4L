@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.0.5",
+    "version": "1.1.0",
     "description": "The documented API is used by the frontend hosted on cloud4log.de. If you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}. Endpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/majuss/cloud4log-swagger"
   },
   "servers": [
@@ -861,7 +861,7 @@
         ],
         "responses": {
           "200": {
-            "description": "All users of the requested organization",
+            "description": "Returns the user details of the requested user for the specified organization",
             "content": {
               "application/json": {
                 "schema": {
@@ -2587,7 +2587,7 @@
       "get": {
         "deprecated": true,
         "summary": "get delivery note keys from wallet for checkin",
-        "description": "Get delivery notes for a checkin.\nThe token from the checkout wallet or from the tour wallet.\nReturns list of delivery note keys that can be used to create a checkin.\nThe requesting user must have the permission\nconsignee_delivery_notes_lookup_with_token on all organization sites.\n",
+        "description": "Deprecated - will be removed 2023-02-28\nGet delivery notes for a checkin.\nThe token from the checkout wallet or from the tour wallet.\nReturns list of delivery note keys that can be used to create a checkin.\nThe requesting user must have the permission\nconsignee_delivery_notes_lookup_with_token on all organization sites.\n",
         "operationId": "getConsigneeDeliveryNoteKeysForToken",
         "tags": [
           "checkins"
@@ -4997,6 +4997,40 @@
         }
       }
     },
+    "/organization-sites/{organizationSiteKey}/carrier/tours/{tourKey}/delivery-note-pdfs": {
+      "get": {
+        "summary": "Get all pdfs from a tour.",
+        "description": "Get all pdfs from a tour by the tourKey.\n",
+        "operationId": "getToursPdfs",
+        "x-dls-requiredOrganizationSitePermission": "carrier_tours_read",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/tourKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "body contains array of pdfs in binary format",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "$ref": "#/components/schemas/BinaryFileType"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/me": {
       "get": {
         "summary": "Get information of user the logged in user",
@@ -5551,9 +5585,9 @@
         "additionalProperties": false,
         "required": [
           "_key",
-          "address",
           "gln",
           "name",
+          "fullSiteName",
           "phoneNumbers",
           "consignor",
           "carrier",
@@ -5569,11 +5603,17 @@
           "address": {
             "type": "string"
           },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
           "gln": {
             "type": "string"
           },
           "name": {
             "type": "string"
+          },
+          "fullSiteName": {
+            "$ref": "#/components/schemas/NameType"
           },
           "phoneNumbers": {
             "$ref": "#/components/schemas/PhoneNumbersArray"
@@ -7085,7 +7125,6 @@
           "_key",
           "dateCreated",
           "name",
-          "address",
           "gln",
           "phoneNumbers",
           "sites"
@@ -7103,6 +7142,9 @@
           "address": {
             "$ref": "#/components/schemas/NameType"
           },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
           "gln": {
             "$ref": "#/components/schemas/NameType"
           },
@@ -7116,7 +7158,30 @@
             }
           },
           "contact": {
-            "$ref": "#/components/schemas/ServiceProviderOrganizationContact"
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "emailAddress",
+              "phoneNumbers"
+            ],
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/NameType"
+              },
+              "address": {
+                "$ref": "#/components/schemas/NameType"
+              },
+              "location": {
+                "$ref": "#/components/schemas/Location"
+              },
+              "emailAddress": {
+                "$ref": "#/components/schemas/EmailAddressType",
+                "default": ""
+              },
+              "phoneNumbers": {
+                "$ref": "#/components/schemas/PhoneNumbersArray"
+              }
+            }
           },
           "quotas": {
             "$ref": "#/components/schemas/Quotas"
@@ -7145,7 +7210,7 @@
             "additionalProperties": false,
             "required": [
               "name",
-              "address",
+              "location",
               "gln",
               "phoneNumbers",
               "quotas"
@@ -7154,8 +7219,8 @@
               "name": {
                 "$ref": "#/components/schemas/OrgNameType"
               },
-              "address": {
-                "$ref": "#/components/schemas/NameType"
+              "location": {
+                "$ref": "#/components/schemas/Location"
               },
               "gln": {
                 "$ref": "#/components/schemas/NameType"
@@ -7194,16 +7259,16 @@
         "additionalProperties": false,
         "required": [
           "name",
-          "address",
           "emailAddress",
-          "phoneNumbers"
+          "phoneNumbers",
+          "location"
         ],
         "properties": {
           "name": {
             "$ref": "#/components/schemas/NameType"
           },
-          "address": {
-            "$ref": "#/components/schemas/NameType"
+          "location": {
+            "$ref": "#/components/schemas/Location"
           },
           "emailAddress": {
             "$ref": "#/components/schemas/EmailAddressType",
@@ -7270,8 +7335,8 @@
           "name": {
             "$ref": "#/components/schemas/OrgNameType"
           },
-          "address": {
-            "$ref": "#/components/schemas/NameType"
+          "location": {
+            "$ref": "#/components/schemas/Location"
           },
           "gln": {
             "$ref": "#/components/schemas/NameType"
@@ -7295,7 +7360,6 @@
           "_key",
           "name",
           "fullSiteName",
-          "address",
           "gln",
           "phoneNumbers",
           "consignor",
@@ -7314,6 +7378,9 @@
           },
           "address": {
             "$ref": "#/components/schemas/NameType"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
           },
           "gln": {
             "$ref": "#/components/schemas/NameType"
@@ -7350,7 +7417,6 @@
         "additionalProperties": false,
         "required": [
           "_key",
-          "address",
           "gln",
           "name",
           "phoneNumbers",
@@ -7364,7 +7430,10 @@
             "$ref": "#/components/schemas/KeyType"
           },
           "address": {
-            "type": "string"
+            "$ref": "#/components/schemas/NameType"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
           },
           "gln": {
             "type": "string"
@@ -7715,7 +7784,7 @@
         "required": [
           "name",
           "gln",
-          "address",
+          "location",
           "consignor",
           "carrier",
           "consignee",
@@ -7729,8 +7798,8 @@
           "gln": {
             "$ref": "#/components/schemas/NameType"
           },
-          "address": {
-            "$ref": "#/components/schemas/NameType"
+          "location": {
+            "$ref": "#/components/schemas/Location"
           },
           "consignor": {
             "type": "boolean"
@@ -9462,7 +9531,6 @@
         "required": [
           "_key",
           "name",
-          "address",
           "gln",
           "phoneNumbers",
           "roles",
@@ -9477,6 +9545,9 @@
           },
           "address": {
             "$ref": "#/components/schemas/NameType"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
           },
           "gln": {
             "$ref": "#/components/schemas/NameType"
@@ -9732,6 +9803,30 @@
         "description": "String pattern for email address",
         "type": "string",
         "maxLength": 1024
+      },
+      "Location": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "country",
+          "zipCode",
+          "city",
+          "street"
+        ],
+        "properties": {
+          "country": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "zipCode": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "city": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "street": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
       },
       "ExternalTourName": {
         "type": "string",
