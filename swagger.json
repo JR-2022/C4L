@@ -3383,7 +3383,7 @@
     "/external/signature-pads/{signaturePadType}": {
       "patch": {
         "summary": "Update signature via carrier",
-        "description": "Update the signature in a signature pad. The token is the carrierAccessToken\nfrom the signature pad creation request.\n",
+        "description": "Update the signature on a signature pad. This request waits with the response until the checkout process is finished.\nThe token is the carrierAccessToken from the signature pad creation request.\nReturns the accessToken to access the wallet invite page or gate page.\nTo complete the checkout process, use POST /organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles-checkout.\n",
         "operationId": "externalPatchSignaturePad",
         "security": [],
         "tags": [
