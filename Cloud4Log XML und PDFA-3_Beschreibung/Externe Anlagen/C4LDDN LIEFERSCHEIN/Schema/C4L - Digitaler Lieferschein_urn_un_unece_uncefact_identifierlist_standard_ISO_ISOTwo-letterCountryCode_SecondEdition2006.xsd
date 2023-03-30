@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:ids5ISO316612A="urn:un:unece:uncefact:identifierlist:standard:ISO:ISOTwo-letterCountryCode:SecondEdition2006"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="urn:un:unece:uncefact:identifierlist:standard:ISO:ISOTwo-letterCountryCode:SecondEdition2006"
+    elementFormDefault="qualified"
+    version="10.11">
+  <xs:simpleType name="ISOTwoletterCountryCodeContentType">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+</xs:schema>
