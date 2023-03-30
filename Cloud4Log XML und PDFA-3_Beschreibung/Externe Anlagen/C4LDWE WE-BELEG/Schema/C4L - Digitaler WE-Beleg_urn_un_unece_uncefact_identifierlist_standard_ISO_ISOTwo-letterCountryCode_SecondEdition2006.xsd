@@ -1,0 +1,5 @@
+<xs:schema targetNamespace="urn:un:unece:uncefact:identifierlist:standard:ISO:ISOTwo-letterCountryCode:SecondEdition2006" elementFormDefault="qualified" version="10.11">
+<xs:simpleType name="ISOTwoletterCountryCodeContentType">
+<xs:restriction base="xs:token"/>
+</xs:simpleType>
+</xs:schema>
