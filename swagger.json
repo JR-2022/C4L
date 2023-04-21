@@ -2319,8 +2319,8 @@
     },
     "/organization-sites/{organizationSiteKey}/carrier/delivery-notes": {
       "get": {
-        "summary": "Get delivery node w/o loadcarrier as carrier",
-        "description": "Get carrier delivery notes from delivery note pool.\nDoes not include load carriers.\n",
+        "summary": "Get delivery notes w/o load carriers as carrier",
+        "description": "Get carrier delivery notes from delivery note pool.\nProperty loadCarriers is always an empty array. To get the\nload carriers please use the load carriers endpoint.\n",
         "operationId": "getCarrierDeliveryNotesMetadataInPool",
         "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
         "tags": [
@@ -2491,8 +2491,8 @@
     },
     "/organization-sites/{organizationSiteKey}/consignee/delivery-notes": {
       "get": {
-        "summary": "Get delivery node w/o loadcarrier as consignee",
-        "description": "Get consignee delivery notes from delivery note pool.\nDoes not include load carriers.\n",
+        "summary": "Get delivery notes w/o load carriers as consignee",
+        "description": "Get consignee delivery notes from delivery note pool.\nProperty loadCarriers is always an empty array. To get the\nload carriers please use the load carriers endpoint.\n",
         "operationId": "getConsigneeDeliveryNotesMetadataInPool",
         "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
         "tags": [
@@ -2690,7 +2690,7 @@
     "/organization-sites/{organizationSiteKey}/consignor/delivery-notes": {
       "post": {
         "summary": "Add PDF to pool",
-        "description": "Adds the posted delivery note PDF to the delivery note pool.\nThe PDF is converted to PDF/A3. The pool is a colleciton of\nloose delivery notes without a assigned supply chain or bundle.\n",
+        "description": "Adds the posted delivery note PDF to the delivery note pool.\nThe PDF is converted to PDF/A3. The pool is a collection of\nloose delivery notes without a assigned supply chain or bundle.\n",
         "operationId": "postDeliveryNoteToPool",
         "x-dls-requiredOrganizationSitePermission": "delivery_notes_create",
         "tags": [
@@ -2727,8 +2727,8 @@
         }
       },
       "get": {
-        "summary": "Get delivery note data w/o load carriers",
-        "description": "Get delivery notes metadata from delivery note pool.\nDoes not include load carriers.\n",
+        "summary": "Get delivery notes data w/o load carriers",
+        "description": "Get delivery notes metadata from delivery note pool.\nProperty loadCarriers is always an empty array. To get the\nload carriers please use the load carriers endpoint.\n",
         "operationId": "getDeliveryNotesMetadataInPool",
         "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
         "tags": [
@@ -2828,8 +2828,8 @@
         }
       },
       "get": {
-        "summary": "Get delivery note data from bundle w/o load carriers",
-        "description": "Get delivery note metadata from a delivery note bundle.\nDoes not include load carriers.\n",
+        "summary": "Get delivery notes data from bundle w/o load carriers",
+        "description": "Get delivery notes metadata from a delivery note bundle.\nProperty loadCarriers is always an empty array. To get the\nload carriers please use the load carriers endpoint.\n",
         "operationId": "getDeliveryNoteMetadataInBundle",
         "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
         "tags": [
@@ -3020,7 +3020,7 @@
     "/delivery-notes/{deliveryNoteKey}": {
       "get": {
         "summary": "Get meta data for a delivery note w/o loadcarrier",
-        "description": "Get meta data for a single delivery note from delivery note pool.\nDoes not include load carriers.\n",
+        "description": "Get meta data for a single delivery note from delivery note pool.\nProperty loadCarriers is always an empty array. To get the\nload carriers please use the load carriers endpoint.\n",
         "operationId": "getSingleDeliveryNoteMetaData",
         "tags": [
           "delivery notes"
@@ -4876,7 +4876,7 @@
         "summary": "Delete a carrier tour.",
         "description": "Delete a tour. This is only possible when not a signle delivery note from the tour is in checkin.\n",
         "operationId": "deleteTour",
-        "x-dls-requiredOrganizationSitePermission": "carrier_tours_update",
+        "x-dls-requiredOrganizationSitePermission": "carrier_tours_delete",
         "tags": [
           "tours"
         ],
