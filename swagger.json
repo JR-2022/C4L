@@ -2,8 +2,8 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.1.0",
-    "description": "The documented API is used by the frontend hosted on cloud4log.de. If you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}. Endpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/majuss/cloud4log-swagger"
+    "version": "1.1.2",
+    "description": "The documented API is used by the frontend hosted on cloud4log.com. If you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}. Endpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
     {
@@ -709,8 +709,8 @@
         }
       },
       "put": {
-        "summary": "Edit user with new site roles/permission",
-        "description": "Edit a existing user and add this user to the given organization sites\nand equip the new user with permissions according to the given roles.\nThe requesting user must have access to the organization the new user is added.\nAll previously set permissions and linked sites will be removed.\nAll sites and roles to be set must be passed.\nThe optional submitted password is ignored.\n",
+        "summary": "Edit user with new site roles/permissions",
+        "description": "Edit a existing user and add this user to the given organization sites\nand equip the new user with permissions according to the given roles.\nThe requesting user must have access to the organization the user is added.\nAll previously set permissions and linked sites are removed.\nAll sites and roles to be set must be passed.\nThe optional submitted password is ignored.\n",
         "operationId": "putAdministrationOrganizationUser",
         "x-dls-requiredOrganizationPermission": "administration_users_modify",
         "tags": [
@@ -775,8 +775,9 @@
         }
       },
       "post": {
+        "deprecated": true,
         "summary": "Create new user for organization site",
-        "description": "Create a new user and add this user to the organization for the specified organization site\nand equip the new user with the rights according to the specified roles.\nThe requesting user must have access to the organization site to which the new user is to be added.\nThe new user can have only the roles carrier, consignee, consignor, site_admin.\n",
+        "description": "Deprecated: Please use POST /administration/organization-sites/users\nCreate a new user and add this user to the organization for the specified organization site\nand equip the new user with the rights according to the specified roles.\nThe requesting user must have access to the organization site to which the new user is to be added.\nThe new user can have only the roles carrier, consignee, consignor, site_admin.\n",
         "operationId": "postAdministrationOrganizationSiteUser",
         "x-dls-requiredOrganizationSitePermission": "administration_organization_sites_users_create",
         "tags": [
@@ -807,10 +808,72 @@
         }
       }
     },
+    "/administration/organization-sites/users": {
+      "post": {
+        "summary": "Create new user for organization sites",
+        "description": "Create a new user and add this user to the organization for the specified organization sites\nand equip the new user with the rights according to the specified roles.\nThe requesting user must have access to the organization sites to which the new user is to be added.\nThe new user can have only the roles carrier, consignee, consignor, site_admin.\n",
+        "operationId": "postAdministrationOrganizationSitesUser",
+        "tags": [
+          "administration"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserForOrganizationSitesAdminRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The user was create and added to the organization"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organization-sites/users/{userKey}": {
+      "put": {
+        "summary": "Edit user with new site roles/permissions",
+        "description": "Edit a existing user and add this user to the given organization sites\nand equip the new user with permissions according to the given roles.\nThe requesting user must have access to the organization sites the user is added.\nAll previously set permissions and linked sites are removed.\nAll sites and roles to be set must be passed.\nThe optional submitted password is ignored.\nThe user can have only the roles carrier, consignee, consignor, site_admin.\n",
+        "operationId": "putAdministrationOrganizationSitesUser",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserForOrganizationSitesAdminRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The user was edited and got new permissions"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/administration/organization-sites/{organizationSiteKey}/users/{userKey}": {
       "patch": {
+        "deprecated": true,
         "summary": "Modify user for organization site",
-        "description": "Modify a user and for the given organization site and equip the\nuser with permissions according to the given roles.\nThe requesting user must have access to the organization site where the user is in.\nThe edited user can only have the roles site_admin, carrier, consignor, consignee.\nYou can't edit users with roles organization_admin\n",
+        "description": "Deprecated: Please use PUT /administration/organization-sites/users/{userKey}\nModify a user and for the given organization site and equip the\nuser with permissions according to the given roles.\nThe requesting user must have access to the organization site where the user is in.\nThe edited user can only have the roles site_admin, carrier, consignor, consignee.\nYou can't edit users with roles organization_admin\n",
         "operationId": "patchAdministrationOrganizationSiteUser",
         "x-dls-requiredOrganizationSitePermission": "administration_organization_sites_users_modify",
         "tags": [
@@ -8633,11 +8696,11 @@
           "emailAddress": {
             "$ref": "#/components/schemas/EmailAddressType"
           },
-          "organizationSiteKeysAndRoles": {
-            "$ref": "#/components/schemas/OrganitazionSiteRolesArray"
-          },
           "password": {
             "$ref": "#/components/schemas/PasswordType"
+          },
+          "organizationSiteKeysAndRoles": {
+            "$ref": "#/components/schemas/OrganitazionSiteRolesArray"
           }
         }
       },
@@ -8688,6 +8751,29 @@
           }
         }
       },
+      "UserForOrganizationSitesAdminRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fullName",
+          "emailAddress",
+          "organizationSiteKeysAndRoles"
+        ],
+        "properties": {
+          "fullName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "emailAddress": {
+            "$ref": "#/components/schemas/EmailAddressType"
+          },
+          "password": {
+            "$ref": "#/components/schemas/PasswordType"
+          },
+          "organizationSiteKeysAndRoles": {
+            "$ref": "#/components/schemas/OrganizationSitesRolesForSiteAdminArray"
+          }
+        }
+      },
       "PatchUserForOrganizationSiteAdminRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -8705,6 +8791,25 @@
           },
           "roles": {
             "$ref": "#/components/schemas/UserRolesForSiteAdminArray"
+          }
+        }
+      },
+      "OrganizationSitesRolesForSiteAdminArray": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "organizationSiteKey",
+            "roles"
+          ],
+          "properties": {
+            "organizationSiteKey": {
+              "$ref": "#/components/schemas/KeyType"
+            },
+            "roles": {
+              "$ref": "#/components/schemas/UserRolesForSiteAdminArray"
+            }
           }
         }
       },
