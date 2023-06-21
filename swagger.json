@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "description": "The documented API is used by the frontend hosted on cloud4log.com. If you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}. Endpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -2650,7 +2650,7 @@
       "get": {
         "deprecated": true,
         "summary": "get delivery note keys from wallet for checkin",
-        "description": "Deprecated - will be removed 2023-02-28\nGet delivery notes for a checkin.\nThe token from the checkout wallet or from the tour wallet.\nReturns list of delivery note keys that can be used to create a checkin.\nThe requesting user must have the permission\nconsignee_delivery_notes_lookup_with_token on all organization sites.\n",
+        "description": "Deprecated - will be removed 2023-02-28\nGet delivery notes for a checkin.\nThe token from the checkout wallet or from the tour wallet.\nReturns list of delivery note keys that can be used to create a checkin.\nThe requesting user must have the permission\nconsignee_delivery_notes_lookup_with_token on all organization sites.\nThis endpoint is deprecated. Please use the endpoint\nGET /organization-sites/consignee/delivery-notes/for-checkin\ninstead.\n",
         "operationId": "getConsigneeDeliveryNoteKeysForToken",
         "tags": [
           "checkins"
