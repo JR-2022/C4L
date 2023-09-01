@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.1.3",
+    "version": "1.2.0",
     "description": "The documented API is used by the frontend hosted on cloud4log.com. If you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}. Endpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -615,7 +615,7 @@
     "/administration/organizations/{organizationKey}/users": {
       "get": {
         "summary": "Get organization users information",
-        "description": "Return all users of an organization. The organization must\nbelong to the calling user.\nPermissions are returned.\n",
+        "description": "Return all users of an organization. The organization must\nbelong to the calling user.\nUsers Permissions are returned.\n",
         "operationId": "getAdministrationOrganizationUsers",
         "x-dls-requiredOrganizationPermission": "administration_users_read",
         "tags": [
@@ -678,7 +678,7 @@
     "/administration/organizations/{organizationKey}/users/{userKey}": {
       "get": {
         "summary": "Get information details for one organization user",
-        "description": "Return one user of an organization. The organization must\nbelong to the calling user.\nPermissions are returned.\n",
+        "description": "Return one user of an organization. The organization must\nbelong to the calling user.\nUsers, Org and Sites Permissions are returned.\n",
         "operationId": "getAdministrationOrganizationUser",
         "x-dls-requiredOrganizationPermission": "administration_users_read",
         "tags": [
@@ -1979,7 +1979,7 @@
     "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles": {
       "post": {
         "summary": "Create bundle",
-        "description": "Create new delivery note bundle.\nThe consignor key in the payload and the path parameter\norganizationSiteKey must be equal.\nSo the consignor site is the site where the bundle will be created in.\n",
+        "description": "Create new delivery note bundle.\nThe consignor key in the payload and the path parameter\norganizationSiteKey must be equal.\nThe carrierKey and consigneeKey are the organizationSiteKeys\nof the parties in the supply chain.\nSo the consignor site is the site where the bundle will be created in.\n",
         "operationId": "postNewBundle",
         "x-dls-requiredOrganizationSitePermission": "delivery_note_bundles_create",
         "tags": [
@@ -2752,8 +2752,8 @@
     },
     "/organization-sites/{organizationSiteKey}/consignor/delivery-notes": {
       "post": {
-        "summary": "Add PDF to pool",
-        "description": "Adds the posted delivery note PDF to the delivery note pool.\nThe PDF is converted to PDF/A3. The pool is a collection of\nloose delivery notes without a assigned supply chain or bundle.\n",
+        "summary": "Upload delivery note PDF",
+        "description": "Adds the uploaded delivery note PDF to the delivery note pool.\nThe PDF is converted to PDF/A3. The pool is a collection of\nloose delivery notes without a assigned supply chain or bundle.\n",
         "operationId": "postDeliveryNoteToPool",
         "x-dls-requiredOrganizationSitePermission": "delivery_notes_create",
         "tags": [
@@ -3962,6 +3962,34 @@
                 }
               }
             }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/external/gate/delivery-notes/{deliveryNoteKey}/complete-pdf": {
+      "get": {
+        "summary": "Get a complete sanitized pdf with checkout and checkin data",
+        "description": "Get a complete sanitized pdf with checkout and checkin data: the delivery note,\nall attachments and all images\n",
+        "operationId": "getExternalDeliveryNoteCompletePdf",
+        "security": [],
+        "tags": [
+          "external",
+          "pdf"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/TokenTypeParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PDFFileResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -8065,7 +8093,7 @@
                   "$ref": "#/components/schemas/UserRolesArray"
                 },
                 "permissions": {
-                  "$ref": "#/components/schemas/UserPermissionsType"
+                  "$ref": "#/components/schemas/OrganizationSitePermissionsType"
                 }
               }
             }
@@ -8259,11 +8287,19 @@
           "additionalProperties": false,
           "required": [
             "_key",
-            "deliveryNotes"
+            "deliveryNotes",
+            "tourNumber",
+            "dateShipped"
           ],
           "properties": {
             "_key": {
               "$ref": "#/components/schemas/KeyType"
+            },
+            "tourNumber": {
+              "$ref": "#/components/schemas/NameType"
+            },
+            "dateShipped": {
+              "$ref": "#/components/schemas/TimestampType"
             },
             "deliveryNotes": {
               "type": "array",
@@ -8274,7 +8310,9 @@
                   "_key",
                   "fileName",
                   "consigneeName",
-                  "number"
+                  "number",
+                  "consignorGln",
+                  "orderNumber"
                 ],
                 "properties": {
                   "_key": {
@@ -8288,6 +8326,12 @@
                   },
                   "number": {
                     "$ref": "#/components/schemas/DeliveryNoteNumber"
+                  },
+                  "orderNumber": {
+                    "$ref": "#/components/schemas/NameType"
+                  },
+                  "consignorGln": {
+                    "$ref": "#/components/schemas/NameType"
                   }
                 }
               }
@@ -8303,7 +8347,9 @@
           "required": [
             "_key",
             "consigneeName",
-            "deliveryNotes"
+            "deliveryNotes",
+            "bundleNumber",
+            "dateShipped"
           ],
           "properties": {
             "_key": {
@@ -8311,6 +8357,12 @@
             },
             "consigneeName": {
               "$ref": "#/components/schemas/NameType"
+            },
+            "bundleNumber": {
+              "$ref": "#/components/schemas/NameType"
+            },
+            "dateShipped": {
+              "$ref": "#/components/schemas/TimestampType"
             },
             "deliveryNotes": {
               "type": "array",
@@ -8320,7 +8372,9 @@
                 "required": [
                   "_key",
                   "fileName",
-                  "number"
+                  "number",
+                  "orderNumber",
+                  "consignorGln"
                 ],
                 "properties": {
                   "_key": {
@@ -8331,6 +8385,12 @@
                   },
                   "number": {
                     "$ref": "#/components/schemas/DeliveryNoteNumber"
+                  },
+                  "orderNumber": {
+                    "$ref": "#/components/schemas/NameType"
+                  },
+                  "consignorGln": {
+                    "$ref": "#/components/schemas/NameType"
                   }
                 }
               }
