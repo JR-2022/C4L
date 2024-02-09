@@ -2822,7 +2822,7 @@
     "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-note-pdfs": {
       "get": {
         "summary": "Get bundle PDF from bundle",
-        "description": "Get all delivery note PDF's as merged PDF from delivery note bundle.\nIf the delivery note bundle does not have any delivery note an HTTP\nstatus code 400 is returned.\n",
+        "description": "Returns a PDF file containing all delivery notes associated with a specific delivery note bundle.\nIf the delivery note bundle does not have any delivery note an HTTP\nstatus code 400 is returned.\n",
         "operationId": "getDeliveryNotePdfsForBundle",
         "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
         "tags": [
@@ -2839,7 +2839,7 @@
         ],
         "responses": {
           "200": {
-            "description": "body contains array of pdfs in binary format",
+            "description": "body contains the delivery notes in binary format.",
             "content": {
               "application/pdf": {
                 "schema": {
