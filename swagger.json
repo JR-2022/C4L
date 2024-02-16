@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.2.1",
+    "version": "1.2.3",
     "description": "The documented API is used by the frontend hosted on cloud4log.com. If you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}. Endpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -2822,7 +2822,7 @@
     "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-note-pdfs": {
       "get": {
         "summary": "Get bundle PDF from bundle",
-        "description": "Returns a PDF file containing all delivery notes associated with a specific delivery note bundle.\nIf the delivery note bundle does not have any delivery note an HTTP\nstatus code 400 is returned.\n",
+        "description": "Get all delivery note PDF's as merged PDF from delivery note bundle.\nIf the delivery note bundle does not have any delivery note an HTTP\nstatus code 400 is returned.\n",
         "operationId": "getDeliveryNotePdfsForBundle",
         "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
         "tags": [
@@ -2839,7 +2839,7 @@
         ],
         "responses": {
           "200": {
-            "description": "body contains the delivery notes in binary format.",
+            "description": "body contains array of pdfs in binary format",
             "content": {
               "application/pdf": {
                 "schema": {
