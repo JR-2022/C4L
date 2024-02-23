@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.2.3",
+    "version": "1.2.1",
     "description": "The documented API is used by the frontend hosted on cloud4log.com. If you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}. Endpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -372,6 +372,36 @@
         "responses": {
           "204": {
             "description": "API key successfully patched"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organization-sites/{organizationSiteKey}/load-carriers/reports/csv": {
+      "get": {
+        "summary": "Get load carriers report as csv for provided organization site",
+        "description": "Get report as CSV for all load carrier exchanges for all delivery notes\nat the provied organization site.\nConstrain: from <= timestamp < to, from and to must have millisecond\nresolution. Allowed time range is 35 days.\nAll times are in UTC.\n",
+        "operationId": "getAdministrationLoadCarriersReportsCsv",
+        "x-dls-requiredOrganizationSitePermission": "administration_report_load_carriers_csv_read",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/FromTimestampTypeParam"
+          },
+          {
+            "$ref": "#/components/parameters/ToTimestampTypeParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CSVFileResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -2822,7 +2852,7 @@
     "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-note-pdfs": {
       "get": {
         "summary": "Get bundle PDF from bundle",
-        "description": "Get all delivery note PDF's as merged PDF from delivery note bundle.\nIf the delivery note bundle does not have any delivery note an HTTP\nstatus code 400 is returned.\n",
+        "description": "Returns a PDF file containing all delivery notes associated with a specific delivery note bundle.\nIf the delivery note bundle does not have any delivery note an HTTP\nstatus code 400 is returned.\n",
         "operationId": "getDeliveryNotePdfsForBundle",
         "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
         "tags": [
@@ -2839,7 +2869,7 @@
         ],
         "responses": {
           "200": {
-            "description": "body contains array of pdfs in binary format",
+            "description": "body contains the delivery notes in binary format.",
             "content": {
               "application/pdf": {
                 "schema": {
@@ -5974,6 +6004,10 @@
           "COLLI"
         ]
       },
+      "DiscrepanciesNote": {
+        "type": "string",
+        "maxLength": 400
+      },
       "DeliveryNoteBundleOverview": {
         "type": "object",
         "additionalProperties": false,
@@ -7664,7 +7698,8 @@
           "article",
           "reason",
           "number",
-          "unit"
+          "unit",
+          "note"
         ],
         "properties": {
           "article": {
@@ -7678,6 +7713,9 @@
           },
           "unit": {
             "$ref": "#/components/schemas/DiscrepanciesUnit"
+          },
+          "note": {
+            "$ref": "#/components/schemas/DiscrepanciesNote"
           }
         }
       },
@@ -7697,7 +7735,8 @@
           "article",
           "reason",
           "number",
-          "unit"
+          "unit",
+          "note"
         ],
         "properties": {
           "_key": {
@@ -7717,6 +7756,9 @@
           },
           "unit": {
             "$ref": "#/components/schemas/DiscrepanciesUnit"
+          },
+          "note": {
+            "$ref": "#/components/schemas/DiscrepanciesNote"
           }
         }
       },
@@ -10364,6 +10406,14 @@
           "administration_organization_sites_users_modify": {
             "type": "boolean",
             "description": "This permission is needed to modify a users for a organization site",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_report_load_carriers_csv_read": {
+            "type": "boolean",
+            "description": "This permission is needed to get the load carriers report as csv",
             "x-roles": [
               "organization_admin",
               "site_admin"
