@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "description": "The documented API is used by the frontend hosted on cloud4log.com. If you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}. Endpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -105,16 +105,6 @@
             "$ref": "#/components/parameters/checkinKeyParam"
           }
         ],
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "One signature pad instance. Valid for 10 minutes.",
@@ -969,6 +959,178 @@
         }
       }
     },
+    "/administration/organization-sites/{organizationSiteKey}/self-checkin": {
+      "put": {
+        "summary": "Customize the display of the self service configuration during the checkin process for an organization site.",
+        "description": "This endpoint provides the option to specify which self-service\ncheckin information should be presented during the check-in process\nfor an organization site.\n\nSet the notificationEmailAddress to the email address where notifications should be sent.\n\nSet the scanner flag to true or false to enable or disable the scanner.\n\nSpecify the selfCheckinData elements to be displayed during the\ncheckin process and omit the ones you don't want to display,\ne.g.: 'selfCheckinData': [ \"NAME\", \"PAGER_NUMBER\", \"REFERENCE_NUMBER\"].\nHere, the name, pager number, and reference number will be displayed,\nwhereas the license plate number, phone number, waiting number, booking number\nand time slot booking number will not be displayed. You can choose from the\nfollowing elements:\n\"NAME\", \"LICENSE_PLATE_NUMBER\", \"PHONE_NUMBER\", \"PAGER_NUMBER\",\n\"REFERENCE_NUMBER\", \"WAITING_NUMBER\", \"BOOKING_NUMBER\",\n\"TIME_SLOT_BOOKING_NUMBER\".\nHowever, the maximum number of elements selected at the same time must not exceed 5.\n\nDuplicates in the selfCheckinData array are not allowed and will result in an error.\n",
+        "operationId": "putSelfServiceConfigCheckin",
+        "x-dls-requiredOrganizationSitePermission": "administration_organization_sites_self_checkin_config_modify",
+        "tags": [
+          "administration - self service checkin"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelfServiceConfigCheckinRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Self service configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelfServiceConfigCheckinResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get the self service configuration during the checkin process for an organization site.",
+        "description": "Allows users to retrieve the current self service configuration during the checkin process.\n",
+        "operationId": "getSelfServiceConfigCheckin",
+        "x-dls-requiredOrganizationSitePermission": "administration_organization_sites_self_checkin_config_read",
+        "tags": [
+          "administration - self service checkin"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Self service configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelfServiceConfigCheckinWithTokensResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organization-sites/{organizationSiteKey}/self-checkin-tokens": {
+      "post": {
+        "summary": "Creates a self service checkin token for self-checkin on an organization site.",
+        "description": "This is an admin endpoint. The user must be an organization admin or site admin.\nThe endpoint creates an token, this token can be used as a\ndlssessionId for all endpoints with 'self_checkin' role set as\npermission on the organization site.\n",
+        "operationId": "postGenerateSelfCheckinToken",
+        "x-dls-requiredOrganizationSitePermission": "administration_organization_sites_self_checkin_tokens_create",
+        "tags": [
+          "administration - self service checkin"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelfCheckinRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Unique url token for self-checkin created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelfCheckinTokenResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all self-checkin tokens for an organization site.",
+        "description": "This is an admin endpoint. The user must be an organization admin or site admin.\nThe endpoint retrieves all self-checkin tokens for the organization site.\n",
+        "operationId": "getSelfCheckinTokens",
+        "x-dls-requiredOrganizationSitePermission": "administration_organization_sites_self_checkin_tokens_read",
+        "tags": [
+          "administration - self service checkin"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of self-checkin tokens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelfCheckinTokensResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a self-checkin token for an organization site.",
+        "description": "This is an admin endpoint. The user must be an organization admin or site admin.\nThe endpoint deletes a self-checkin token for the organization site.\n",
+        "operationId": "deleteSelfCheckinToken",
+        "x-dls-requiredOrganizationSitePermission": "administration_organization_sites_self_checkin_tokens_delete",
+        "tags": [
+          "administration - self service checkin"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelfCheckinDeleteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Self-checkin token deleted"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/attachments/file/{fileName}": {
       "post": {
         "description": "Add a new attachment to a existing delivery note.\nThe delivery note bundle must be in status 'open'.\nAccepted Formats are jpg, png, heic and heif.\n",
@@ -1038,7 +1200,7 @@
         "responses": {
           "200": {
             "description": "Attachment",
-            "$ref": "#/components/requestBodies/AttachmentFile"
+            "$ref": "#/components/responses/AttachmentFileResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -1177,7 +1339,7 @@
         "responses": {
           "200": {
             "description": "Attachment",
-            "$ref": "#/components/requestBodies/AttachmentFile"
+            "$ref": "#/components/responses/AttachmentFileResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -1310,7 +1472,7 @@
         "responses": {
           "200": {
             "description": "Attachment",
-            "$ref": "#/components/requestBodies/AttachmentFile"
+            "$ref": "#/components/responses/AttachmentFileResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -1446,7 +1608,7 @@
         "responses": {
           "200": {
             "description": "Attachment",
-            "$ref": "#/components/requestBodies/AttachmentFile"
+            "$ref": "#/components/responses/AttachmentFileResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -1579,7 +1741,7 @@
         "responses": {
           "200": {
             "description": "Attachment",
-            "$ref": "#/components/requestBodies/AttachmentFile"
+            "$ref": "#/components/responses/AttachmentFileResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -1684,7 +1846,7 @@
         "responses": {
           "200": {
             "description": "PalletTicket",
-            "$ref": "#/components/requestBodies/PDFFileRequest"
+            "$ref": "#/components/responses/PDFFileResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -1962,6 +2124,43 @@
         }
       }
     },
+    "/organization-sites/{organizationSiteKey}/consignee/checkins/{checkinKey}/consignee-signature": {
+      "patch": {
+        "summary": "Sign a checkin as consignee, make it ready for the self checkin of the carrier.",
+        "description": "Sending the signature of the consignee. The signature must be a png in base64 format.\n",
+        "operationId": "patchConsigneeSelfCheckin",
+        "x-dls-requiredOrganizationSitePermission": "consignee_checkins_self_checkin",
+        "tags": [
+          "checkins"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/checkinKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchConsigneeSelfCheckinRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The checkin was signed by the consignee"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/organization-sites/{organizationSiteKey}/consignee/checkins/{checkinKey}/driver-details": {
       "put": {
         "summary": "Update driver information",
@@ -1996,6 +2195,47 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CheckinsForDriverUpdate"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/self-checkins/checkins": {
+      "post": {
+        "summary": "Allow drivers to create a new checkin at the self service terminal.",
+        "description": "When a driver scans the QR code at a self-service terminal for the\nfirst time, necessary information such as the driver's name, phone\nnumber, and reference number must be collected. If there's no\nexisting check-in document in the collection, a new will be\ncreated. However, if a check-in document already exists, a new one\nwill still be generated, but it's crucial to note that the driver\ninformation from the previous checkin will be transferred\n(i.e., driverName, driverNumberPlate).\nWhen a new check-in is created, the the newly generated check-in key\nshould be used. Using the old checkin key will lead to an error,\nas the old check-in is no longer considered valid.\n",
+        "operationId": "postSelfCheckinData",
+        "x-dls-requiredOrganizationSitePermission": "self_checkins_create",
+        "tags": [
+          "self service checkins"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelfCheckinDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Self service checkin data inserted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsigneeCheckinResponse"
                 }
               }
             }
@@ -2193,7 +2433,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PostBundleResponse"
                 }
               }
             }
@@ -3916,7 +4156,7 @@
         "responses": {
           "200": {
             "description": "Attachment",
-            "$ref": "#/components/requestBodies/AttachmentFile"
+            "$ref": "#/components/responses/AttachmentFileResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -3955,14 +4195,7 @@
         },
         "responses": {
           "200": {
-            "description": "Test was successfull",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
+            "$ref": "#/components/responses/TestStringLengthResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -4768,6 +5001,46 @@
         "responses": {
           "204": {
             "description": "The user password was reset with the provided password.\nAny active session is removed.\n"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/self-checkin/information": {
+      "get": {
+        "summary": "Get detailed information about a self checkin",
+        "description": "Get detailed information about a self checkin by tourKey xor bundleKey xor checkinToken. It returns especially the state of the self checkin and the associated delivery notes.\n",
+        "operationId": "getSelfCheckinInformation",
+        "x-dls-requiredOrganizationSitePermission": "self_checkin_information",
+        "tags": [
+          "self service checkins"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/CheckinTokenTypeParam"
+          },
+          {
+            "$ref": "#/components/parameters/TourNumberTypeParam"
+          },
+          {
+            "$ref": "#/components/parameters/BundleNumberTypeParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Self checkin information with state, checkinKey and associated delivery notes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelfCheckinInformation"
+                }
+              }
+            }
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -5771,8 +6044,9 @@
             ],
             "properties": {
               "version": {
-                "type": "number",
-                "minimum": 1
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1
               },
               "accepted": {
                 "type": "boolean"
@@ -5820,7 +6094,9 @@
           "consignee",
           "organizationKey",
           "allowRemoteAccess",
-          "roles"
+          "roles",
+          "selfCheckin",
+          "selfCheckinConfig"
         ],
         "properties": {
           "_key": {
@@ -5864,6 +6140,29 @@
           },
           "permissions": {
             "$ref": "#/components/schemas/OrganizationSitePermissionsType"
+          },
+          "selfCheckin": {
+            "type": "boolean"
+          },
+          "selfCheckinConfig": {
+            "$ref": "#/components/schemas/LoginOrganizationSelfCheckinConfig"
+          }
+        }
+      },
+      "LoginOrganizationSelfCheckinConfig": {
+        "type": "object",
+        "description": "Self service config for login response",
+        "additionalProperties": false,
+        "required": [
+          "scanner",
+          "selfCheckinData"
+        ],
+        "properties": {
+          "scanner": {
+            "type": "boolean"
+          },
+          "selfCheckinData": {
+            "$ref": "#/components/schemas/SelfCheckinDataArray"
           }
         }
       },
@@ -5897,7 +6196,7 @@
         ],
         "properties": {
           "name": {
-            "type": "string"
+            "$ref": "#/components/schemas/NameType"
           },
           "consignorKey": {
             "$ref": "#/components/schemas/KeyType"
@@ -5948,6 +6247,7 @@
         }
       },
       "PatchDeliveryNoteRequest": {
+        "type": "object",
         "additionalProperties": false,
         "description": "Update metadata of a delivery note",
         "properties": {
@@ -5994,8 +6294,63 @@
           }
         }
       },
+      "SelfCheckinRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Post Self Checkin Url",
+        "required": [
+          "dateExpired",
+          "roles",
+          "name"
+        ],
+        "properties": {
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SelfCheckinRoles"
+            }
+          },
+          "dateExpired": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "name": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
+      "SelfCheckinDeleteRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "The self checkin token which should be deleted.",
+        "required": [
+          "token"
+        ],
+        "properties": {
+          "token": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
+      "SelfCheckinTokenResponse": {
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "properties": {
+          "token": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
+      "SelfCheckinTokensResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/NameType"
+        }
+      },
       "PostApiUserResponse": {
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "sessionId"
         ],
@@ -6059,7 +6414,7 @@
         ],
         "properties": {
           "name": {
-            "type": "string"
+            "$ref": "#/components/schemas/NameType"
           },
           "organizationSiteKey": {
             "$ref": "#/components/schemas/KeyType"
@@ -6270,7 +6625,7 @@
             "$ref": "#/components/schemas/NameType"
           },
           "carrierNumberPlateOutgoing": {
-            "type": "string"
+            "$ref": "#/components/schemas/NameType"
           },
           "carrierEmailAddressOutgoing": {
             "$ref": "#/components/schemas/EmailAddressType"
@@ -6339,6 +6694,7 @@
             "$ref": "#/components/schemas/KeyType"
           },
           "status": {
+            "type": "string",
             "enum": [
               "sent",
               "closed"
@@ -6448,6 +6804,7 @@
             "$ref": "#/components/schemas/NameType"
           },
           "status": {
+            "type": "string",
             "enum": [
               "sent",
               "closed"
@@ -6674,7 +7031,7 @@
             "$ref": "#/components/schemas/TimestampType"
           },
           "fileName": {
-            "type": "string"
+            "$ref": "#/components/schemas/NameType"
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
@@ -6761,7 +7118,7 @@
             "$ref": "#/components/schemas/TimestampType"
           },
           "fileName": {
-            "type": "string"
+            "$ref": "#/components/schemas/NameType"
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
@@ -6917,6 +7274,7 @@
             "$ref": "#/components/schemas/NameType"
           },
           "deliveryNoteBundleStatus": {
+            "type": "string",
             "enum": [
               "-",
               "open",
@@ -7061,6 +7419,7 @@
             "$ref": "#/components/schemas/NameType"
           },
           "deliveryNoteBundleStatus": {
+            "type": "string",
             "enum": [
               "-",
               "open",
@@ -7192,6 +7551,7 @@
             "$ref": "#/components/schemas/NameType"
           },
           "deliveryNoteBundleStatus": {
+            "type": "string",
             "enum": [
               "sent",
               "closed"
@@ -7332,6 +7692,7 @@
             "$ref": "#/components/schemas/NameType"
           },
           "deliveryNoteBundleStatus": {
+            "type": "string",
             "enum": [
               "sent",
               "closed"
@@ -7541,35 +7902,35 @@
         ],
         "properties": {
           "maxUsers": {
-            "type": "number",
+            "type": "integer",
             "minimum": 0
           },
           "maxOrganizationSites": {
-            "type": "number",
+            "type": "integer",
             "minimum": 0
           },
           "maxDeliveryNotesPerMonth": {
-            "type": "number",
+            "type": "integer",
             "minimum": 0
           },
           "maxDeliveryNoteAttachments": {
-            "type": "number",
+            "type": "integer",
             "minimum": 0
           },
           "maxBundlesPerMonth": {
-            "type": "number",
+            "type": "integer",
             "minimum": 0
           },
           "maxCheckoutsPerMonth": {
-            "type": "number",
+            "type": "integer",
             "minimum": 0
           },
           "maxToursPerMonth": {
-            "type": "number",
+            "type": "integer",
             "minimum": 0
           },
           "maxCheckinsPerMonth": {
-            "type": "number",
+            "type": "integer",
             "minimum": 0
           }
         }
@@ -7654,6 +8015,9 @@
           },
           "allowRemoteAccess": {
             "type": "boolean"
+          },
+          "selfCheckin": {
+            "type": "boolean"
           }
         }
       },
@@ -7685,7 +8049,7 @@
             "type": "string"
           },
           "name": {
-            "type": "string"
+            "$ref": "#/components/schemas/NameType"
           },
           "phoneNumbers": {
             "$ref": "#/components/schemas/PhoneNumbersArray"
@@ -7911,10 +8275,10 @@
             "$ref": "#/components/schemas/KeyType"
           },
           "name": {
-            "type": "string"
+            "$ref": "#/components/schemas/NameType"
           },
           "description": {
-            "type": "string"
+            "$ref": "#/components/schemas/DescriptionType"
           }
         }
       },
@@ -7951,10 +8315,10 @@
             "$ref": "#/components/schemas/KeyType"
           },
           "name": {
-            "type": "string"
+            "$ref": "#/components/schemas/NameType"
           },
           "description": {
-            "type": "string"
+            "$ref": "#/components/schemas/DescriptionType"
           },
           "operation": {
             "$ref": "#/components/schemas/LoadCarrierOperation"
@@ -8069,6 +8433,9 @@
           },
           "allowRemoteAccess": {
             "type": "boolean"
+          },
+          "selfCheckin": {
+            "type": "boolean"
           }
         }
       },
@@ -8180,7 +8547,7 @@
             "$ref": "#/components/schemas/EmailAddressType"
           },
           "numberOfOrganizationSites": {
-            "type": "number",
+            "type": "integer",
             "minimum": 0
           },
           "hasRoleOrganizationAdministrator": {
@@ -8264,7 +8631,7 @@
           "organizationRoles": {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/NameType"
             }
           },
           "permissions": {
@@ -8275,6 +8642,202 @@
           },
           "organizationPermissions": {
             "$ref": "#/components/schemas/OrganizationPermissionsType"
+          }
+        }
+      },
+      "SelfCheckinData": {
+        "type": "string",
+        "enum": [
+          "NAME",
+          "LICENSE_PLATE_NUMBER",
+          "PHONE_NUMBER",
+          "PAGER_NUMBER",
+          "REFERENCE_NUMBER",
+          "WAITING_NUMBER",
+          "BOOKING_NUMBER",
+          "TIME_SLOT_BOOKING_NUMBER"
+        ]
+      },
+      "SelfCheckinDataArray": {
+        "type": "array",
+        "maxItems": 5,
+        "items": {
+          "$ref": "#/components/schemas/SelfCheckinData"
+        }
+      },
+      "SelfServiceConfigCheckinRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "notificationEmailAddress",
+          "scanner",
+          "selfCheckinData"
+        ],
+        "properties": {
+          "notificationEmailAddress": {
+            "$ref": "#/components/schemas/EmailAddressType"
+          },
+          "scanner": {
+            "type": "boolean"
+          },
+          "selfCheckinData": {
+            "$ref": "#/components/schemas/SelfCheckinDataArray"
+          }
+        },
+        "example": {
+          "notificationEmailAddress": "test@gmail.com",
+          "scanner": true,
+          "selfCheckinData": [
+            "NAME",
+            "LICENSE_PLATE_NUMBER",
+            "PHONE_NUMBER",
+            "BOOKING_NUMBER",
+            "TIME_SLOT_BOOKING_NUMBER"
+          ]
+        }
+      },
+      "SelfServiceConfigCheckinResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "notificationEmailAddress",
+          "scanner",
+          "selfCheckinData",
+          "dateCreated"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "notificationEmailAddress": {
+            "$ref": "#/components/schemas/EmailAddressType"
+          },
+          "scanner": {
+            "type": "boolean"
+          },
+          "selfCheckinData": {
+            "$ref": "#/components/schemas/SelfCheckinDataArray"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          }
+        },
+        "example": {
+          "_key": "956700",
+          "notificationEmailAddress": "test@gmail.com",
+          "scanner": true,
+          "selfCheckinData": [
+            "NAME",
+            "LICENSE_PLATE_NUMBER",
+            "TIME_SLOT_BOOKING_NUMBER"
+          ],
+          "dateCreated": 1707997160074
+        }
+      },
+      "SelfServiceConfigCheckinWithTokensResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "notificationEmailAddress",
+          "scanner",
+          "selfCheckinData",
+          "dateCreated",
+          "tokens"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "notificationEmailAddress": {
+            "type": "string"
+          },
+          "scanner": {
+            "type": "boolean"
+          },
+          "selfCheckinData": {
+            "$ref": "#/components/schemas/SelfCheckinDataArray"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SelfServiceTokenDetails"
+            }
+          }
+        }
+      },
+      "SelfServiceTokenDetails": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "token",
+          "dateExpired",
+          "name"
+        ],
+        "properties": {
+          "token": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "dateExpired": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "name": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
+      "SelfCheckinDataInsertion": {
+        "type": "object",
+        "additionalProperties": false,
+        "maxProperties": 5,
+        "properties": {
+          "NAME": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "LICENSE_PLATE_NUMBER": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "REFERENCE_NUMBER": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "BOOKING_NUMBER": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "TIME_SLOT_BOOKING_NUMBER": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "WAITING_NUMBER": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "PHONE_NUMBER": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "PAGER_NUMBER": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
+      "SelfCheckinDataRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "deliveryNoteKeys",
+          "selfCheckinData"
+        ],
+        "properties": {
+          "deliveryNoteKeys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/KeyType"
+            },
+            "minItems": 1
+          },
+          "selfCheckinData": {
+            "$ref": "#/components/schemas/SelfCheckinDataInsertion"
           }
         }
       },
@@ -8735,7 +9298,7 @@
               "$ref": "#/components/schemas/NameType"
             },
             "carrierNumberPlateOutgoing": {
-              "type": "string"
+              "$ref": "#/components/schemas/NameType"
             },
             "carrierEmailAddressOutgoing": {
               "$ref": "#/components/schemas/EmailAddressType"
@@ -8755,6 +9318,97 @@
                 "$ref": "#/components/schemas/SignaturePadBundlesDeliveryNoteCheckout"
               }
             }
+          }
+        }
+      },
+      "SelfCheckinInformation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "deliveryNotes"
+        ],
+        "properties": {
+          "deliveryNotes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SelfCheckinDeliveryNote"
+            }
+          }
+        }
+      },
+      "SelfCheckinState": {
+        "type": "string",
+        "enum": [
+          "REGISTRATION",
+          "WAITING_FOR_CONSIGNEE",
+          "CONSIGNEE_SIGNED"
+        ]
+      },
+      "SelfCheckinDeliveryNote": {
+        "type": "object",
+        "required": [
+          "selfCheckinState",
+          "checkinComplete",
+          "_key",
+          "dateCreated",
+          "fileName",
+          "number",
+          "discrepancies",
+          "loadCarriers",
+          "receiptsAttachments",
+          "palletTicketsAttachments",
+          "loadCarriersAttachments",
+          "discrepanciesAttachments",
+          "attachmentsCount"
+        ],
+        "properties": {
+          "selfCheckinState": {
+            "$ref": "#/components/schemas/SelfCheckinState"
+          },
+          "checkinKey": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "checkinComplete": {
+            "type": "boolean"
+          },
+          "selfCheckinData": {
+            "$ref": "#/components/schemas/SelfCheckinDataInsertion"
+          },
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "fileName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "orderNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "number": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "discrepancies": {
+            "$ref": "#/components/schemas/GetDiscrepanciesResponse"
+          },
+          "loadCarriers": {
+            "$ref": "#/components/schemas/LoadCarriers"
+          },
+          "receiptsAttachments": {
+            "$ref": "#/components/schemas/GetConsigneeAttachmentsResponse"
+          },
+          "palletTicketsAttachments": {
+            "$ref": "#/components/schemas/GetConsigneeAttachmentsResponse"
+          },
+          "discrepanciesAttachments": {
+            "$ref": "#/components/schemas/GetConsigneeAttachmentsResponse"
+          },
+          "loadCarriersAttachments": {
+            "$ref": "#/components/schemas/GetConsigneeAttachmentsResponse"
+          },
+          "attachmentsCount": {
+            "$ref": "#/components/schemas/AttachmentsCount"
           }
         }
       },
@@ -8836,9 +9490,7 @@
         ],
         "properties": {
           "feedback": {
-            "type": "number",
-            "minimum": 1,
-            "maximum": 4
+            "$ref": "#/components/schemas/Feedback"
           },
           "text": {
             "$ref": "#/components/schemas/NameType"
@@ -8862,8 +9514,7 @@
         ],
         "properties": {
           "feedback": {
-            "type": "number",
-            "minimum": 0
+            "$ref": "#/components/schemas/Feedback"
           },
           "text": {
             "$ref": "#/components/schemas/NameType"
@@ -8875,6 +9526,11 @@
             "$ref": "#/components/schemas/FeedbackUser"
           }
         }
+      },
+      "Feedback": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 4
       },
       "FeedbackUser": {
         "type": "object",
@@ -9178,6 +9834,20 @@
             "$ref": "#/components/schemas/Base64Type",
             "description": "base64 encoded png of the signature"
           },
+          "consigneeSignature": {
+            "$ref": "#/components/schemas/Base64Type",
+            "description": "base64 encoded png of the signature"
+          }
+        }
+      },
+      "PatchConsigneeSelfCheckinRequest": {
+        "description": "Make a checkin self checkin ready by sending the consignee signature.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "consigneeSignature"
+        ],
+        "properties": {
           "consigneeSignature": {
             "$ref": "#/components/schemas/Base64Type",
             "description": "base64 encoded png of the signature"
@@ -9578,7 +10248,9 @@
           "driverName",
           "driverNumberPlate",
           "status",
-          "deliveryNotes"
+          "deliveryNotes",
+          "selfCheckinData",
+          "selfCheckinDataSet"
         ],
         "properties": {
           "_key": {
@@ -9608,6 +10280,12 @@
             "items": {
               "$ref": "#/components/schemas/CheckinDeliveryNote"
             }
+          },
+          "selfCheckinData": {
+            "$ref": "#/components/schemas/SelfCheckinDataInsertion"
+          },
+          "selfCheckinDataSet": {
+            "type": "boolean"
           }
         }
       },
@@ -9976,12 +10654,12 @@
         ],
         "properties": {
           "year": {
-            "type": "number",
+            "type": "integer",
             "minimum": 2022,
             "maximum": 2099
           },
           "month": {
-            "type": "number",
+            "type": "integer",
             "minimum": 1,
             "maximum": 12
           },
@@ -10002,31 +10680,31 @@
             ],
             "properties": {
               "usedUsers": {
-                "type": "number",
+                "type": "integer",
                 "minimum": 0
               },
               "usedOrganizationSites": {
-                "type": "number",
+                "type": "integer",
                 "minimum": 0
               },
               "usedDeliveryNotesPerMonth": {
-                "type": "number",
+                "type": "integer",
                 "minimum": 0
               },
               "usedBundlesPerMonth": {
-                "type": "number",
+                "type": "integer",
                 "minimum": 0
               },
               "usedCheckoutsPerMonth": {
-                "type": "number",
+                "type": "integer",
                 "minimum": 0
               },
               "usedToursPerMonth": {
-                "type": "number",
+                "type": "integer",
                 "minimum": 0
               },
               "usedCheckinsPerMonth": {
-                "type": "number",
+                "type": "integer",
                 "minimum": 0
               }
             }
@@ -10055,7 +10733,9 @@
       "KeyType": {
         "description": "one _key",
         "type": "string",
-        "pattern": "^\\d+$"
+        "pattern": "^\\d+$",
+        "minLength": 1,
+        "maxLength": 254
       },
       "KeyXorEmptyKeyType": {
         "type": "string",
@@ -10073,6 +10753,10 @@
         "maxLength": 1024,
         "default": ""
       },
+      "NameTypeNullAble": {
+        "type": "string",
+        "maxLength": 1024
+      },
       "NameArrayType": {
         "type": "array",
         "items": {
@@ -10087,7 +10771,8 @@
         "type": "array",
         "description": "empty array",
         "items": {
-          "type": "integer"
+          "type": "integer",
+          "maximum": 0
         },
         "minItems": 0,
         "maxItems": 0
@@ -10100,7 +10785,8 @@
       "TimestampType": {
         "description": "UNIX timestamp in milliseconds",
         "type": "integer",
-        "minimum": 0
+        "minimum": 0,
+        "maximum": 9007199254740991
       },
       "PositiveIntegerType": {
         "description": "A positiv Number",
@@ -10170,7 +10856,7 @@
       "ColorType": {
         "type": "string",
         "pattern": "^#[0-9a-f]{6}$",
-        "default": "ffffff"
+        "default": "#ffffff"
       },
       "OrderNoteNumberAsStringType": {
         "type": "string",
@@ -10185,7 +10871,7 @@
         "pattern": "^[A-Za-z0-9]+$"
       },
       "AttachmentsCount": {
-        "type": "number",
+        "type": "integer",
         "minimum": 0
       },
       "PhoneNumbersArray": {
@@ -10324,7 +11010,8 @@
               "consignor",
               "remote_consignor",
               "remote_carrier",
-              "remote_consignee"
+              "remote_consignee",
+              "self_checkin"
             ]
           }
         }
@@ -10539,6 +11226,46 @@
               "site_admin"
             ]
           },
+          "administration_organization_sites_self_checkin_config_read": {
+            "type": "boolean",
+            "description": "This permission is needed to get the self checkin configuration",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_self_checkin_config_modify": {
+            "type": "boolean",
+            "description": "This permission is needed to modify the self checkin configuration",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_self_checkin_tokens_create": {
+            "type": "boolean",
+            "description": "This permission is needed to create a new self checkin token",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_self_checkin_tokens_read": {
+            "type": "boolean",
+            "description": "This permission is needed to read all self checkin tokens",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_self_checkin_tokens_delete": {
+            "type": "boolean",
+            "description": "This permission is needed to delete a self checkin token",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
           "user_assign": {
             "type": "boolean",
             "description": "This permission is needed for assigning users to an organization site",
@@ -10558,6 +11285,22 @@
           "user_organization_site_permissions_modify": {
             "type": "boolean",
             "description": "This permission is needed for modifying permissions of a user on organization site level",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "self_service_config_consignee_checkin_read": {
+            "type": "boolean",
+            "description": "This permission is needed for getting all the driver information that is possible to display during the consignee checkin process.",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "self_service_config_consignee_checkin_replace": {
+            "type": "boolean",
+            "description": "This permission is needed for setting all the driver information that should be displayed during the consignee checkin process.",
             "x-roles": [
               "organization_admin",
               "site_admin"
@@ -11038,6 +11781,13 @@
               "consignee"
             ]
           },
+          "consignee_checkins_self_checkin": {
+            "type": "boolean",
+            "description": "User can sign a self checkin",
+            "x-roles": [
+              "consignee"
+            ]
+          },
           "consignee_checkin_driver_details_update": {
             "type": "boolean",
             "description": "User can set driver information of checkins",
@@ -11050,6 +11800,13 @@
             "description": "User can get a list of checkinable delivery notes by wallet token",
             "x-roles": [
               "consignee"
+            ]
+          },
+          "self_checkins_create": {
+            "type": "boolean",
+            "description": "User can create a self checkin",
+            "x-roles": [
+              "self_checkin"
             ]
           },
           "consignee_pallet_tickets_create": {
@@ -11088,6 +11845,13 @@
             "x-roles": [
               "consignor",
               "consignee"
+            ]
+          },
+          "self_checkin_information": {
+            "type": "boolean",
+            "description": "get detailed information of a self checkin",
+            "x-roles": [
+              "self_checkin"
             ]
           }
         }
@@ -11152,6 +11916,12 @@
           "receipt"
         ]
       },
+      "SelfCheckinRoles": {
+        "type": "string",
+        "enum": [
+          "self_checkin"
+        ]
+      },
       "UserRoles": {
         "type": "string",
         "enum": [
@@ -11162,11 +11932,14 @@
           "site_admin",
           "remote_consignor",
           "remote_consignee",
-          "remote_carrier"
+          "remote_carrier",
+          "self_checkin"
         ]
       },
       "UserRolesArray": {
         "type": "array",
+        "minItems": 0,
+        "maxItems": 8,
         "items": {
           "$ref": "#/components/schemas/UserRoles"
         }
@@ -11291,7 +12064,7 @@
         "name": "fileName",
         "required": true,
         "schema": {
-          "type": "string"
+          "$ref": "#/components/schemas/NameType"
         }
       },
       "supplyChainKeyParam": {
@@ -11388,6 +12161,30 @@
         "name": "yearMonth",
         "schema": {
           "$ref": "#/components/schemas/TimestampType"
+        }
+      },
+      "CheckinTokenTypeParam": {
+        "in": "query",
+        "required": false,
+        "name": "checkinToken",
+        "schema": {
+          "$ref": "#/components/schemas/Token64LengthType"
+        }
+      },
+      "TourNumberTypeParam": {
+        "in": "query",
+        "required": false,
+        "name": "tourNumber",
+        "schema": {
+          "$ref": "#/components/schemas/NameTypeNullAble"
+        }
+      },
+      "BundleNumberTypeParam": {
+        "in": "query",
+        "required": false,
+        "name": "bundleNumber",
+        "schema": {
+          "$ref": "#/components/schemas/NameTypeNullAble"
         }
       }
     },
@@ -11521,9 +12318,62 @@
               ],
               "properties": {
                 "errorMessage": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/NameType"
                 }
               }
+            }
+          }
+        }
+      },
+      "TestStringLengthResponse": {
+        "description": "Default error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "codePoints",
+                "message"
+              ],
+              "properties": {
+                "codePoints": {
+                  "type": "integer"
+                },
+                "message": {
+                  "$ref": "#/components/schemas/NameType"
+                }
+              }
+            }
+          }
+        }
+      },
+      "AttachmentFileResponse": {
+        "description": "Returns a attachment file",
+        "content": {
+          "application/pdf": {
+            "schema": {
+              "$ref": "#/components/schemas/BinaryFileType"
+            }
+          },
+          "image/heic": {
+            "schema": {
+              "$ref": "#/components/schemas/BinaryFileType"
+            }
+          },
+          "image/heif": {
+            "schema": {
+              "$ref": "#/components/schemas/BinaryFileType"
+            }
+          },
+          "image/jpeg": {
+            "schema": {
+              "$ref": "#/components/schemas/BinaryFileType"
+            }
+          },
+          "image/png": {
+            "schema": {
+              "$ref": "#/components/schemas/BinaryFileType"
             }
           }
         }
@@ -11598,6 +12448,10 @@
     {
       "name": "public",
       "description": "Endpoints which are accessable without authentication"
+    },
+    {
+      "name": "self service checkins",
+      "description": "Endpoints for the self service checkin by the driver"
     },
     {
       "name": "signature pads",
