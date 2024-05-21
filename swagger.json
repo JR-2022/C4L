@@ -1323,7 +1323,8 @@
         "operationId": "getConsigneeDiscrepancyImageAttachment",
         "x-dls-requiredOrganizationSitePermission": "consignee_discrepancy_images_read",
         "tags": [
-          "discrepancy images"
+          "discrepancy images",
+          "self service checkins"
         ],
         "parameters": [
           {
@@ -1456,7 +1457,8 @@
         "operationId": "getConsigneeLoadCarrierFile",
         "x-dls-requiredOrganizationSitePermission": "consignee_load_carrier_file_read",
         "tags": [
-          "consignee load carrier files"
+          "consignee load carrier files",
+          "self service checkins"
         ],
         "parameters": [
           {
@@ -1592,7 +1594,8 @@
         "operationId": "getConsigneeDiscrepancyReceiptAttachment",
         "x-dls-requiredOrganizationSitePermission": "consignee_receipts_read",
         "tags": [
-          "receipts"
+          "receipts",
+          "self service checkins"
         ],
         "parameters": [
           {
@@ -1830,7 +1833,8 @@
         "operationId": "getPalletTicket",
         "x-dls-requiredOrganizationSitePermission": "consignee_pallet_tickets_read",
         "tags": [
-          "pallet tickets"
+          "pallet tickets",
+          "self service checkins"
         ],
         "parameters": [
           {
@@ -2236,6 +2240,84 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ConsigneeCheckinResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/self-checkin/checkins/{checkinKey}": {
+      "patch": {
+        "summary": "Finish a self service checkin with signatures.",
+        "description": "Finish a self service checkin by sending the signatures of the\nconsignee and carrier. The signatures must be pngs in base64 format.\n",
+        "operationId": "patchConsigneeSelfServiceCheckinFinish",
+        "x-dls-requiredOrganizationSitePermission": "self_checkins_finish",
+        "tags": [
+          "self service checkins"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/checkinKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchConsigneeSelfServiceCheckinFinishRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The self service checkin was finished"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/consignee/checkins/lookup": {
+      "post": {
+        "summary": "Get all checkin documents associated with the specified delivery notes.",
+        "description": "By providing a list of delivery note keys, this endpoint returns all\ncheckin documents associated with those delivery notes.\n",
+        "operationId": "getConsigneeCheckinLookup",
+        "x-dls-requiredOrganizationSitePermission": "consignee_checkins_lookup",
+        "tags": [
+          "checkins"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KeyArrayType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The checkin documents associated with the specified delivery notes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsigneeLookupDeliveryNoteResponse"
                 }
               }
             }
@@ -2898,7 +2980,8 @@
         "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
         "tags": [
           "delivery notes",
-          "pdf"
+          "pdf",
+          "self service checkins"
         ],
         "parameters": [
           {
@@ -3839,6 +3922,56 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DiscrepanciesChoices"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organizations/{organizationKey}/events": {
+      "get": {
+        "summary": "Get Event",
+        "description": "Get event from the events log. The filtering parameters are optional and work on the dateCreated field of the event.\nThe default sort order is descending. With gt and lt you can get all events greater than or less than a specific date.\nWith siteKeys you can filter events by site. With eventTypes you can filter events by type.\n",
+        "operationId": "getEvents",
+        "x-dls-requiredOrganizationPermission": "events_read",
+        "tags": [
+          "events",
+          "notifications"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/sortParam"
+          },
+          {
+            "$ref": "#/components/parameters/gtParam"
+          },
+          {
+            "$ref": "#/components/parameters/ltParam"
+          },
+          {
+            "$ref": "#/components/parameters/siteKeysParam"
+          },
+          {
+            "$ref": "#/components/parameters/eventTypesParam"
+          },
+          {
+            "$ref": "#/components/parameters/limitParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventsArray"
                 }
               }
             }
@@ -5110,6 +5243,40 @@
         }
       }
     },
+    "/organization-sites/{organizationSiteKey}/consignee/bundlesAndTours/{lastFourBundleOrTourNumbers}": {
+      "get": {
+        "summary": "Get the bundle or tour by last four places of number",
+        "description": "Get the bundles or/and tours by the last four places of the bundleNumber or tourNumber.\n",
+        "operationId": "getBundlesAndTours",
+        "x-dls-requiredOrganizationSitePermission": "consignee_lookup_bundles_and_tours",
+        "tags": [
+          "self service checkins"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/lastFourBundleOrTourNumbers"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "lookuped tours and/or bundles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryNoteBundleOrTourArray"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/service-provider/organizations": {
       "post": {
         "summary": "Create organization",
@@ -5998,6 +6165,64 @@
           },
           "orderNumber": {
             "$ref": "#/components/schemas/OrderNoteNumberAsStringType"
+          }
+        }
+      },
+      "ConsigneeLookupDeliveryNoteResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "deliveryNotes",
+          "checkins"
+        ],
+        "properties": {
+          "deliveryNotes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryNoteKeyAndCheckinKeyLookup"
+            }
+          },
+          "checkins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CheckinKeyAndDeliveryNoteKeyLookup"
+            }
+          }
+        }
+      },
+      "DeliveryNoteKeyAndCheckinKeyLookup": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "deliveryNoteKey",
+          "checkinKey"
+        ],
+        "properties": {
+          "deliveryNoteKey": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "checkinKey": {
+            "$ref": "#/components/schemas/KeyType"
+          }
+        }
+      },
+      "CheckinKeyAndDeliveryNoteKeyLookup": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "checkinKey",
+          "deliveryNoteKeysExact",
+          "deliveryNoteKeys"
+        ],
+        "properties": {
+          "checkinKey": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "deliveryNoteKeysExact": {
+            "type": "boolean"
+          },
+          "deliveryNoteKeys": {
+            "$ref": "#/components/schemas/KeyArrayType"
           }
         }
       },
@@ -8903,6 +9128,24 @@
           }
         }
       },
+      "PatchConsigneeSelfServiceCheckinFinishRequest": {
+        "description": "Finish a self service checkin by sending consignee and carrier signature.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "driverSignature",
+          "transactionId"
+        ],
+        "properties": {
+          "driverSignature": {
+            "$ref": "#/components/schemas/Base64Type",
+            "description": "base64 encoded png of the signature"
+          },
+          "transactionId": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
       "SelfCheckinConfigAsSelfCheckin": {
         "type": "object",
         "additionalProperties": false,
@@ -9452,6 +9695,9 @@
           "selfCheckinState": {
             "$ref": "#/components/schemas/SelfCheckinState"
           },
+          "transactionId": {
+            "$ref": "#/components/schemas/NameType"
+          },
           "checkinKey": {
             "$ref": "#/components/schemas/KeyType"
           },
@@ -9901,6 +10147,104 @@
           }
         }
       },
+      "BasicEvent": {
+        "type": "object",
+        "required": [
+          "eventKey",
+          "dateCreated",
+          "organizationSiteKey",
+          "eventType"
+        ],
+        "properties": {
+          "eventKey": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "organizationSiteKey": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "eventType": {
+            "$ref": "#/components/schemas/EventType"
+          }
+        },
+        "discriminator": {
+          "propertyName": "eventType",
+          "mapping": {
+            "register": "#/components/schemas/RegisterEvent",
+            "checkin": "#/components/schemas/CheckinEvent"
+          }
+        }
+      },
+      "RegisterEvent": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasicEvent"
+          },
+          {
+            "type": "object",
+            "required": [
+              "deliveryNoteKeys",
+              "selfCheckinData",
+              "checkinKey",
+              "driverName",
+              "driverNumberPlate"
+            ],
+            "properties": {
+              "deliveryNoteKeys": {
+                "$ref": "#/components/schemas/KeyArrayType"
+              },
+              "selfCheckinData": {
+                "$ref": "#/components/schemas/SelfCheckinDataInsertion"
+              },
+              "checkinKey": {
+                "$ref": "#/components/schemas/KeyType"
+              },
+              "driverName": {
+                "$ref": "#/components/schemas/NameType"
+              },
+              "driverNumberPlate": {
+                "$ref": "#/components/schemas/NameType"
+              }
+            }
+          }
+        ]
+      },
+      "CheckinEvent": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasicEvent"
+          },
+          {
+            "type": "object",
+            "required": [
+              "checkinKey"
+            ],
+            "properties": {
+              "checkinKey": {
+                "$ref": "#/components/schemas/KeyType"
+              }
+            }
+          }
+        ]
+      },
+      "EventsArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Event"
+        }
+      },
+      "Event": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/RegisterEvent"
+          },
+          {
+            "$ref": "#/components/schemas/CheckinEvent"
+          }
+        ]
+      },
       "PostConsigneeCheckinDeliveryNotesRequest": {
         "type": "array",
         "items": {
@@ -10337,7 +10681,8 @@
           "status",
           "deliveryNotes",
           "selfCheckinData",
-          "selfCheckinDataSet"
+          "selfCheckinDataSet",
+          "transactionId"
         ],
         "properties": {
           "_key": {
@@ -10373,6 +10718,9 @@
           },
           "selfCheckinDataSet": {
             "type": "boolean"
+          },
+          "transactionId": {
+            "$ref": "#/components/schemas/NameType"
           }
         }
       },
@@ -10817,6 +11165,39 @@
           }
         }
       },
+      "DeliveryNoteBundleOrTour": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "_key",
+          "bundleOrTourNumber"
+        ],
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/BundleOrTourType"
+          },
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "bundleOrTourNumber": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
+      "DeliveryNoteBundleOrTourArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/DeliveryNoteBundleOrTour"
+        }
+      },
+      "BundleOrTourType": {
+        "type": "string",
+        "enum": [
+          "tour",
+          "bundle"
+        ]
+      },
       "KeyType": {
         "description": "one _key",
         "type": "string",
@@ -11234,6 +11615,22 @@
             "x-roles": [
               "organization_admin"
             ]
+          },
+          "events_read": {
+            "type": "boolean",
+            "description": "The permission to read the event log",
+            "x-roles": [
+              "service_provider",
+              "organization_admin",
+              "site_admin",
+              "consignee",
+              "carrier",
+              "consignor",
+              "remote_consignor",
+              "remote_carrier",
+              "remote_consignee",
+              "self_checkin"
+            ]
           }
         }
       },
@@ -11530,7 +11927,8 @@
             "description": "This permission is needed for reading a discrepancy image",
             "x-roles": [
               "consignee",
-              "remote_consignee"
+              "remote_consignee",
+              "self_checkin"
             ]
           },
           "consignee_discrepancy_images_delete": {
@@ -11552,7 +11950,8 @@
             "description": "This permission is needed for reading a load carrier file",
             "x-roles": [
               "consignee",
-              "remote_consignee"
+              "remote_consignee",
+              "self_checkin"
             ]
           },
           "consignee_load_carrier_file_delete": {
@@ -11574,7 +11973,8 @@
             "description": "This permission is needed for reading a consignee receipts",
             "x-roles": [
               "consignee",
-              "remote_consignee"
+              "remote_consignee",
+              "self_checkin"
             ]
           },
           "consignee_receipts_delete": {
@@ -11778,7 +12178,8 @@
               "consignee",
               "remote_consignor",
               "remote_carrier",
-              "remote_consignee"
+              "remote_consignee",
+              "self_checkin"
             ]
           },
           "delivery_notes_update": {
@@ -11896,6 +12297,13 @@
               "consignee"
             ]
           },
+          "consignee_checkins_lookup": {
+            "type": "boolean",
+            "description": "User can lookup checkins associated with specified delivery note keys",
+            "x-roles": [
+              "consignee"
+            ]
+          },
           "self_checkin_config_read": {
             "type": "boolean",
             "description": "User can read the self checkin configuration",
@@ -11922,7 +12330,8 @@
             "description": "This permission is needed to read a pallet ticket",
             "x-roles": [
               "consignee",
-              "remote_consignee"
+              "remote_consignee",
+              "self_checkin"
             ]
           },
           "consignee_pallet_tickets_delete": {
@@ -11948,10 +12357,35 @@
               "consignee"
             ]
           },
+          "events_notifications_read": {
+            "type": "boolean",
+            "description": "User can read notifications",
+            "x-roles": [
+              "consignor",
+              "carrier",
+              "consignee",
+              "self_checkin"
+            ]
+          },
           "self_checkin_information": {
             "type": "boolean",
             "description": "get detailed information of a self checkin",
             "x-roles": [
+              "self_checkin"
+            ]
+          },
+          "self_checkins_finish": {
+            "type": "boolean",
+            "description": "finish a self checkin",
+            "x-roles": [
+              "self_checkin"
+            ]
+          },
+          "consignee_lookup_bundles_and_tours": {
+            "type": "boolean",
+            "description": "This permission is needed to get bundles and tours by last four places of number",
+            "x-roles": [
+              "consignee",
               "self_checkin"
             ]
           }
@@ -11996,6 +12430,13 @@
         "type": "string",
         "maxLength": 1024,
         "minLength": 3
+      },
+      "SortType": {
+        "type": "string",
+        "enum": [
+          "asc",
+          "desc"
+        ]
       },
       "FileTypes": {
         "type": "string",
@@ -12052,6 +12493,14 @@
           "consignee",
           "consignor",
           "site_admin"
+        ]
+      },
+      "EventType": {
+        "type": "string",
+        "enum": [
+          "register",
+          "checkin",
+          "checkout"
         ]
       },
       "UserRolesForSiteAdminArray": {
@@ -12216,6 +12665,74 @@
           "$ref": "#/components/schemas/KeyType"
         }
       },
+      "lastFourBundleOrTourNumbers": {
+        "in": "path",
+        "name": "lastFourBundleOrTourNumbers",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 4
+        }
+      },
+      "sortParam": {
+        "in": "query",
+        "name": "sort",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/SortType"
+        }
+      },
+      "limitParam": {
+        "in": "query",
+        "name": "limit",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "default": 10
+        }
+      },
+      "gtParam": {
+        "in": "query",
+        "name": "gt",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/TimestampType"
+        }
+      },
+      "ltParam": {
+        "in": "query",
+        "name": "lt",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/TimestampType"
+        }
+      },
+      "siteKeysParam": {
+        "in": "query",
+        "name": "siteKeys",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/components/schemas/KeyType"
+          }
+        }
+      },
+      "eventTypesParam": {
+        "in": "query",
+        "name": "eventTypes",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EventType"
+          }
+        }
+      },
       "TokenTypeParam": {
         "in": "query",
         "required": true,
@@ -12262,6 +12779,17 @@
         "name": "yearMonth",
         "schema": {
           "$ref": "#/components/schemas/TimestampType"
+        }
+      },
+      "EventsLimitTypeParam": {
+        "in": "query",
+        "required": false,
+        "name": "limit",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 10
         }
       },
       "CheckinTokenTypeParam": {
