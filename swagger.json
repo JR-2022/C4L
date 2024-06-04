@@ -1131,6 +1131,36 @@
         }
       }
     },
+    "/administration/organization-sites/{organizationSiteKey}/self-checkin/legal-document/{fileName}": {
+      "put": {
+        "description": "Add a legal document to the organization site which will be\ndisplayed during the self-checkin process.\n",
+        "summary": "Add a legal document to the organization site.",
+        "operationId": "putConsigneeSelfCheckinLegalDocument",
+        "x-dls-requiredOrganizationSitePermission": "administration_legal_document_create",
+        "tags": [
+          "administration - self service checkin"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/fileNameParam"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PDFFileRequest"
+        },
+        "responses": {
+          "204": {
+            "description": "Legal PDF document was uploaded successfully."
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles/{deliveryNoteBundleKey}/delivery-notes/{deliveryNoteKey}/attachments/file/{fileName}": {
       "post": {
         "description": "Add a new attachment to a existing delivery note.\nThe delivery note bundle must be in status 'open'.\nAccepted Formats are jpg, png, heic and heif.\n",
@@ -3939,8 +3969,7 @@
         "operationId": "getEvents",
         "x-dls-requiredOrganizationPermission": "events_read",
         "tags": [
-          "events",
-          "notifications"
+          "events"
         ],
         "parameters": [
           {
@@ -3972,6 +4001,47 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/EventsArray"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/events": {
+      "post": {
+        "summary": "Trigger a event manually",
+        "description": "Trigger a event manually with the given payload.\n",
+        "operationId": "triggerEvent",
+        "x-dls-requiredOrganizationSitePermission": "events_trigger",
+        "tags": [
+          "events"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TriggerEvent"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response of triggered event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TriggerEventResponse"
                 }
               }
             }
@@ -5270,6 +5340,32 @@
                 }
               }
             }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/self-checkin/legal-document": {
+      "get": {
+        "summary": "Get the legal PDF document.",
+        "description": "Retrieve the legal PDF document associated with the organization\nsite. The file name is returned in the content-disposition section\nof the header.\n",
+        "operationId": "getConsigneeSelfCheckinLegalDocument",
+        "x-dls-requiredOrganizationSitePermission": "legal_document_read",
+        "tags": [
+          "pdf",
+          "self service checkins",
+          "administration - self service checkin"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PDFFileResponse"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -9031,7 +9127,8 @@
           "scanner",
           "selfCheckinData",
           "dateCreated",
-          "tokens"
+          "tokens",
+          "legalDocument"
         ],
         "properties": {
           "_key": {
@@ -9053,6 +9150,26 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SelfServiceTokenDetails"
+            }
+          },
+          "legalDocument": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "uploaded",
+              "uploadDate",
+              "fileName"
+            ],
+            "properties": {
+              "uploaded": {
+                "type": "boolean"
+              },
+              "uploadDate": {
+                "$ref": "#/components/schemas/TimestampType"
+              },
+              "fileName": {
+                "$ref": "#/components/schemas/NameType"
+              }
             }
           }
         }
@@ -9153,7 +9270,8 @@
           "_key",
           "scanner",
           "selfCheckinData",
-          "dateCreated"
+          "dateCreated",
+          "legalDocument"
         ],
         "properties": {
           "_key": {
@@ -9167,6 +9285,26 @@
           },
           "dateCreated": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "legalDocument": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "uploaded",
+              "uploadDate",
+              "fileName"
+            ],
+            "properties": {
+              "uploaded": {
+                "type": "boolean"
+              },
+              "uploadDate": {
+                "$ref": "#/components/schemas/TimestampType"
+              },
+              "fileName": {
+                "$ref": "#/components/schemas/NameType"
+              }
+            }
           }
         }
       },
@@ -9677,6 +9815,8 @@
       "SelfCheckinDeliveryNote": {
         "type": "object",
         "required": [
+          "deliveryNoteBundleKey",
+          "deliveryNoteBundleNumber",
           "selfCheckinState",
           "checkinComplete",
           "_key",
@@ -9692,6 +9832,12 @@
           "attachmentsCount"
         ],
         "properties": {
+          "deliveryNoteBundleKey": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "deliveryNoteBundleNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
           "selfCheckinState": {
             "$ref": "#/components/schemas/SelfCheckinState"
           },
@@ -10147,24 +10293,12 @@
           }
         }
       },
-      "BasicEvent": {
+      "BasicEventPayload": {
         "type": "object",
         "required": [
-          "eventKey",
-          "dateCreated",
-          "organizationSiteKey",
           "eventType"
         ],
         "properties": {
-          "eventKey": {
-            "$ref": "#/components/schemas/KeyType"
-          },
-          "dateCreated": {
-            "$ref": "#/components/schemas/TimestampType"
-          },
-          "organizationSiteKey": {
-            "$ref": "#/components/schemas/KeyType"
-          },
           "eventType": {
             "$ref": "#/components/schemas/EventType"
           }
@@ -10172,20 +10306,24 @@
         "discriminator": {
           "propertyName": "eventType",
           "mapping": {
-            "register": "#/components/schemas/RegisterEvent",
-            "checkin": "#/components/schemas/CheckinEvent"
+            "self_checkin_registration_completed": "#/components/schemas/SelfCheckinRegistrationCompletedEventPayload",
+            "self_checkin_checkin_finished": "#/components/schemas/SelfCheckinCheckinFinishedEventPayload",
+            "self_checkin_driver_waiting": "#/components/schemas/SelfCheckinDriverWaitingEventPayload"
           }
         }
       },
-      "RegisterEvent": {
+      "SelfCheckinRegistrationCompletedEventPayload": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/BasicEvent"
+            "$ref": "#/components/schemas/BasicEventPayload"
           },
           {
             "type": "object",
             "required": [
               "deliveryNoteKeys",
+              "deliveryNoteNumbers",
+              "deliveryNoteBundleKeys",
+              "deliveryNoteBundleNumbers",
               "selfCheckinData",
               "checkinKey",
               "driverName",
@@ -10194,6 +10332,15 @@
             "properties": {
               "deliveryNoteKeys": {
                 "$ref": "#/components/schemas/KeyArrayType"
+              },
+              "deliveryNoteNumbers": {
+                "$ref": "#/components/schemas/NameArrayType"
+              },
+              "deliveryNoteBundleKeys": {
+                "$ref": "#/components/schemas/KeyArrayType"
+              },
+              "deliveryNoteBundleNumbers": {
+                "$ref": "#/components/schemas/NameArrayType"
               },
               "selfCheckinData": {
                 "$ref": "#/components/schemas/SelfCheckinDataInsertion"
@@ -10211,10 +10358,149 @@
           }
         ]
       },
-      "CheckinEvent": {
+      "SelfCheckinDriverWaitingEventPayload": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/BasicEvent"
+            "$ref": "#/components/schemas/BasicEventPayload"
+          },
+          {
+            "type": "object",
+            "required": [
+              "deliveryNoteKeys",
+              "deliveryNoteNumbers",
+              "deliveryNoteBundleKeys",
+              "deliveryNoteBundleNumbers",
+              "selfCheckinData",
+              "checkinKey",
+              "driverName",
+              "driverNumberPlate"
+            ],
+            "properties": {
+              "deliveryNoteKeys": {
+                "$ref": "#/components/schemas/KeyArrayType"
+              },
+              "deliveryNoteNumbers": {
+                "$ref": "#/components/schemas/NameArrayType"
+              },
+              "deliveryNoteBundleKeys": {
+                "$ref": "#/components/schemas/KeyArrayType"
+              },
+              "deliveryNoteBundleNumbers": {
+                "$ref": "#/components/schemas/NameArrayType"
+              },
+              "selfCheckinData": {
+                "$ref": "#/components/schemas/SelfCheckinDataInsertion"
+              },
+              "checkinKey": {
+                "$ref": "#/components/schemas/KeyType"
+              },
+              "driverName": {
+                "$ref": "#/components/schemas/NameType"
+              },
+              "driverNumberPlate": {
+                "$ref": "#/components/schemas/NameType"
+              }
+            }
+          }
+        ]
+      },
+      "SelfCheckinCheckinFinishedEventPayload": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasicEventPayload"
+          },
+          {
+            "type": "object",
+            "required": [
+              "checkinKey",
+              "deliveryNoteKeys",
+              "deliveryNoteNumbers",
+              "deliveryNoteBundleKeys",
+              "deliveryNoteBundleNumbers"
+            ],
+            "properties": {
+              "checkinKey": {
+                "$ref": "#/components/schemas/KeyType"
+              },
+              "deliveryNoteKeys": {
+                "$ref": "#/components/schemas/KeyArrayType"
+              },
+              "deliveryNoteNumbers": {
+                "$ref": "#/components/schemas/NameArrayType"
+              },
+              "deliveryNoteBundleKeys": {
+                "$ref": "#/components/schemas/KeyArrayType"
+              },
+              "deliveryNoteBundleNumbers": {
+                "$ref": "#/components/schemas/NameArrayType"
+              }
+            }
+          }
+        ]
+      },
+      "Event": {
+        "type": "object",
+        "required": [
+          "eventKey",
+          "dateCreated",
+          "organizationSiteKey",
+          "payload"
+        ],
+        "properties": {
+          "eventKey": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "organizationSiteKey": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/EventPayload"
+          }
+        }
+      },
+      "EventsArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Event"
+        }
+      },
+      "EventPayload": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/SelfCheckinRegistrationCompletedEventPayload"
+          },
+          {
+            "$ref": "#/components/schemas/SelfCheckinCheckinFinishedEventPayload"
+          },
+          {
+            "$ref": "#/components/schemas/SelfCheckinDriverWaitingEventPayload"
+          }
+        ]
+      },
+      "BasicTriggerEvent": {
+        "type": "object",
+        "required": [
+          "eventType"
+        ],
+        "properties": {
+          "eventType": {
+            "$ref": "#/components/schemas/TriggerEventType"
+          }
+        },
+        "discriminator": {
+          "propertyName": "eventType",
+          "mapping": {
+            "self_checkin_driver_waiting": "#/components/schemas/SelfCheckinDriverWaitingTriggerEvent"
+          }
+        }
+      },
+      "SelfCheckinDriverWaitingTriggerEvent": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasicTriggerEvent"
           },
           {
             "type": "object",
@@ -10229,21 +10515,24 @@
           }
         ]
       },
-      "EventsArray": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/Event"
-        }
-      },
-      "Event": {
+      "TriggerEvent": {
         "anyOf": [
           {
-            "$ref": "#/components/schemas/RegisterEvent"
-          },
-          {
-            "$ref": "#/components/schemas/CheckinEvent"
+            "$ref": "#/components/schemas/SelfCheckinDriverWaitingTriggerEvent"
           }
         ]
+      },
+      "TriggerEventResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "eventKey"
+        ],
+        "properties": {
+          "eventKey": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
       },
       "PostConsigneeCheckinDeliveryNotesRequest": {
         "type": "array",
@@ -11750,6 +12039,14 @@
               "site_admin"
             ]
           },
+          "administration_legal_document_create": {
+            "type": "boolean",
+            "description": "This permission is needed to upload the legal PDF document",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
           "user_assign": {
             "type": "boolean",
             "description": "This permission is needed for assigning users to an organization site",
@@ -11788,6 +12085,16 @@
             "x-roles": [
               "organization_admin",
               "site_admin"
+            ]
+          },
+          "legal_document_read": {
+            "type": "boolean",
+            "description": "This permission is needed to read the legal PDF document",
+            "x-roles": [
+              "organization_admin",
+              "site_admin",
+              "consignee",
+              "self_checkin"
             ]
           },
           "loadcarrier_read": {
@@ -12388,6 +12695,13 @@
               "consignee",
               "self_checkin"
             ]
+          },
+          "events_trigger": {
+            "type": "boolean",
+            "description": "Generic permission to trigger site events",
+            "x-roles": [
+              "self_checkin"
+            ]
           }
         }
       },
@@ -12498,9 +12812,15 @@
       "EventType": {
         "type": "string",
         "enum": [
-          "register",
-          "checkin",
-          "checkout"
+          "self_checkin_registration_completed",
+          "self_checkin_checkin_finished",
+          "self_checkin_driver_waiting"
+        ]
+      },
+      "TriggerEventType": {
+        "type": "string",
+        "enum": [
+          "self_checkin_driver_waiting"
         ]
       },
       "UserRolesForSiteAdminArray": {
@@ -12713,7 +13033,7 @@
       "siteKeysParam": {
         "in": "query",
         "name": "siteKeys",
-        "required": false,
+        "required": true,
         "schema": {
           "type": "array",
           "maxItems": 100,
