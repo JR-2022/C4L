@@ -2282,8 +2282,8 @@
     },
     "/organization-sites/{organizationSiteKey}/self-checkin/checkins/{checkinKey}": {
       "patch": {
-        "summary": "Finish a self service checkin with signatures.",
-        "description": "Finish a self service checkin by sending the signatures of the\nconsignee and carrier. The signatures must be pngs in base64 format.\n",
+        "summary": "Finish a self service checkin with signature.",
+        "description": "Finish a self service checkin by sending the signatures of the\ndriver. The signature must be a png in base64 format.\n",
         "operationId": "patchConsigneeSelfServiceCheckinFinish",
         "x-dls-requiredOrganizationSitePermission": "self_checkins_finish",
         "tags": [
@@ -10312,6 +10312,43 @@
           }
         }
       },
+      "DeliveryNoteEvents": {
+        "type": "object",
+        "required": [
+          "key",
+          "number"
+        ],
+        "properties": {
+          "key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "number": {
+            "$ref": "#/components/schemas/DeliveryNoteNumber"
+          }
+        }
+      },
+      "DeliveryNoteBundleEvents": {
+        "type": "object",
+        "required": [
+          "key",
+          "bundleNumber",
+          "deliveryNotes"
+        ],
+        "properties": {
+          "key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "bundleNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "deliveryNotes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryNoteEvents"
+            }
+          }
+        }
+      },
       "SelfCheckinRegistrationCompletedEventPayload": {
         "allOf": [
           {
@@ -10320,27 +10357,18 @@
           {
             "type": "object",
             "required": [
-              "deliveryNoteKeys",
-              "deliveryNoteNumbers",
-              "deliveryNoteBundleKeys",
-              "deliveryNoteBundleNumbers",
+              "deliveryNoteBundles",
               "selfCheckinData",
               "checkinKey",
               "driverName",
               "driverNumberPlate"
             ],
             "properties": {
-              "deliveryNoteKeys": {
-                "$ref": "#/components/schemas/KeyArrayType"
-              },
-              "deliveryNoteNumbers": {
-                "$ref": "#/components/schemas/NameArrayType"
-              },
-              "deliveryNoteBundleKeys": {
-                "$ref": "#/components/schemas/KeyArrayType"
-              },
-              "deliveryNoteBundleNumbers": {
-                "$ref": "#/components/schemas/NameArrayType"
+              "deliveryNoteBundles": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DeliveryNoteBundleEvents"
+                }
               },
               "selfCheckinData": {
                 "$ref": "#/components/schemas/SelfCheckinDataInsertion"
@@ -10366,27 +10394,18 @@
           {
             "type": "object",
             "required": [
-              "deliveryNoteKeys",
-              "deliveryNoteNumbers",
-              "deliveryNoteBundleKeys",
-              "deliveryNoteBundleNumbers",
+              "deliveryNoteBundles",
               "selfCheckinData",
               "checkinKey",
               "driverName",
               "driverNumberPlate"
             ],
             "properties": {
-              "deliveryNoteKeys": {
-                "$ref": "#/components/schemas/KeyArrayType"
-              },
-              "deliveryNoteNumbers": {
-                "$ref": "#/components/schemas/NameArrayType"
-              },
-              "deliveryNoteBundleKeys": {
-                "$ref": "#/components/schemas/KeyArrayType"
-              },
-              "deliveryNoteBundleNumbers": {
-                "$ref": "#/components/schemas/NameArrayType"
+              "deliveryNoteBundles": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DeliveryNoteBundleEvents"
+                }
               },
               "selfCheckinData": {
                 "$ref": "#/components/schemas/SelfCheckinDataInsertion"
@@ -10412,27 +10431,30 @@
           {
             "type": "object",
             "required": [
+              "deliveryNoteBundles",
+              "selfCheckinData",
               "checkinKey",
-              "deliveryNoteKeys",
-              "deliveryNoteNumbers",
-              "deliveryNoteBundleKeys",
-              "deliveryNoteBundleNumbers"
+              "driverName",
+              "driverNumberPlate"
             ],
             "properties": {
+              "deliveryNoteBundles": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DeliveryNoteBundleEvents"
+                }
+              },
+              "selfCheckinData": {
+                "$ref": "#/components/schemas/SelfCheckinDataInsertion"
+              },
               "checkinKey": {
                 "$ref": "#/components/schemas/KeyType"
               },
-              "deliveryNoteKeys": {
-                "$ref": "#/components/schemas/KeyArrayType"
+              "driverName": {
+                "$ref": "#/components/schemas/NameType"
               },
-              "deliveryNoteNumbers": {
-                "$ref": "#/components/schemas/NameArrayType"
-              },
-              "deliveryNoteBundleKeys": {
-                "$ref": "#/components/schemas/KeyArrayType"
-              },
-              "deliveryNoteBundleNumbers": {
-                "$ref": "#/components/schemas/NameArrayType"
+              "driverNumberPlate": {
+                "$ref": "#/components/schemas/NameType"
               }
             }
           }
@@ -11010,6 +11032,12 @@
           },
           "transactionId": {
             "$ref": "#/components/schemas/NameType"
+          },
+          "dateConsigneeSigned": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateDriverSigned": {
+            "$ref": "#/components/schemas/TimestampType"
           }
         }
       },
@@ -11242,11 +11270,15 @@
         "additionalProperties": false,
         "required": [
           "base64",
+          "dateFinished",
           "name"
         ],
         "properties": {
           "base64": {
             "$ref": "#/components/schemas/Base64Type"
+          },
+          "dateFinished": {
+            "$ref": "#/components/schemas/TimestampType"
           },
           "name": {
             "$ref": "#/components/schemas/NameType"
