@@ -10993,7 +10993,9 @@
           "deliveryNotes",
           "selfCheckinData",
           "selfCheckinDataSet",
-          "transactionId"
+          "transactionId",
+          "dateConsigneeSigned",
+          "dateDriverSigned"
         ],
         "properties": {
           "_key": {
