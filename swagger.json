@@ -514,7 +514,7 @@
       },
       "delete": {
         "summary": "Archive organization site",
-        "description": "Archives an organization site. After this request, the site is marked as archived.\nOnly read operations are possible after archive.\nTODO: A delete job will delete the site, if the site is no longer needs in supply chains and other.\n",
+        "description": "Archives an organization site. After this request, the site is marked as archived.\nOnly read operations are possible after archive.\nTODO: A delete job will delete the site, if the site is no longer needed in supply chains and other.\n",
         "operationId": "archiveAdministrationOrganizationSite",
         "x-dls-requiredOrganizationSitePermission": "administration_organization_sites_archive",
         "tags": [
@@ -5245,7 +5245,7 @@
     "/organization-sites/{organizationSiteKey}/self-checkin/information": {
       "get": {
         "summary": "Get detailed information about a self checkin",
-        "description": "Get detailed information about a self checkin by tourKey xor bundleKey xor checkinToken. It returns especially the state of the self checkin and the associated delivery notes.\n",
+        "description": "Get detailed information about a self checkin by tourKey xor\nbundleKey xor checkinToken. It returns especially the state\nof the self checkin and the associated delivery notes.\n",
         "operationId": "getSelfCheckinInformation",
         "x-dls-requiredOrganizationSitePermission": "self_checkin_information",
         "tags": [
