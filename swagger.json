@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "description": "The documented API is used by the frontend hosted on cloud4log.com. If you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}. Endpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -182,77 +182,6 @@
         }
       }
     },
-    "/administration/organizations/{organizationKey}/api-keys": {
-      "post": {
-        "deprecated": true,
-        "summary": "creates a API key",
-        "description": "Deprecated: Please use /administration/organizations/{organizationKey}/api-users-keys\nCreates an API user for the specified organization sites with\nthe specified permissions.\nReturns a sessionId that can't received a second time.\n",
-        "operationId": "createApiKeyForOrganizationSites",
-        "x-dls-requiredOrganizationPermission": "api_keys_create",
-        "tags": [
-          "administration"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/organizationKeyParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ApiUserRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "API key successful created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PostApiUserResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "$ref": "#/components/responses/DefaultErrorResponse"
-          }
-        }
-      },
-      "get": {
-        "summary": "Get list of all API keys for organization",
-        "description": "Get a list of all API keys for the given organization\n",
-        "operationId": "getApiKeysForOrganization",
-        "x-dls-requiredOrganizationPermission": "api_keys_read",
-        "tags": [
-          "administration"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/organizationKeyParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "result from operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiUsers"
-                }
-              }
-            }
-          },
-          "default": {
-            "$ref": "#/components/responses/DefaultErrorResponse"
-          }
-        }
-      }
-    },
     "/administration/organizations/{organizationKey}/api-users-keys": {
       "post": {
         "summary": "creates a API key",
@@ -294,37 +223,30 @@
         }
       }
     },
-    "/administration/organizations/{organizationKey}/api-keys/{userKey}": {
-      "put": {
-        "deprecated": true,
-        "summary": "Set new permissions for API key",
-        "description": "Deprecated: Please use /administration/organizations/{organizationKey}/api-users-keys/{userKey}\nNew permissions are set based on the given roles and organization sites.\nYou can also edit the API key user properties.\n",
-        "operationId": "putApiKeyForOrganization",
-        "x-dls-requiredOrganizationPermission": "api_keys_modify",
+    "/administration/organizations/{organizationKey}/api-keys": {
+      "get": {
+        "summary": "Get list of all API keys for organization",
+        "description": "Get a list of all API keys for the given organization\n",
+        "operationId": "getApiKeysForOrganization",
+        "x-dls-requiredOrganizationPermission": "api_keys_read",
         "tags": [
           "administration"
         ],
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationKeyParam"
-          },
-          {
-            "$ref": "#/components/parameters/userKeyParam"
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ApiUserRequest"
+        "responses": {
+          "200": {
+            "description": "result from operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiUsers"
+                }
               }
             }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "API key successfully patched"
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -793,39 +715,6 @@
             "$ref": "#/components/responses/DefaultErrorResponse"
           }
         }
-      },
-      "post": {
-        "deprecated": true,
-        "summary": "Create new user for organization site",
-        "description": "Deprecated: Please use POST /administration/organization-sites/users\nCreate a new user and add this user to the organization for the specified organization site\nand equip the new user with the rights according to the specified roles.\nThe requesting user must have access to the organization site to which the new user is to be added.\nThe new user can have only the roles carrier, consignee, consignor, site_admin.\n",
-        "operationId": "postAdministrationOrganizationSiteUser",
-        "x-dls-requiredOrganizationSitePermission": "administration_organization_sites_users_create",
-        "tags": [
-          "administration"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/organizationSiteKeyParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserForOrganizationSiteAdminRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "The user was create and added to the organization"
-          },
-          "default": {
-            "$ref": "#/components/responses/DefaultErrorResponse"
-          }
-        }
       }
     },
     "/administration/organization-sites/users": {
@@ -890,42 +779,6 @@
       }
     },
     "/administration/organization-sites/{organizationSiteKey}/users/{userKey}": {
-      "patch": {
-        "deprecated": true,
-        "summary": "Modify user for organization site",
-        "description": "Deprecated: Please use PUT /administration/organization-sites/users/{userKey}\nModify a user and for the given organization site and equip the\nuser with permissions according to the given roles.\nThe requesting user must have access to the organization site where the user is in.\nThe edited user can only have the roles site_admin, carrier, consignor, consignee.\nYou can't edit users with roles organization_admin\n",
-        "operationId": "patchAdministrationOrganizationSiteUser",
-        "x-dls-requiredOrganizationSitePermission": "administration_organization_sites_users_modify",
-        "tags": [
-          "administration"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/organizationSiteKeyParam"
-          },
-          {
-            "$ref": "#/components/parameters/userKeyParam"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PatchUserForOrganizationSiteAdminRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "The user was create and added to the organization"
-          },
-          "default": {
-            "$ref": "#/components/responses/DefaultErrorResponse"
-          }
-        }
-      },
       "get": {
         "summary": "Get information details for one organization site user",
         "description": "Return one user of an organization site. The organization site must\nbelong to the calling user.\nPermissions are returned.\n",
@@ -2983,6 +2836,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/OrderNumberParam"
           }
         ],
         "responses": {
@@ -3056,37 +2912,6 @@
               "application/pdf": {
                 "schema": {
                   "$ref": "#/components/schemas/BinaryFileType"
-                }
-              }
-            }
-          },
-          "default": {
-            "$ref": "#/components/responses/DefaultErrorResponse"
-          }
-        }
-      }
-    },
-    "/organization-sites/consignee/delivery-notes/checkin": {
-      "get": {
-        "deprecated": true,
-        "summary": "get delivery note keys from wallet for checkin",
-        "description": "Deprecated - will be removed 2023-02-28\nGet delivery notes for a checkin.\nThe token from the checkout wallet or from the tour wallet.\nReturns list of delivery note keys that can be used to create a checkin.\nThe requesting user must have the permission\nconsignee_delivery_notes_lookup_with_token on all organization sites.\nThis endpoint is deprecated. Please use the endpoint\nGET /organization-sites/consignee/delivery-notes/for-checkin\ninstead.\n",
-        "operationId": "getConsigneeDeliveryNoteKeysForToken",
-        "tags": [
-          "checkins"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/TokenTypeParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of delivery note keys that can be used to create a checkin.\n",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/KeyArrayType"
                 }
               }
             }
@@ -4055,7 +3880,7 @@
     "/external/signature-pads/{signaturePadType}": {
       "patch": {
         "summary": "Update signature via carrier",
-        "description": "Update the signature on a signature pad. This request waits with the response until the checkout process is finished.\nThe token is the carrierAccessToken from the signature pad creation request.\nReturns the accessToken to access the wallet invite page or gate page.\nTo complete the checkout process, use POST /organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles-checkout.\n",
+        "description": "This endpoint updates the signature stored on a signature pad, utilizing the carrierAccessToken obtained during the pad's setup.\nThe behavior of the response varies based on the type of signature pad specified:\n'checkin'-Type: As soon as the checkin process is finished, it returns a 204 status.\n'checkout'-Type: Returns an accessToken for the checkout process.\nIt grants access to either a wallet invite page or a gate page.\nIn both scenarios, if the required conditions are not met within 15 minutes, the server will return an error response.\n",
         "operationId": "externalPatchSignaturePad",
         "security": [],
         "tags": [
@@ -6298,7 +6123,7 @@
             "$ref": "#/components/schemas/KeyType"
           },
           "checkinKey": {
-            "$ref": "#/components/schemas/KeyType"
+            "$ref": "#/components/schemas/NameType"
           }
         }
       },
@@ -11731,14 +11556,6 @@
               "consignee"
             ]
           },
-          "user_permissions_modify": {
-            "type": "boolean",
-            "description": "This permission is needed for modifying permissions of a user",
-            "x-roles": [
-              "organization_admin",
-              "site_admin"
-            ]
-          },
           "user_modify": {
             "type": "boolean",
             "description": "This permission is needed for modifying basic global user information, like name, password or email (of own user)",
@@ -11864,57 +11681,6 @@
             "description": "This permission is needed for reading this organization",
             "x-roles": [
               "service_provider",
-              "organization_admin"
-            ]
-          },
-          "organization_modify": {
-            "type": "boolean",
-            "description": "This permission is needed for modifying the specific organization",
-            "x-roles": [
-              "service_provider"
-            ]
-          },
-          "organization_delete": {
-            "type": "boolean",
-            "description": "This permission is needed for deleting the specific organization",
-            "x-roles": [
-              "service_provider"
-            ]
-          },
-          "user_organization_permissions_modify": {
-            "type": "boolean",
-            "description": "This permission is needed for modifying permissions of a user on organization level",
-            "x-roles": [
-              "service_provider",
-              "organization_admin"
-            ]
-          },
-          "user_assign": {
-            "type": "boolean",
-            "description": "This permission is needed for assigning users to the organization",
-            "x-roles": [
-              "service_provider"
-            ]
-          },
-          "user_unassign": {
-            "type": "boolean",
-            "description": "This permission is needed for unassigning users from the organization",
-            "x-roles": [
-              "organization_admin"
-            ]
-          },
-          "users_create": {
-            "type": "boolean",
-            "description": "This permission is needed to create a new user and add this user to the organization",
-            "x-roles": [
-              "service_provider",
-              "organization_admin"
-            ]
-          },
-          "user_delete": {
-            "type": "boolean",
-            "description": "This permission is need for deleting users from a organization",
-            "x-roles": [
               "organization_admin"
             ]
           },
@@ -12076,46 +11842,6 @@
           "administration_legal_document_create": {
             "type": "boolean",
             "description": "This permission is needed to upload the legal PDF document",
-            "x-roles": [
-              "organization_admin",
-              "site_admin"
-            ]
-          },
-          "user_assign": {
-            "type": "boolean",
-            "description": "This permission is needed for assigning users to an organization site",
-            "x-roles": [
-              "organization_admin",
-              "site_admin"
-            ]
-          },
-          "user_unassign": {
-            "type": "boolean",
-            "description": "This permission is needed for unassigning users from the organization site",
-            "x-roles": [
-              "organization_admin",
-              "site_admin"
-            ]
-          },
-          "user_organization_site_permissions_modify": {
-            "type": "boolean",
-            "description": "This permission is needed for modifying permissions of a user on organization site level",
-            "x-roles": [
-              "organization_admin",
-              "site_admin"
-            ]
-          },
-          "self_service_config_consignee_checkin_read": {
-            "type": "boolean",
-            "description": "This permission is needed for getting all the driver information that is possible to display during the consignee checkin process.",
-            "x-roles": [
-              "organization_admin",
-              "site_admin"
-            ]
-          },
-          "self_service_config_consignee_checkin_replace": {
-            "type": "boolean",
-            "description": "This permission is needed for setting all the driver information that should be displayed during the consignee checkin process.",
             "x-roles": [
               "organization_admin",
               "site_admin"
@@ -12325,35 +12051,6 @@
               "consignee"
             ]
           },
-          "discrepancies_create": {
-            "type": "boolean",
-            "description": "This permission is needed for creating a new discrepancy",
-            "x-roles": [
-              "consignee"
-            ]
-          },
-          "discrepancies_update": {
-            "type": "boolean",
-            "description": "This permission is needed for getting all permitted discrepancies",
-            "x-roles": [
-              "consignee"
-            ]
-          },
-          "discrepancies_read": {
-            "type": "boolean",
-            "description": "This permission is needed for getting all permitted discrepancies",
-            "x-roles": [
-              "consignee",
-              "remote_consignee"
-            ]
-          },
-          "discrepancies_delete": {
-            "type": "boolean",
-            "description": "This permission is needed for deleting a discrepancy",
-            "x-roles": [
-              "consignee"
-            ]
-          },
           "consignee_fine_discrepancies_create": {
             "type": "boolean",
             "description": "This permission is needed for creating a new fine discrepancy",
@@ -12367,13 +12064,6 @@
             "x-roles": [
               "consignee",
               "remote_consignee"
-            ]
-          },
-          "consignee_fine_discrepancies_delete": {
-            "type": "boolean",
-            "description": "This permission is needed for deleting a fine discrepancy",
-            "x-roles": [
-              "consignee"
             ]
           },
           "delivery_note_bundles_create": {
@@ -12416,25 +12106,11 @@
               "consignor"
             ]
           },
-          "delivery_note_bundles_checkout": {
-            "type": "boolean",
-            "description": "User can checkout a delivery note bundle",
-            "x-roles": [
-              "consignor"
-            ]
-          },
           "delivery_note_bundles_checkout_multiple": {
             "type": "boolean",
             "description": "User can checkout multiple delivery note bundles at once",
             "x-roles": [
               "consignor"
-            ]
-          },
-          "delivery_note_bundles_checkin": {
-            "type": "boolean",
-            "description": "User can checkin multiple delivery note bundles at once",
-            "x-roles": [
-              "consignee"
             ]
           },
           "send_wallet_invite_emails": {
@@ -12492,13 +12168,6 @@
           "carrier_delivery_notes_share_rights": {
             "type": "boolean",
             "description": "Shares the rights of delivery notes to another carrier site",
-            "x-roles": [
-              "carrier"
-            ]
-          },
-          "carrier_delivery_notes_read": {
-            "type": "boolean",
-            "description": "user can read pdf file from a delivery note bundle",
             "x-roles": [
               "carrier"
             ]
@@ -12696,16 +12365,6 @@
             "x-roles": [
               "consignor",
               "consignee"
-            ]
-          },
-          "events_notifications_read": {
-            "type": "boolean",
-            "description": "User can read notifications",
-            "x-roles": [
-              "consignor",
-              "carrier",
-              "consignee",
-              "self_checkin"
             ]
           },
           "self_checkin_information": {
@@ -13166,6 +12825,14 @@
         "in": "query",
         "required": false,
         "name": "bundleNumber",
+        "schema": {
+          "$ref": "#/components/schemas/NameTypeNullAble"
+        }
+      },
+      "OrderNumberParam": {
+        "in": "query",
+        "required": false,
+        "name": "orderNumber",
         "schema": {
           "$ref": "#/components/schemas/NameTypeNullAble"
         }
