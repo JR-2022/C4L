@@ -1945,7 +1945,7 @@
     "/organization-sites/{organizationSiteKey}/consignee/checkins/{checkinKey}": {
       "patch": {
         "summary": "Finish a checkin with signatures.",
-        "description": "Finish a checkin by sending the signatures of the consignee and\ncarrier. The signatures must be pngs in base64 format.\n",
+        "description": "Finish a checkin by sending the signatures of the consignee and\ndriver. The signatures must be pngs in base64 format.\n",
         "operationId": "patchConsigneeCheckin",
         "x-dls-requiredOrganizationSitePermission": "consignee_checkins_finish",
         "tags": [
@@ -2013,7 +2013,7 @@
     },
     "/organization-sites/{organizationSiteKey}/consignee/checkins/{checkinKey}/consignee-signature": {
       "patch": {
-        "summary": "Sign a checkin as consignee, make it ready for the self checkin of the carrier.",
+        "summary": "Sign a checkin as consignee, make it ready for the self checkin of the driver.",
         "description": "Sending the signature of the consignee. The signature must be a png in base64 format.\n",
         "operationId": "patchConsigneeSelfCheckin",
         "x-dls-requiredOrganizationSitePermission": "consignee_checkins_self_checkin",
@@ -2477,7 +2477,7 @@
     "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles-checkout": {
       "post": {
         "summary": "Checkout one or more delivery note bundles.",
-        "description": "Checkout one or more delivery note bundles. All bundles must be in status 'open'.\nThe checkout is only possible when every bundle to checkout has at least one delivery note.\n",
+        "description": "Checkout one or more delivery note bundles. All bundles must be in status 'open'.\nThe checkout is only possible when every bundle to checkout has at least one delivery note.\nUse driverSignature in the request body, since carrierSignature is deprecated!\n",
         "operationId": "postDeliveryNoteBundlesCheckout",
         "x-dls-requiredOrganizationSitePermission": "delivery_note_bundles_checkout_multiple",
         "tags": [
@@ -7154,8 +7154,7 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "deliveryNoteBundleKeys",
-          "carrierSignature"
+          "deliveryNoteBundleKeys"
         ],
         "properties": {
           "deliveryNoteBundleKeys": {
@@ -7166,6 +7165,11 @@
             }
           },
           "carrierSignature": {
+            "$ref": "#/components/schemas/Base64Type",
+            "description": "base64 encoded png of the signature",
+            "deprecated": true
+          },
+          "driverSignature": {
             "$ref": "#/components/schemas/Base64Type",
             "description": "base64 encoded png of the signature"
           }
@@ -10917,6 +10921,7 @@
           "bundlenr",
           "tournr",
           "date",
+          "driverSignatureCheckout",
           "carrierSignatureOutgoing",
           "driverSignature",
           "consigneeSignature",
@@ -10955,8 +10960,12 @@
           "date": {
             "$ref": "#/components/schemas/TimestampType"
           },
+          "driverSignatureCheckout": {
+            "$ref": "#/components/schemas/DriverSignatureCheckout"
+          },
           "carrierSignatureOutgoing": {
-            "$ref": "#/components/schemas/CarrierSignatureOutgoing"
+            "$ref": "#/components/schemas/DriverSignatureCheckout",
+            "deprecated": true
           },
           "driverSignature": {
             "$ref": "#/components/schemas/DriverSignature"
@@ -11049,9 +11058,9 @@
           }
         }
       },
-      "CarrierSignatureOutgoing": {
+      "DriverSignatureCheckout": {
         "type": "object",
-        "description": "carrier signature data",
+        "description": "driver signature data",
         "additionalProperties": false,
         "required": [
           "base64",
