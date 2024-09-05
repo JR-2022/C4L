@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.4.2",
+    "version": "1.4.3",
     "description": "The documented API is used by the frontend hosted on cloud4log.com. If you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}. Endpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -3358,8 +3358,8 @@
     },
     "/delivery-notes/{deliveryNoteKey}": {
       "get": {
-        "summary": "Get meta data for a delivery note w/o loadcarrier",
-        "description": "Get meta data for a single delivery note from delivery note pool.\nProperty loadCarriers is always an empty array. To get the\nload carriers please use the load carriers endpoint.\n",
+        "summary": "Get meta data for a delivery note",
+        "description": "Get meta data for a single delivery note from delivery note pool.\nThe property loadCarriers is deprecated. Please use loadCarriersConsignor\nand loadCarriersConsignee instead.\n",
         "operationId": "getSingleDeliveryNoteMetaData",
         "tags": [
           "delivery notes"
@@ -7518,6 +7518,8 @@
           "number",
           "orderNumber",
           "loadCarriers",
+          "loadCarriersConsignor",
+          "loadCarriersConsignee",
           "discrepancies",
           "fineDiscrepancies",
           "palletTickets",
@@ -7568,6 +7570,13 @@
             "$ref": "#/components/schemas/NameType"
           },
           "loadCarriers": {
+            "$ref": "#/components/schemas/LoadCarriers",
+            "deprecated": true
+          },
+          "loadCarriersConsignor": {
+            "$ref": "#/components/schemas/LoadCarriers"
+          },
+          "loadCarriersConsignee": {
             "$ref": "#/components/schemas/LoadCarriers"
           },
           "discrepancies": {
@@ -10137,7 +10146,8 @@
           "mapping": {
             "self_checkin_registration_completed": "#/components/schemas/SelfCheckinRegistrationCompletedEventPayload",
             "self_checkin_checkin_finished": "#/components/schemas/SelfCheckinCheckinFinishedEventPayload",
-            "self_checkin_driver_waiting": "#/components/schemas/SelfCheckinDriverWaitingEventPayload"
+            "self_checkin_driver_waiting": "#/components/schemas/SelfCheckinDriverWaitingEventPayload",
+            "checkout_finished": "#/components/schemas/CheckoutFinishedEventPayload"
           }
         }
       },
@@ -10289,6 +10299,28 @@
           }
         ]
       },
+      "CheckoutFinishedEventPayload": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasicEventPayload"
+          },
+          {
+            "type": "object",
+            "required": [
+              "checkoutKey",
+              "deliveryNoteKeys"
+            ],
+            "properties": {
+              "checkoutKey": {
+                "$ref": "#/components/schemas/KeyType"
+              },
+              "deliveryNoteKeys": {
+                "$ref": "#/components/schemas/KeyArrayType"
+              }
+            }
+          }
+        ]
+      },
       "Event": {
         "type": "object",
         "required": [
@@ -10328,6 +10360,9 @@
           },
           {
             "$ref": "#/components/schemas/SelfCheckinDriverWaitingEventPayload"
+          },
+          {
+            "$ref": "#/components/schemas/CheckoutFinishedEventPayload"
           }
         ]
       },
@@ -10382,6 +10417,67 @@
         "properties": {
           "eventKey": {
             "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
+      "CheckoutEventData": {
+        "type": "object",
+        "required": [
+          "consignorData",
+          "carrierData",
+          "consigneeData"
+        ],
+        "properties": {
+          "consignorData": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "consignorOrgKey": {
+                  "$ref": "#/components/schemas/KeyType"
+                },
+                "consignorOrgSiteKey": {
+                  "$ref": "#/components/schemas/KeyType"
+                },
+                "deliveryNoteKeys": {
+                  "$ref": "#/components/schemas/KeyArrayType"
+                }
+              }
+            }
+          },
+          "carrierData": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "carrierOrgKey": {
+                  "$ref": "#/components/schemas/KeyType"
+                },
+                "carrierOrgSiteKey": {
+                  "$ref": "#/components/schemas/KeyType"
+                },
+                "deliveryNoteKeys": {
+                  "$ref": "#/components/schemas/KeyArrayType"
+                }
+              }
+            }
+          },
+          "consigneeData": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "consigneeOrgKey": {
+                  "$ref": "#/components/schemas/KeyType"
+                },
+                "consigneeOrgSiteKey": {
+                  "$ref": "#/components/schemas/KeyType"
+                },
+                "deliveryNoteKeys": {
+                  "$ref": "#/components/schemas/KeyArrayType"
+                }
+              }
+            }
           }
         }
       },
@@ -11487,7 +11583,7 @@
         "type": "string",
         "maxLength": 60,
         "minLength": 3,
-        "pattern": "^\\d{3,}$"
+        "pattern": "^\\S{3,60}$"
       },
       "DeliveryNoteNumber": {
         "type": "string",
@@ -12516,7 +12612,8 @@
         "enum": [
           "self_checkin_registration_completed",
           "self_checkin_checkin_finished",
-          "self_checkin_driver_waiting"
+          "self_checkin_driver_waiting",
+          "checkout_finished"
         ]
       },
       "TriggerEventType": {
