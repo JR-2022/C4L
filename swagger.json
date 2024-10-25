@@ -7551,6 +7551,8 @@
           "deliveryNoteBundleName",
           "deliveryNoteBundleNumber",
           "deliveryNoteBundleStatus",
+          "selfCheckinDataSet",
+          "checkinDateCreated",
           "attachmentsCount",
           "organicCertificationNumberChecked",
           "driverOutgoingSignatureDate",
@@ -7669,6 +7671,12 @@
           },
           "checkinKey": {
             "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "selfCheckinDataSet": {
+            "type": "boolean"
+          },
+          "checkinDateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
           },
           "attachmentsCount": {
             "$ref": "#/components/schemas/AttachmentsCount"
