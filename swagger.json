@@ -3389,7 +3389,7 @@
     "/organization-sites/{organizationSiteKey}/consignor/delivery-notes/{deliveryNoteKey}/complete-pdf": {
       "get": {
         "summary": "Get a complete pdf with checkout and checkin data",
-        "description": "Get a complete pdf with checkout and checkin data: all delivery notes,\nall attachments, all signatures and all images as a consignor\n",
+        "description": "Get a complete pdf with checkout and checkin data: the delivery note,\nall attachments, all signatures and all images as a consignor\n",
         "operationId": "getConsignorDeliveryNoteCombinedPdf",
         "x-dls-requiredOrganizationSitePermission": "consignor_delivery_notes_complete_pdf_read",
         "tags": [
@@ -3418,7 +3418,7 @@
     "/organization-sites/{organizationSiteKey}/carrier/delivery-notes/{deliveryNoteKey}/complete-pdf": {
       "get": {
         "summary": "Get a complete pdf with checkout and checkin data",
-        "description": "Get a complete pdf with checkout and checkin data: all delivery notes,\nall attachments, all signatures and all images as a carrier\n",
+        "description": "Get a complete pdf with checkout and checkin data: the delivery note,\nall attachments, all signatures and all images as a carrier\n",
         "operationId": "getCarrierDeliveryNoteCombinedPdf",
         "x-dls-requiredOrganizationSitePermission": "carrier_delivery_notes_complete_pdf_read",
         "tags": [
