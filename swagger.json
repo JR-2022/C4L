@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.4.4",
+    "version": "1.4.5",
     "description": "The documented API is used for cloud4log.com.\n\nIf you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}.\n\nFor Information about your current user see /me endpoint. The technical keys of the application are referenced as \"_key\" (For example the deliveryNoteKey is referenced as _key on GET /organization-sites/{organizationSiteKey}/carrier/delivery-notes).\n\nEndpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -3790,7 +3790,7 @@
     "/organizations/{organizationKey}/events": {
       "get": {
         "summary": "Get Event",
-        "description": "Get event from the events log. The filtering parameters are optional and work on the dateCreated field of the event.\nThe default sort order is descending. With gt and lt you can get all events greater than or less than a specific date.\nWith siteKeys you can filter events by site. With eventTypes you can filter events by type.\n",
+        "description": "Get event from the events log. The filtering parameters are optional and work on the dateCreated field of the event.\nThe default sort order is descending. With gt and lt you can get all events greater than or less than a specific date.\nThe gt filter is the date of the oldest event you want to get. The lt filter is the date of the newest event you want to get.\nWith siteKeys you can filter events by site. With eventTypes you can filter events by type.\n",
         "operationId": "getEvents",
         "x-dls-requiredOrganizationPermission": "events_read",
         "tags": [
@@ -10479,6 +10479,9 @@
               },
               "deliveryNoteKeys": {
                 "$ref": "#/components/schemas/KeyArrayType"
+              },
+              "deliveryNoteBundleKeys": {
+                "$ref": "#/components/schemas/KeyArrayType"
               }
             }
           }
@@ -11750,13 +11753,13 @@
         "type": "string",
         "maxLength": 60,
         "minLength": 3,
-        "pattern": "^\\S{3,60}$"
+        "pattern": "^[^,]{3,60}$"
       },
       "DeliveryNoteNumber": {
         "type": "string",
         "maxLength": 60,
         "minLength": 3,
-        "pattern": "^[A-Za-z0-9]+$"
+        "pattern": "^[^,]{3,60}$"
       },
       "AttachmentsCount": {
         "type": "integer",
@@ -12692,6 +12695,7 @@
       },
       "Base64Type": {
         "type": "string",
+        "format": "byte",
         "example": "JVBERi0...U9GCg=="
       },
       "Base64ArrayType": {
