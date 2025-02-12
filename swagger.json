@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.4.5",
+    "version": "1.4.6",
     "description": "The documented API is used for cloud4log.com.\n\nIf you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}.\n\nFor Information about your current user see /me endpoint. The technical keys of the application are referenced as \"_key\" (For example the deliveryNoteKey is referenced as _key on GET /organization-sites/{organizationSiteKey}/carrier/delivery-notes).\n\nEndpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -4981,6 +4981,31 @@
         }
       }
     },
+    "/platform/organizations": {
+      "get": {
+        "summary": "Get all organization keys.",
+        "description": "Get a list of all organization keys.\n",
+        "operationId": "getPlatformOrganizations",
+        "tags": [
+          "platform"
+        ],
+        "responses": {
+          "200": {
+            "description": "All organization keys",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationKeysAndNames"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/public/organizations": {
       "get": {
         "summary": "Get all ogranizations",
@@ -6470,6 +6495,9 @@
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "originalConsignor": {
+            "$ref": "#/components/schemas/OriginalConsignor"
           }
         }
       },
@@ -7165,12 +7193,12 @@
             }
           },
           "carrierSignature": {
-            "$ref": "#/components/schemas/Base64Type",
+            "$ref": "#/components/schemas/ImageBase64Type",
             "description": "base64 encoded png of the signature",
             "deprecated": true
           },
           "driverSignature": {
-            "$ref": "#/components/schemas/Base64Type",
+            "$ref": "#/components/schemas/ImageBase64Type",
             "description": "base64 encoded png of the signature"
           }
         }
@@ -7208,6 +7236,9 @@
           },
           "attachmentsCount": {
             "$ref": "#/components/schemas/AttachmentsCount"
+          },
+          "originalConsignor": {
+            "$ref": "#/components/schemas/NameType"
           }
         }
       },
@@ -7283,6 +7314,9 @@
           },
           "consigneeLoadCarrierExchange": {
             "type": "boolean"
+          },
+          "originalConsignor": {
+            "$ref": "#/components/schemas/NameType"
           }
         }
       },
@@ -7310,6 +7344,7 @@
           "consigneeLoadCarrierImages",
           "consignorLoadCarrierExchange",
           "consigneeLoadCarrierExchange",
+          "originalConsignor",
           "dateAnnounced",
           "consignorName",
           "carrierName",
@@ -7364,6 +7399,9 @@
           },
           "consigneeLoadCarrierExchange": {
             "type": "boolean"
+          },
+          "originalConsignor": {
+            "$ref": "#/components/schemas/NameType"
           },
           "consignorName": {
             "$ref": "#/components/schemas/NameType"
@@ -7465,6 +7503,9 @@
           },
           "consigneeLoadCarrierExchange": {
             "type": "boolean"
+          },
+          "originalConsignor": {
+            "$ref": "#/components/schemas/NameType"
           },
           "consignorKey": {
             "$ref": "#/components/schemas/KeyXorEmptyKeyType"
@@ -7729,7 +7770,8 @@
           "deliveryNoteBundleNumber",
           "deliveryNoteBundleStatus",
           "checkinKey",
-          "attachmentsCount"
+          "attachmentsCount",
+          "organicCertificationNumberChecked"
         ],
         "properties": {
           "_key": {
@@ -7789,6 +7831,9 @@
           "tourNumber": {
             "$ref": "#/components/schemas/NameType"
           },
+          "originalConsignor": {
+            "$ref": "#/components/schemas/NameType"
+          },
           "consignorKey": {
             "$ref": "#/components/schemas/KeyXorEmptyKeyType"
           },
@@ -7831,6 +7876,9 @@
           },
           "attachmentsCount": {
             "$ref": "#/components/schemas/AttachmentsCount"
+          },
+          "organicCertificationNumberChecked": {
+            "type": "boolean"
           }
         }
       },
@@ -7937,6 +7985,9 @@
             "$ref": "#/components/schemas/NameType"
           },
           "tourNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "originalConsignor": {
             "$ref": "#/components/schemas/NameType"
           },
           "consignorKey": {
@@ -8083,6 +8134,25 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/Organization"
+        }
+      },
+      "OrganizationKeysAndNames": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "_key",
+            "name"
+          ],
+          "properties": {
+            "_key": {
+              "$ref": "#/components/schemas/KeyType"
+            },
+            "name": {
+              "$ref": "#/components/schemas/NameType"
+            }
+          }
         }
       },
       "PostOrganizationRequest": {
@@ -9153,7 +9223,7 @@
         ],
         "properties": {
           "driverSignature": {
-            "$ref": "#/components/schemas/Base64Type",
+            "$ref": "#/components/schemas/ImageBase64Type",
             "description": "base64 encoded png of the signature"
           },
           "transactionId": {
@@ -10668,11 +10738,11 @@
         ],
         "properties": {
           "driverSignature": {
-            "$ref": "#/components/schemas/Base64Type",
+            "$ref": "#/components/schemas/ImageBase64Type",
             "description": "base64 encoded png of the signature"
           },
           "consigneeSignature": {
-            "$ref": "#/components/schemas/Base64Type",
+            "$ref": "#/components/schemas/ImageBase64Type",
             "description": "base64 encoded png of the signature"
           }
         }
@@ -10686,7 +10756,7 @@
         ],
         "properties": {
           "consigneeSignature": {
-            "$ref": "#/components/schemas/Base64Type",
+            "$ref": "#/components/schemas/ImageBase64Type",
             "description": "base64 encoded png of the signature"
           }
         }
@@ -10722,7 +10792,7 @@
             "$ref": "#/components/schemas/NameType"
           },
           "deliveryNote": {
-            "$ref": "#/components/schemas/Base64Type"
+            "$ref": "#/components/schemas/PdfBase64Type"
           },
           "number": {
             "$ref": "#/components/schemas/DeliveryNoteNumber"
@@ -10732,6 +10802,9 @@
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "originalConsignor": {
+            "$ref": "#/components/schemas/OriginalConsignor"
           }
         }
       },
@@ -11267,7 +11340,7 @@
             "$ref": "#/components/schemas/GetConsigneeAttachmentsResponse"
           },
           "ls_base64": {
-            "$ref": "#/components/schemas/Base64Type"
+            "$ref": "#/components/schemas/PdfBase64Type"
           },
           "wapictures_base64": {
             "$ref": "#/components/schemas/Base64ArrayType"
@@ -11335,7 +11408,7 @@
         ],
         "properties": {
           "base64": {
-            "$ref": "#/components/schemas/Base64Type"
+            "$ref": "#/components/schemas/ImageBase64Type"
           },
           "dateCreated": {
             "$ref": "#/components/schemas/TimestampType"
@@ -11356,7 +11429,7 @@
         ],
         "properties": {
           "base64": {
-            "$ref": "#/components/schemas/Base64Type"
+            "$ref": "#/components/schemas/ImageBase64Type"
           },
           "dateFinished": {
             "$ref": "#/components/schemas/TimestampType"
@@ -11377,7 +11450,7 @@
         ],
         "properties": {
           "base64": {
-            "$ref": "#/components/schemas/Base64Type"
+            "$ref": "#/components/schemas/ImageBase64Type"
           },
           "dateFinished": {
             "$ref": "#/components/schemas/TimestampType"
@@ -11754,6 +11827,11 @@
         "maxLength": 60,
         "minLength": 3,
         "pattern": "^[^,]{3,60}$"
+      },
+      "OriginalConsignor": {
+        "type": "string",
+        "maxLength": 60,
+        "pattern": "^$|^[a-zA-Z0-9ßäöüÄÖÜ,\\-_]{3,60}$"
       },
       "DeliveryNoteNumber": {
         "type": "string",
@@ -12698,6 +12776,16 @@
         "pattern": "^[A-Za-z0-9+/]+={0,2}$",
         "minLength": 1,
         "example": "JVBERi0...U9GCg=="
+      },
+      "PdfBase64Type": {
+        "type": "string",
+        "minLength": 1,
+        "format": "base64Pdf"
+      },
+      "ImageBase64Type": {
+        "type": "string",
+        "minLength": 1,
+        "format": "base64Image"
       },
       "Base64ArrayType": {
         "type": "array",
