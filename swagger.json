@@ -11831,7 +11831,7 @@
       "OriginalConsignor": {
         "type": "string",
         "maxLength": 60,
-        "pattern": "^$|^[a-zA-Z0-9ßäöüÄÖÜ,\\-_]{3,60}$"
+        "pattern": "^$|^[^,]{3,60}$"
       },
       "DeliveryNoteNumber": {
         "type": "string",
