@@ -7576,6 +7576,7 @@
           "consigneeLoadCarrierImages",
           "consignorLoadCarrierExchange",
           "consigneeLoadCarrierExchange",
+          "originalConsignor",
           "consignorKey",
           "partOfTour",
           "tourKey",
@@ -7666,6 +7667,9 @@
             "$ref": "#/components/schemas/NameType"
           },
           "tourNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "originalConsignor": {
             "$ref": "#/components/schemas/NameType"
           },
           "consignorKey": {
