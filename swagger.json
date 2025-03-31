@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.4.6",
+    "version": "1.4.7",
     "description": "The documented API is used for cloud4log.com.\n\nIf you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}.\n\nFor Information about your current user see /me endpoint. The technical keys of the application are referenced as \"_key\" (For example the deliveryNoteKey is referenced as _key on GET /organization-sites/{organizationSiteKey}/carrier/delivery-notes).\n\nEndpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -2615,6 +2615,43 @@
         }
       }
     },
+    "/organization-sites/{organizationSiteKey}/carrier/delivery-notes/{deliveryNoteKey}/properties": {
+      "patch": {
+        "summary": "Update delivery note properties as carrier",
+        "description": "Update delivery note properties as carrier.\n",
+        "operationId": "patchCarrierDeliveryNoteProperties",
+        "x-dls-requiredOrganizationSitePermission": "reference_number_update",
+        "tags": [
+          "delivery notes"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeliveryProperties"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The delivery note was updated."
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/organization-sites/{organizationSiteKey}/carrier/delivery-notes": {
       "get": {
         "summary": "Get delivery notes w/o load carriers as carrier",
@@ -2827,7 +2864,7 @@
     "/organization-sites/{organizationSiteKey}/consignee/delivery-notes": {
       "get": {
         "summary": "Get delivery notes w/o load carriers as consignee",
-        "description": "Get consignee delivery notes from delivery note pool.\nProperty loadCarriers is always an empty array. To get the\nload carriers please use the load carriers endpoint.\n",
+        "description": "Get consignee delivery notes from the delivery note pool.\nProperty `loadCarriers` is always an empty array. To get the\nload carriers, please use the load carriers endpoint.\nYou can search using either `referenceNumber` XOR `orderNumber`, or both.\n",
         "operationId": "getConsigneeDeliveryNotesMetadataInPool",
         "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
         "tags": [
@@ -2839,11 +2876,19 @@
           },
           {
             "$ref": "#/components/parameters/OrderNumberParam"
+          },
+          {
+            "in": "query",
+            "name": "referenceNumber",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Reference number to filter delivery notes."
           }
         ],
         "responses": {
           "200": {
-            "description": "body contains list of delivery notes metadata",
+            "description": "List of delivery notes metadata.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2945,6 +2990,43 @@
                 }
               }
             }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-notes/{deliveryNoteKey}/properties": {
+      "patch": {
+        "summary": "Update delivery note properties as consignor",
+        "description": "Update delivery note properties as consignor.\n",
+        "operationId": "patchConsignorDeliveryNoteProperties",
+        "x-dls-requiredOrganizationSitePermission": "reference_number_update",
+        "tags": [
+          "delivery notes"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeliveryProperties"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The delivery note was updated."
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -4981,6 +5063,36 @@
         }
       }
     },
+    "/platform/organization-sites/{organizationSiteKey}": {
+      "get": {
+        "summary": "Get a specific organization site",
+        "description": "Get a specific organization site by organization site key.\n",
+        "operationId": "getPlatformOrganizationsSitesBySiteKey",
+        "tags": [
+          "platform"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OrganizationSite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrgOrganizationSite"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/platform/organizations": {
       "get": {
         "summary": "Get all organization keys.",
@@ -6498,6 +6610,9 @@
           },
           "originalConsignor": {
             "$ref": "#/components/schemas/OriginalConsignor"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DeliveryProperties"
           }
         }
       },
@@ -7239,6 +7354,9 @@
           },
           "originalConsignor": {
             "$ref": "#/components/schemas/NameType"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DeliveryProperties"
           }
         }
       },
@@ -7317,6 +7435,9 @@
           },
           "originalConsignor": {
             "$ref": "#/components/schemas/NameType"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DeliveryProperties"
           }
         }
       },
@@ -7414,6 +7535,9 @@
           },
           "attachmentsCount": {
             "$ref": "#/components/schemas/AttachmentsCount"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DeliveryProperties"
           }
         }
       },
@@ -7545,6 +7669,9 @@
           },
           "attachmentsCount": {
             "$ref": "#/components/schemas/AttachmentsCount"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DeliveryProperties"
           }
         }
       },
@@ -7737,6 +7864,9 @@
           },
           "driverIncomingSignatureDate": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DeliveryProperties"
           }
         }
       },
@@ -7883,6 +8013,9 @@
           },
           "organicCertificationNumberChecked": {
             "type": "boolean"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DeliveryProperties"
           }
         }
       },
@@ -8039,6 +8172,9 @@
           },
           "attachmentsCount": {
             "$ref": "#/components/schemas/AttachmentsCount"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DeliveryProperties"
           }
         }
       },
@@ -8147,7 +8283,8 @@
           "additionalProperties": false,
           "required": [
             "_key",
-            "name"
+            "name",
+            "sites"
           ],
           "properties": {
             "_key": {
@@ -8155,6 +8292,26 @@
             },
             "name": {
               "$ref": "#/components/schemas/NameType"
+            },
+            "sites": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "description": "one site of an organization",
+                "additionalProperties": false,
+                "required": [
+                  "_key",
+                  "name"
+                ],
+                "properties": {
+                  "_key": {
+                    "$ref": "#/components/schemas/KeyType"
+                  },
+                  "name": {
+                    "$ref": "#/components/schemas/NameType"
+                  }
+                }
+              }
             }
           }
         }
@@ -8373,6 +8530,74 @@
           },
           "selfCheckin": {
             "type": "boolean"
+          }
+        }
+      },
+      "OrgOrganizationSite": {
+        "type": "object",
+        "description": "one site of an organization",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "name",
+          "fullSiteName",
+          "gln",
+          "phoneNumbers",
+          "consignor",
+          "carrier",
+          "consignee",
+          "organization"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "name": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "fullSiteName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "address": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "gln": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "phoneNumbers": {
+            "$ref": "#/components/schemas/PhoneNumbersArray"
+          },
+          "consignor": {
+            "type": "boolean"
+          },
+          "carrier": {
+            "type": "boolean"
+          },
+          "consignee": {
+            "type": "boolean"
+          },
+          "organization": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "_key",
+              "name",
+              "gln"
+            ],
+            "properties": {
+              "_key": {
+                "$ref": "#/components/schemas/KeyType"
+              },
+              "name": {
+                "$ref": "#/components/schemas/OrgNameType"
+              },
+              "gln": {
+                "$ref": "#/components/schemas/NameType"
+              }
+            }
           }
         }
       },
@@ -10782,6 +11007,15 @@
           }
         }
       },
+      "DeliveryProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "referenceNumber": {
+            "$ref": "#/components/schemas/ReferenceNumberAsStringType"
+          }
+        }
+      },
       "PostDeliveryNoteRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -10809,6 +11043,9 @@
           },
           "originalConsignor": {
             "$ref": "#/components/schemas/OriginalConsignor"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DeliveryProperties"
           }
         }
       },
@@ -10986,6 +11223,9 @@
           },
           "accessToken": {
             "$ref": "#/components/schemas/Token64LengthXorEmptyType"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DeliveryProperties"
           }
         }
       },
@@ -11832,6 +12072,11 @@
         "minLength": 3,
         "pattern": "^[^,]{3,60}$"
       },
+      "ReferenceNumberAsStringType": {
+        "type": "string",
+        "maxLength": 60,
+        "pattern": "^$|^[^,]{3,60}$"
+      },
       "OriginalConsignor": {
         "type": "string",
         "maxLength": 60,
@@ -12554,6 +12799,14 @@
             "description": "user can update the metadata from a delivery note",
             "x-roles": [
               "consignor"
+            ]
+          },
+          "reference_number_update": {
+            "type": "boolean",
+            "description": "user can update the referenceNumber from a delivery note",
+            "x-roles": [
+              "consignor",
+              "carrier"
             ]
           },
           "delivery_notes_delete": {
