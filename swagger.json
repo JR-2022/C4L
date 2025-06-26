@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.4.7",
+    "version": "1.4.9",
     "description": "The documented API is used for cloud4log.com.\n\nIf you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}.\n\nFor Information about your current user see /me endpoint. The technical keys of the application are referenced as \"_key\" (For example the deliveryNoteKey is referenced as _key on GET /organization-sites/{organizationSiteKey}/carrier/delivery-notes).\n\nEndpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -13,6 +13,9 @@
   "security": [
     {
       "ApiKeyAuth": []
+    },
+    {
+      "CookieAuth": []
     }
   ],
   "paths": {
@@ -301,6 +304,39 @@
           "administration"
         ],
         "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/FromTimestampTypeParam"
+          },
+          {
+            "$ref": "#/components/parameters/ToTimestampTypeParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CSVFileResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organizations/{organizationKey}/organization-sites/{organizationSiteKey}/delivery-notes/reports/csv": {
+      "get": {
+        "summary": "Get delivery notes report as csv for provided organization site",
+        "description": "Get report as CSV for all delivery notes at the provied organization site.\nConstrain: from <= timestamp < to, from and to must have millisecond\nresolution. Allowed time range is 35 days.\nAll times are in UTC.\n",
+        "operationId": "getAdministrationDeliveryNotesReportCsv",
+        "x-dls-requiredOrganizationPermission": "administration_report_delivery_notes_csv_read",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          },
           {
             "$ref": "#/components/parameters/organizationSiteKeyParam"
           },
@@ -1806,11 +1842,21 @@
     "/authentication/login": {
       "post": {
         "summary": "Log in",
-        "description": "Log in user and get initial user, organization and organization site\ndata with permissions.\n",
+        "description": "Log in user and get initial user, organization and organization site\ndata with permissions.\nIf cookie is set to true, the sessionId will be set in a cookie and will be set as undefined in the response.\n",
         "operationId": "postLogin",
         "security": [],
         "tags": [
           "authentication"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "required": false,
+            "name": "cookie",
+            "schema": {
+              "type": "boolean"
+            }
+          }
         ],
         "requestBody": {
           "required": true,
@@ -1871,11 +1917,14 @@
     "/authentication/logout": {
       "post": {
         "summary": "Log out",
-        "description": "Log out the user.\n",
+        "description": "Log out the user and clear the session cookie if present.\n",
         "operationId": "postLogout",
         "security": [
           {
             "ApiKeyAuth": []
+          },
+          {
+            "CookieAuth": []
           }
         ],
         "tags": [
@@ -3083,6 +3132,7 @@
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -3123,6 +3173,7 @@
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -3921,7 +3972,7 @@
     "/organization-sites/{organizationSiteKey}/events": {
       "post": {
         "summary": "Trigger a event manually",
-        "description": "Trigger a event manually with the given payload.\n",
+        "description": "Trigger a event manually with the given payload. Either checkinKey or checkinKeys must be set. But not both.\n",
         "operationId": "triggerEvent",
         "x-dls-requiredOrganizationSitePermission": "events_trigger",
         "tags": [
@@ -6351,13 +6402,12 @@
       },
       "LoginResponse": {
         "type": "object",
-        "description": "Login response data",
+        "description": "Login response data. The sessionId is only returned, if the user did not choose to use a session id response by cookie.",
         "additionalProperties": false,
         "required": [
           "_key",
           "emailAddress",
           "fullName",
-          "sessionId",
           "termsOfService",
           "organizations",
           "organizationSites",
@@ -6520,8 +6570,7 @@
         ],
         "properties": {
           "externalTourName": {
-            "$ref": "#/components/schemas/ExternalTourName",
-            "default": ""
+            "$ref": "#/components/schemas/ExternalTourName"
           },
           "deliveryNoteKeys": {
             "$ref": "#/components/schemas/KeyArrayType"
@@ -6610,6 +6659,9 @@
           },
           "originalConsignor": {
             "$ref": "#/components/schemas/OriginalConsignor"
+          },
+          "originalConsignorGln": {
+            "$ref": "#/components/schemas/OriginalConsignorGln"
           },
           "properties": {
             "$ref": "#/components/schemas/DeliveryProperties"
@@ -7355,6 +7407,9 @@
           "originalConsignor": {
             "$ref": "#/components/schemas/NameType"
           },
+          "originalConsignorGln": {
+            "$ref": "#/components/schemas/OriginalConsignorGln"
+          },
           "properties": {
             "$ref": "#/components/schemas/DeliveryProperties"
           }
@@ -7436,6 +7491,9 @@
           "originalConsignor": {
             "$ref": "#/components/schemas/NameType"
           },
+          "originalConsignorGln": {
+            "$ref": "#/components/schemas/OriginalConsignorGln"
+          },
           "properties": {
             "$ref": "#/components/schemas/DeliveryProperties"
           }
@@ -7466,6 +7524,7 @@
           "consignorLoadCarrierExchange",
           "consigneeLoadCarrierExchange",
           "originalConsignor",
+          "originalConsignorGln",
           "dateAnnounced",
           "consignorName",
           "carrierName",
@@ -7523,6 +7582,9 @@
           },
           "originalConsignor": {
             "$ref": "#/components/schemas/NameType"
+          },
+          "originalConsignorGln": {
+            "$ref": "#/components/schemas/OriginalConsignorGln"
           },
           "consignorName": {
             "$ref": "#/components/schemas/NameType"
@@ -7631,6 +7693,9 @@
           "originalConsignor": {
             "$ref": "#/components/schemas/NameType"
           },
+          "originalConsignorGln": {
+            "$ref": "#/components/schemas/OriginalConsignorGln"
+          },
           "consignorKey": {
             "$ref": "#/components/schemas/KeyXorEmptyKeyType"
           },
@@ -7704,6 +7769,7 @@
           "consignorLoadCarrierExchange",
           "consigneeLoadCarrierExchange",
           "originalConsignor",
+          "originalConsignorGln",
           "consignorKey",
           "partOfTour",
           "tourKey",
@@ -7798,6 +7864,9 @@
           },
           "originalConsignor": {
             "$ref": "#/components/schemas/NameType"
+          },
+          "originalConsignorGln": {
+            "$ref": "#/components/schemas/OriginalConsignorGln"
           },
           "consignorKey": {
             "$ref": "#/components/schemas/KeyXorEmptyKeyType"
@@ -7968,6 +8037,9 @@
           "originalConsignor": {
             "$ref": "#/components/schemas/NameType"
           },
+          "originalConsignorGln": {
+            "$ref": "#/components/schemas/OriginalConsignorGln"
+          },
           "consignorKey": {
             "$ref": "#/components/schemas/KeyXorEmptyKeyType"
           },
@@ -8126,6 +8198,9 @@
           },
           "originalConsignor": {
             "$ref": "#/components/schemas/NameType"
+          },
+          "originalConsignorGln": {
+            "$ref": "#/components/schemas/OriginalConsignorGln"
           },
           "consignorKey": {
             "$ref": "#/components/schemas/KeyXorEmptyKeyType"
@@ -10858,12 +10933,16 @@
           },
           {
             "type": "object",
-            "required": [
-              "checkinKey"
-            ],
             "properties": {
               "checkinKey": {
-                "$ref": "#/components/schemas/KeyType"
+                "$ref": "#/components/schemas/KeyType",
+                "deprecated": true
+              },
+              "checkinKeys": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/KeyType"
+                }
               }
             }
           }
@@ -10884,7 +10963,14 @@
         ],
         "properties": {
           "eventKey": {
+            "deprecated": true,
             "$ref": "#/components/schemas/NameType"
+          },
+          "eventKeys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NameType"
+            }
           }
         }
       },
@@ -11043,6 +11129,9 @@
           },
           "originalConsignor": {
             "$ref": "#/components/schemas/OriginalConsignor"
+          },
+          "originalConsignorGln": {
+            "$ref": "#/components/schemas/OriginalConsignorGln"
           },
           "properties": {
             "$ref": "#/components/schemas/DeliveryProperties"
@@ -12082,6 +12171,12 @@
         "maxLength": 60,
         "pattern": "^$|^[^,]{3,60}$"
       },
+      "OriginalConsignorGln": {
+        "type": "string",
+        "maxLength": 13,
+        "pattern": "^(|[0-9]{13})$",
+        "description": "13 digit GLN number. Can be empty if no GLN is available."
+      },
       "DeliveryNoteNumber": {
         "type": "string",
         "maxLength": 60,
@@ -12276,6 +12371,13 @@
               "consignee",
               "remote_consignor",
               "remote_consignee"
+            ]
+          },
+          "administration_report_delivery_notes_csv_read": {
+            "type": "boolean",
+            "description": "This permission is needed to get the delivery notes report as csv",
+            "x-roles": [
+              "organization_admin"
             ]
           },
           "organization_read": {
@@ -13659,6 +13761,12 @@
         "in": "header",
         "name": "dlssessionid",
         "description": "API-keys and session ids are used as synonyms. The only difference is that an API-key is not able to log himself out. Otherwise it would be destroyed.\n"
+      },
+      "CookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "dlssessionid",
+        "description": "Cookie based authentication. The cookie is set by the login endpoint and used for all subsequent requests.\n"
       }
     }
   },
