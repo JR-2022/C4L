@@ -10,17 +10,30 @@
 ## Deprecated Properties in following Endpoints
 
 - `POST /authentication/login`
+
 We decided to not move forward with the cookie authentication flow. I.e. the `cookie` parameter will be removed. The `dlssessionid` parameter in the header is the standard again for authentication via this endpoint.
 
 - `POST /organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles-checkout`
-Request schema (DeliveryNoteBundlesCheckout): Property `carrierSignature` is deprecated and will be removed.
+
+Request schema (DeliveryNoteBundlesCheckout): 
+
+Property `carrierSignature` is deprecated and will be removed.
 
 - `GET /delivery-notes/{deliveryNoteKey}`
-Response schema (SingleDeliveryNote): Property `loadCarriers` is deprecated and will be removed.
+
+Response schema (SingleDeliveryNote): 
+
+Property `loadCarriers` is deprecated and will be removed.
 
 - `POST /organization-sites/{organizationSiteKey}/events`
-Request schema (TriggerEvent): Property `checkinKey` is deprecated and will be removed. Property `checkinKeys` is now required.
-Response schema (TriggerEventResponse): Property `checkinKey` is deprecated and will be removed. Property `checkinKeys` is now required.
+
+Request schema (TriggerEvent): 
+
+Property `checkinKey` is deprecated and will be removed. Property `checkinKeys` is now required.
+
+Response schema (TriggerEventResponse): 
+
+Property `checkinKey` is deprecated and will be removed. Property `checkinKeys` is now required.
 
 ---
 
