@@ -11,7 +11,7 @@
 
 ### `POST /authentication/login`
 
-We decided not to move forward with the cookie-based authentication flow.  
+We decided to not move forward with the cookie-based authentication flow.  
 The `cookie` parameter will be removed.  
 The `dlssessionid` header is once again the standard for authentication via this endpoint.
 
