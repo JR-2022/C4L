@@ -7,33 +7,39 @@
 
 ---
 
-## Deprecated Properties in following Endpoints
+## Deprecated Properties in the Following Endpoints
 
-- `POST /authentication/login`
+### `POST /authentication/login`
 
-We decided to not move forward with the cookie authentication flow. I.e. the `cookie` parameter will be removed. The `dlssessionid` parameter in the header is the standard again for authentication via this endpoint.
+We decided not to move forward with the cookie-based authentication flow.  
+The `cookie` parameter will be removed.  
+The `dlssessionid` header is once again the standard for authentication via this endpoint.
 
-- `POST /organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles-checkout`
+---
 
-Request schema (DeliveryNoteBundlesCheckout): 
+### `POST /organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles-checkout`
 
-Property `carrierSignature` is deprecated and will be removed.
+**Request schema (`DeliveryNoteBundlesCheckout`)**:  
+The `carrierSignature` property is deprecated and will be removed.
 
-- `GET /delivery-notes/{deliveryNoteKey}`
+---
 
-Response schema (SingleDeliveryNote): 
+### `GET /delivery-notes/{deliveryNoteKey}`
 
-Property `loadCarriers` is deprecated and will be removed.
+**Response schema (`SingleDeliveryNote`)**:  
+The `loadCarriers` property is deprecated and will be removed.
 
-- `POST /organization-sites/{organizationSiteKey}/events`
+---
 
-Request schema (TriggerEvent): 
+### `POST /organization-sites/{organizationSiteKey}/events`
 
-Property `checkinKey` is deprecated and will be removed. Property `checkinKeys` is now required.
+**Request schema (`TriggerEvent`)**:  
+The `checkinKey` property is deprecated and will be removed.  
+The `checkinKeys` property is now required.
 
-Response schema (TriggerEventResponse): 
-
-Property `checkinKey` is deprecated and will be removed. Property `checkinKeys` is now required.
+**Response schema (`TriggerEventResponse`)**:  
+The `checkinKey` property is deprecated and will be removed.  
+The `checkinKeys` property is now required.
 
 ---
 
