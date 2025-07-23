@@ -21,6 +21,7 @@ The `dlssessionid` header is once again the standard for authentication via this
 
 **Request schema (`DeliveryNoteBundlesCheckout`)**:  
 The `carrierSignature` property is deprecated and will be removed.
+The `driverSignature` property is now required.
 
 ---
 
