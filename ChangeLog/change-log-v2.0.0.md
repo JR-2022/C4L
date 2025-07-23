@@ -20,7 +20,7 @@ The `dlssessionid` header is once again the standard for authentication via this
 ### `POST /organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles-checkout`
 
 **Request schema (`DeliveryNoteBundlesCheckout`)**:  
-The `carrierSignature` property is deprecated and will be removed.
+The `carrierSignature` property is deprecated and will be removed.  
 The `driverSignature` property is now required.
 
 ---
@@ -28,7 +28,8 @@ The `driverSignature` property is now required.
 ### `GET /delivery-notes/{deliveryNoteKey}`
 
 **Response schema (`SingleDeliveryNote`)**:  
-The `loadCarriers` property is deprecated and will be removed.
+The `loadCarriers` property is deprecated and will be removed.  
+You can now use the `loadCarriersConsignor` and `loadCarriersConsignee` properties to get the load carriers for consignor and consignee respectively.
 
 ---
 
