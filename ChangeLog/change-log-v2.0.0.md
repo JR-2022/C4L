@@ -38,8 +38,8 @@ The `checkinKey` property is deprecated and will be removed.
 The `checkinKeys` property is now required.
 
 **Response schema (`TriggerEventResponse`)**:  
-The `checkinKey` property is deprecated and will be removed.  
-The `checkinKeys` property is now required.
+The `eventKey` property is deprecated and will be removed.  
+The `eventKeys` property is now required.
 
 ---
 
