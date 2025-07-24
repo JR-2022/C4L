@@ -13,7 +13,7 @@
 
 We decided to not move forward with the cookie-based authentication flow.  
 The `cookie` parameter will be removed.  
-The `dlssessionid` header is once again the standard for authentication via this endpoint.
+Instead, the `dlssessionid` header is once again the standard for authentication via this endpoint.
 
 ---
 
@@ -21,7 +21,7 @@ The `dlssessionid` header is once again the standard for authentication via this
 
 **Request schema (`DeliveryNoteBundlesCheckout`)**:  
 The `carrierSignature` property is deprecated and will be removed.  
-The `driverSignature` property is now required.
+Instead, the `driverSignature` property must be used, as it is now required.
 
 ---
 
@@ -29,7 +29,7 @@ The `driverSignature` property is now required.
 
 **Response schema (`SingleDeliveryNote`)**:  
 The `loadCarriers` property is deprecated and will be removed.  
-You can now use the `loadCarriersConsignor` and `loadCarriersConsignee` properties to get the load carriers for consignor and consignee respectively.
+Instead, the `loadCarriersConsignor` and `loadCarriersConsignee` properties must be used to get the load carriers for consignor and consignee respectively.
 
 ---
 
@@ -37,11 +37,11 @@ You can now use the `loadCarriersConsignor` and `loadCarriersConsignee` properti
 
 **Request schema (`TriggerEvent`)**:  
 The `checkinKey` property is deprecated and will be removed.  
-The `checkinKeys` property is now required.
+Instead, the `checkinKeys` array property must be used, as it is now required.
 
 **Response schema (`TriggerEventResponse`)**:  
 The `eventKey` property is deprecated and will be removed.  
-The `eventKeys` property is now required.
+Instead, the `eventKeys` array property must be used, as it is now required.
 
 ---
 
