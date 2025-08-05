@@ -11,7 +11,7 @@
 
 - `POST /authentication/login`  
 - `POST /authentication/loginTwoFARequest`  
-- `POST /authentication/logout` 
+- `POST /authentication/logout`  
 These endpoints will be removed. Use the new Keycloak-based OAuth2.1 authentication system.
 
 ---
