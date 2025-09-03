@@ -7,6 +7,14 @@ https://auth.dls.apitest.cloud4log.dev/realms/dls/.well-known/openid-configurati
 Die Authentication funktioniert mit einer im Basic-Frontend erzeugten ClientId und ClientSecret. 
 Dieser Client kann im Basic-Frontend im Admin-Panel unter Api-Clients als Unternehmensadmin angelegt werden.
 
+This document describes the most important aspects of authentication as a service (machine to machine).
+
+All important authentication endpoints for the API test environment can be found in the following document:
+https://auth.dls.apitest.cloud4log.dev/realms/dls/.well-known/openid-configuration
+
+Authentication works with a ClientId and ClientSecret generated in the Basic frontend. 
+This client can be created as a company admin in the Basic frontend in the admin panel under Api clients.
+
 ## Example
 
 ```ts
