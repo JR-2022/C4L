@@ -1,3 +1,20 @@
+# Client types
+
+## Public Client
+
+Ein Public Client ist eine Anwendung, die in einer unzuverlässigen Umgebung läuft (z. B. Browser/Native App) und kein Client-Secret sicher speichern kann. Deshalb authentifiziert er sich nicht mit einem Secret und muss PKCE verwenden.
+Flow: Authorization Code mit PKCE (S256)
+
+## Confidential Client
+
+Ein Confidential Client ist eine serverseitige Anwendung, die ein Client-Secret sicher speichern und sich damit beim Authorization Server ausweisen kann. Der Token-Austausch erfolgt serverseitig.
+Flow: Authorization Code mit Client-Authentifizierung (Secret)
+
+## M2M (Machine-to-Machine)
+
+Ein M2M-Client agiert ohne Benutzerkontext und authentifiziert ausschließlich die Anwendung selbst (Service-Account). Er erhält Tokens direkt auf Basis der Client-Anmeldedaten.
+Flow: Client Credentials
+
 # Authentication
 Dieses Dokument beschreibt die wichtigsten Aspekte zur Authentifizierung als Service (maschine to maschine).
 
