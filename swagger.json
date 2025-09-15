@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "1.4.9",
+    "version": "2.0.1",
     "description": "The documented API is used for cloud4log.com.\n\nIf you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}.\n\nFor Information about your current user see /me endpoint. The technical keys of the application are referenced as \"_key\" (For example the deliveryNoteKey is referenced as _key on GET /organization-sites/{organizationSiteKey}/carrier/delivery-notes).\n\nEndpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -12,10 +12,10 @@
   ],
   "security": [
     {
-      "ApiKeyAuth": []
+      "KeyCloakAuth": []
     },
     {
-      "CookieAuth": []
+      "ApiKeyAuth": []
     }
   ],
   "paths": {
@@ -1841,22 +1841,13 @@
     },
     "/authentication/login": {
       "post": {
+        "deprecated": true,
         "summary": "Log in",
-        "description": "Log in user and get initial user, organization and organization site\ndata with permissions.\nIf cookie is set to true, the sessionId will be set in a cookie and will be set as undefined in the response.\n",
+        "description": "Log in user and get initial user, organization and organization site\ndata with permissions.\n",
         "operationId": "postLogin",
         "security": [],
         "tags": [
           "authentication"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "required": false,
-            "name": "cookie",
-            "schema": {
-              "type": "boolean"
-            }
-          }
         ],
         "requestBody": {
           "required": true,
@@ -1887,6 +1878,7 @@
     },
     "/authentication/loginTwoFARequest": {
       "post": {
+        "deprecated": true,
         "summary": "request 2fa for log in",
         "description": "Request login of user by email and send an email with 2fa code to login the user.\n",
         "operationId": "postLogin2FARequest",
@@ -1916,15 +1908,13 @@
     },
     "/authentication/logout": {
       "post": {
+        "deprecated": true,
         "summary": "Log out",
-        "description": "Log out the user and clear the session cookie if present.\n",
+        "description": "Log out the user.\n",
         "operationId": "postLogout",
         "security": [
           {
             "ApiKeyAuth": []
-          },
-          {
-            "CookieAuth": []
           }
         ],
         "tags": [
@@ -5962,7 +5952,8 @@
     "/users/request-change-password": {
       "put": {
         "summary": "Request user password reset",
-        "description": "Request the change of the password of the current user.\nAfter this the request must be completed with a 2fa code in another request,\nwhich will be sent to the users email.\n",
+        "deprecated": true,
+        "description": "WARNING: This endpoint just work for the legacy user management.\nRequest the change of the password of the current user.\nAfter this the request must be completed with a 2fa code in another request,\nwhich will be sent to the users email.\n",
         "operationId": "requestChangePassword",
         "x-dls-requiredUserPermission": "user_modify",
         "tags": [
@@ -5998,7 +5989,8 @@
     "/users/complete-change-password": {
       "post": {
         "summary": "Complete the password reset",
-        "description": "Completes the password request with the correct 2fa code given in the body.\nThe current session is closed.\n",
+        "deprecated": true,
+        "description": "WARNING: This endpoint just work for the legacy user management.\nCompletes the password request with the correct 2fa code given in the body.\nThe current session is closed.\n",
         "operationId": "completeChangePassword",
         "x-dls-requiredUserPermission": "user_modify",
         "tags": [
@@ -6027,7 +6019,8 @@
     "/users/request-change-email-address": {
       "put": {
         "summary": "Request email address change",
-        "description": "Request the change of the email address of the current user.\nAfter this an 2fa code is send to the old email address and another\n2fa code is send to the new email address. Both 2fa codes are needed\nto complete the email address change.\n",
+        "deprecated": true,
+        "description": "WARNING: This endpoint just work for the legacy user management.\nRequest the change of the email address of the current user.\nAfter this an 2fa code is send to the old email address and another\n2fa code is send to the new email address. Both 2fa codes are needed\nto complete the email address change.\n",
         "operationId": "requestChangeEmailAddress",
         "x-dls-requiredUserPermission": "user_modify",
         "tags": [
@@ -6063,7 +6056,8 @@
     "/users/complete-change-email-address": {
       "post": {
         "summary": "Complete email address change",
-        "description": "Completes the email address change with both 2fa codes. One from the\nold email address and one from the new email address.\nThe current session is closed.\n",
+        "deprecated": true,
+        "description": "WARNING: This endpoint just work for the legacy user management.\nCompletes the email address change with both 2fa codes. One from the\nold email address and one from the new email address.\nThe current session is closed.\n",
         "operationId": "completeChangeEmailAddress",
         "x-dls-requiredUserPermission": "user_modify",
         "tags": [
@@ -6402,7 +6396,7 @@
       },
       "LoginResponse": {
         "type": "object",
-        "description": "Login response data. The sessionId is only returned, if the user did not choose to use a session id response by cookie.",
+        "description": "Login response data.",
         "additionalProperties": false,
         "required": [
           "_key",
@@ -7726,7 +7720,6 @@
           "deliveryNoteBundleStatus": {
             "type": "string",
             "enum": [
-              "-",
               "open",
               "sent",
               "closed"
@@ -7904,7 +7897,6 @@
           "deliveryNoteBundleStatus": {
             "type": "string",
             "enum": [
-              "-",
               "open",
               "sent",
               "closed"
@@ -10326,11 +10318,11 @@
           "emailAddress": {
             "$ref": "#/components/schemas/EmailAddressType"
           },
-          "password": {
-            "$ref": "#/components/schemas/PasswordType"
-          },
           "organizationSiteKeysAndRoles": {
             "$ref": "#/components/schemas/OrganitazionSiteRolesArray"
+          },
+          "password": {
+            "$ref": "#/components/schemas/PasswordType"
           }
         }
       },
@@ -10396,11 +10388,11 @@
           "emailAddress": {
             "$ref": "#/components/schemas/EmailAddressType"
           },
-          "password": {
-            "$ref": "#/components/schemas/PasswordType"
-          },
           "organizationSiteKeysAndRoles": {
             "$ref": "#/components/schemas/OrganizationSitesRolesForSiteAdminArray"
+          },
+          "password": {
+            "$ref": "#/components/schemas/PasswordType"
           }
         }
       },
@@ -12204,7 +12196,7 @@
       "UserPermissionsType": {
         "description": "All user permissions. If set to true user has this permission. This permissions are set directly to the user and operate globally.",
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "properties": {
           "service_provider_organizations_create": {
             "type": "boolean",
@@ -12324,7 +12316,7 @@
       "OrganizationPermissionsType": {
         "description": "all organization permissions. If set to true user has this permission for the organization",
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "properties": {
           "administration_users_create": {
             "type": "boolean",
@@ -12430,7 +12422,7 @@
       "OrganizationSitePermissionsType": {
         "description": "all organization site permissions. If set to true user has this permission for the organization site",
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "properties": {
           "administration_organization_sites_archive": {
             "type": "boolean",
@@ -13756,100 +13748,99 @@
       }
     },
     "securitySchemes": {
+      "KeyCloakAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
       "ApiKeyAuth": {
         "type": "apiKey",
         "in": "header",
         "name": "dlssessionid",
-        "description": "API-keys and session ids are used as synonyms. The only difference is that an API-key is not able to log himself out. Otherwise it would be destroyed.\n"
-      },
-      "CookieAuth": {
-        "type": "apiKey",
-        "in": "cookie",
-        "name": "dlssessionid",
-        "description": "Cookie based authentication. The cookie is set by the login endpoint and used for all subsequent requests.\n"
+        "description": "Legacy session ID header. Still accepted for backward compatibility.\n"
       }
     }
   },
   "tags": [
     {
       "name": "administration",
-      "description": "Endpoints to handle organization administration funcitons"
+      "description": "Organization and site administration including user management, role assignments, remote access control, self-service configurations, and CSV reports for delivery tracking"
     },
     {
       "name": "attachments",
-      "description": "Endpoints to handle attachments to load carriers"
+      "description": "File attachment management for delivery notes including image uploads, load carrier documentation, discrepancy photos, receipts, and pallet tickets with compression support"
     },
     {
       "name": "authentication",
-      "description": "Endpoints to login and logout"
+      "description": "User authentication and session management including login/logout, two-factor authentication, password reset flows, email verification, and session token management"
     },
     {
       "name": "checkins",
-      "description": "Endpoints"
+      "description": "Consignee delivery checkin operations including checkin creation, driver signature capture, delivery confirmation, self-checkin support, and checkin status management"
     },
     {
       "name": "delivery note bundles",
-      "description": "Endpoints to handle bundles"
+      "description": "Delivery note bundle lifecycle management including creation, merging multiple bundles, checkout operations, carrier bundle management, and status tracking"
     },
     {
       "name": "delivery notes",
-      "description": "Endpoints to handle single delivery notes"
+      "description": "Individual delivery note operations including PDF uploads, metadata management, archival processes, organic certification controls, and carrier lookup functionality"
     },
     {
       "name": "discrepancies",
-      "description": "Endpoints to manage discrepancies which are registered during checkin"
+      "description": "Delivery discrepancy tracking and management including fine discrepancy documentation, consignee discrepancy handling, and resolution workflow support"
     },
     {
       "name": "external",
-      "description": "Endpoints accessable through tokens instead of a login"
+      "description": "External API access using token-based authentication for third-party integrations, wallet operations, signature pad updates, and carrier access management"
     },
     {
       "name": "load carrier templates",
-      "description": "Endpoints to manage load carrier templates (types)"
+      "description": "Load carrier type definitions and template management including standardized pallet specifications, container types, and carrier template administration"
     },
     {
       "name": "load carriers",
-      "description": "Endpoints to manage load carriers"
+      "description": "Load carrier instance management including tracking, exchange operations, consignee load carrier handling, and load carrier file attachments"
     },
     {
       "name": "organization sites",
-      "description": "Endpoints which manipulate data and grant acces to it on organization site level"
+      "description": "Site-level operations including site configuration, user assignments for sites, remote access sharing between organizations, and site-specific permission management"
     },
     {
       "name": "organizations",
-      "description": "Endpoints which manipulate data and grant acces to it on organization level"
+      "description": "Organization-level management including quota tracking, billing operations, API key management, supply chain relationships, and organizational configuration settings"
     },
     {
       "name": "pdf",
-      "description": "Endpoints for PDF file acces and upload"
+      "description": "PDF document operations including delivery note uploads, merged PDF generation for complete delivery documentation, and PDF file retrieval services"
     },
     {
       "name": "platform",
-      "description": "Endpoints that can be accesssed by every logged in user"
+      "description": "Cross-platform utilities accessible to all authenticated users including user feedback collection, notification management, and common data access services"
     },
     {
       "name": "public",
-      "description": "Endpoints which are accessable without authentication"
+      "description": "Publicly accessible endpoints requiring no authentication including organization name lookup, password reset initiation, and public API information"
     },
     {
       "name": "self service checkins",
-      "description": "Endpoints for the self service checkin by the driver"
+      "description": "Driver self-service checkin operations including registration, waiting status updates, automated signature capture, and driver-initiated delivery confirmation"
     },
     {
       "name": "signature pads",
-      "description": "Endpoints to post and access signature pads"
+      "description": "Digital signature pad management for checkout and checkin processes including pad creation, driver and consignee signature capture, and signature validation"
     },
     {
       "name": "users",
-      "description": "Endpoints to manage users"
+      "description": "User lifecycle management including creation, modification, role assignments, password management, email changes, and user-specific operations across organizations"
     },
     {
       "name": "wallet invite",
-      "description": "Endpoints regarding the wallet invite page"
+      "description": "Digital wallet integration and invitation management for mobile delivery tracking, wallet pass generation, and delivery notification systems"
     },
     {
       "name": "wallet invite notification",
-      "description": "Endpoint to send the wallet invite via email"
+      "description": "Email notification system for wallet invitations and delivery-related communications including automated delivery status updates"
     }
   ]
 }
