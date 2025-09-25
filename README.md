@@ -24,7 +24,7 @@ If you want to test the APIs through the Swagger-UI or Scalar-UI, you can author
 2. **Bearer Token (Keycloak Authentication)** –  
    - Obtain a token using the Keycloak login flow.  
    - **Remove the `Bearer ` prefix** before pasting it into the authorization field.  
-   - Keep in mind: **Bearer tokens are valid for only 3 minutes**.
+   - Keep in mind: **Bearer tokens are valid for only 5 minutes**.
 
 ---
 
