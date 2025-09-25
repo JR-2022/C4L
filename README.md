@@ -4,8 +4,10 @@
  
 In this JSON API you will find REST methods for creating, editing and sharing delivery note information. Roles and rights can be managed via the admin tool and can be assigned to users per company, location or function-related. In the area of contract logistics, rights can be temporarily passed on to partner companies. 
 Delivery bill data can be linked to each other through assignments at process level or delimited from each other at company level.
- 
-Here are the available API documentation versions and solution overview:
+
+---
+
+Here are the available API documentation versions:
 
 - **[API Documentation v2](https://api.cloud4log.com/api-docs/)**  
   Stable version for existing integrations.
@@ -23,10 +25,15 @@ If you want to test the APIs through the Swagger-UI or Scalar-UI, you can author
    - Obtain a token using the Keycloak login flow.  
    - **Remove the `Bearer ` prefix** before pasting it into the authorization field.  
    - Keep in mind: **Bearer tokens are valid for only 3 minutes**.
+
 ---
+
+Solution overview:
 
 - **[Solution Overview Diagram](https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1&title=C4l%20Systemüberblick.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1ZgyjjVKgR4EoMwbgwfXX4AM-fBNV5M0A%26export%3Ddownload)**  
   High-level architecture diagram of the Cloud4Log system.
+
+---
 
 In the API, you can set up and use the following roles and functions:
  
