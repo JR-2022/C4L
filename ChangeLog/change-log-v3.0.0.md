@@ -14,6 +14,13 @@
 - `POST /authentication/logout`  
 These endpoints will be removed. Use the new Keycloak-based OAuth2.1 authentication system.
 
+### Consignee Attachments (Receipts) Endpoints
+
+API v2 endpoint is deprecated:
+- `GET /organization-sites/{organizationSiteKey}/consignee/delivery-notes/{deliveryNoteKey}/receipts/{attachmentKey}`
+Use the new API v3 endpoint:
+- `GET /organization-sites/{organizationSiteKey}/consignee/delivery-notes/{deliveryNoteKey}/receipts/{attachmentKey}/file`
+
 ---
 
 ## Deprecated Properties in the Following Endpoints
