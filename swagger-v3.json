@@ -1,0 +1,3509 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Cloud4Log API v3",
+    "version": "2.2.0",
+    "description": "The v3 API for cloud4log.com.\n\nThis is the new version of the Cloud4Log API with improved pagination, enhanced features, and better performance.\n\nIf you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}.\n\nFor Information about your current user see /me endpoint. The technical keys of the application are referenced as \"_key\" (For example the deliveryNoteKey is referenced as _key on GET /organization-sites/{organizationSiteKey}/carrier/delivery-notes).\n\nEndpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
+  },
+  "servers": [
+    {
+      "url": "/api/v3"
+    }
+  ],
+  "security": [
+    {
+      "KeyCloakAuth": []
+    },
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "paths": {
+    "/organization-sites/{organizationSiteKey}/carrier/delivery-note-bundles": {
+      "get": {
+        "summary": "Get carrier delivery note bundles (v3)",
+        "description": "Get delivery note bundles for carrier with enhanced pagination and sorting.\nSupports improved performance with pagination parameters.\nCan fetch delivery note bundles from multiple sites using the organizationSiteKeys query parameter.\n",
+        "operationId": "getCarrierDeliveryNoteBundlesV3",
+        "x-dls-requiredOrganizationSitePermission": "delivery_note_bundles_read",
+        "tags": [
+          "delivery note bundles v3"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationLimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationOffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationSortParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationBundleSortByParam"
+          },
+          {
+            "$ref": "#/components/parameters/organizationSiteKeysParam"
+          },
+          {
+            "$ref": "#/components/parameters/carrierDeliveryNoteBundlesFilterPropertyParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterValueParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterClosedParam"
+          },
+          {
+            "$ref": "#/components/parameters/filterOnlyDiscrepanciesParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "body contains list of carrier delivery note bundles with enhanced pagination info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarrierDeliveryNoteBundlesArrayV3"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/carrier/delivery-notes": {
+      "get": {
+        "summary": "Get carrier delivery notes (v3)",
+        "description": "Get delivery notes for carrier with enhanced pagination and sorting.\nSupports improved performance with pagination parameters.\nCan fetch delivery notes from multiple sites using the organizationSiteKeys query parameter.\n",
+        "operationId": "getCarrierDeliveryNotesV3",
+        "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
+        "tags": [
+          "delivery notes v3"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationLimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationOffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationSortParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationDeliverySortByParam"
+          },
+          {
+            "$ref": "#/components/parameters/organizationSiteKeysParam"
+          },
+          {
+            "$ref": "#/components/parameters/carrierDeliveryNotesFilterPropertyParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterValueParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterClosedParam"
+          },
+          {
+            "$ref": "#/components/parameters/filterOnlyDiscrepanciesParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "body contains list of carrier delivery notes with enhanced pagination info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarrierDeliveryNotesArrayV3"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/carrier/tours": {
+      "get": {
+        "summary": "Get carrier tours (v3)",
+        "description": "Get tours for carrier with enhanced pagination and sorting.\nSupports improved performance with pagination parameters.\nCan fetch tours from multiple sites using the organizationSiteKeys query parameter.\n",
+        "operationId": "getCarrierToursV3",
+        "x-dls-requiredOrganizationSitePermission": "carrier_tours_read",
+        "tags": [
+          "tours v3"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/organizationSiteKeysParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationLimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationOffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationSortParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationTourSortByParam"
+          },
+          {
+            "$ref": "#/components/parameters/carrierToursFilterPropertyParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterValueParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterClosedParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "body contains list of carrier tours with enhanced pagination info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarrierToursArrayV3"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/consignee/delivery-note-bundles": {
+      "get": {
+        "summary": "Get consignee delivery note bundles (v3)",
+        "description": "Get delivery note bundles for consignee with enhanced pagination and sorting.\nSupports improved performance with pagination parameters.\nCan fetch delivery note bundles from multiple sites using the organizationSiteKeys query parameter.\n",
+        "operationId": "getConsigneeDeliveryNoteBundlesV3",
+        "x-dls-requiredOrganizationSitePermission": "delivery_note_bundles_read",
+        "tags": [
+          "delivery note bundles v3"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/organizationSiteKeysParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationLimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationOffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationSortParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationBundleSortByParam"
+          },
+          {
+            "$ref": "#/components/parameters/consigneeDeliveryNoteBundlesFilterPropertyParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterValueParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterClosedParam"
+          },
+          {
+            "$ref": "#/components/parameters/filterOnlyDiscrepanciesParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "body contains list of consignee delivery note bundles with enhanced pagination info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsigneeDeliveryNoteBundlesArrayV3"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/consignee/delivery-notes": {
+      "get": {
+        "summary": "Get consignee delivery notes (v3)",
+        "description": "Get delivery notes for consignee with enhanced pagination and sorting.\nSupports improved performance with pagination parameters.\nCan fetch delivery notes from multiple sites using the organizationSiteKeys query parameter.\n",
+        "operationId": "getConsigneeDeliveryNotesV3",
+        "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
+        "tags": [
+          "delivery notes v3"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationLimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationOffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationSortParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationDeliverySortByParam"
+          },
+          {
+            "$ref": "#/components/parameters/organizationSiteKeysParam"
+          },
+          {
+            "$ref": "#/components/parameters/consigneeDeliveryNotesFilterPropertyParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterValueParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterClosedParam"
+          },
+          {
+            "$ref": "#/components/parameters/filterOnlyDiscrepanciesParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "body contains list of consignee delivery notes with enhanced pagination info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsigneeDeliveryNotesArrayV3"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/consignee/tours": {
+      "get": {
+        "summary": "Get consignee tours (v3)",
+        "description": "Get tours for consignee with enhanced pagination and sorting.\nSupports improved performance with pagination parameters.\nCan fetch tours from multiple sites using the organizationSiteKeys query parameter.\n",
+        "operationId": "getConsigneeToursV3",
+        "x-dls-requiredOrganizationSitePermission": "consignee_tour_read",
+        "tags": [
+          "tours v3"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/organizationSiteKeysParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationLimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationOffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationSortParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationTourSortByParam"
+          },
+          {
+            "$ref": "#/components/parameters/consigneeToursFilterPropertyParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterValueParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterClosedParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "body contains list of consignee tours with enhanced pagination info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsigneeToursArrayV3"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-note-bundles": {
+      "get": {
+        "summary": "Get consignor delivery note bundles (v3)",
+        "description": "Get delivery note bundles for consignor with enhanced pagination and sorting.\nSupports improved performance with pagination parameters.\nCan fetch bundles from multiple sites using the organizationSiteKeys query parameter.\n",
+        "operationId": "getConsignorDeliveryNoteBundlesV3",
+        "x-dls-requiredOrganizationSitePermission": "delivery_note_bundles_read",
+        "tags": [
+          "delivery note bundles v3"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/organizationSiteKeysParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationLimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationOffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationSortParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationBundleSortByParam"
+          },
+          {
+            "$ref": "#/components/parameters/consignorDeliveryNoteBundlesFilterPropertyParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterValueParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterClosedParam"
+          },
+          {
+            "$ref": "#/components/parameters/filterOnlyDiscrepanciesParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "body contains list of consignor delivery note bundles with enhanced pagination info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsignorDeliveryNoteBundlesArrayV3"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-notes": {
+      "get": {
+        "summary": "Get consignor delivery notes data w/o load carriers (v3)",
+        "description": "Get delivery notes metadata from delivery note pool.\nProperty loadCarriers is always an empty array. To get the\nload carriers please use the load carriers endpoint.\nSupports enhanced pagination and sorting with improved performance.\nCan fetch delivery notes from multiple sites using the organizationSiteKeys query parameter.\n",
+        "operationId": "getDeliveryNotesMetadataInPoolV3",
+        "x-dls-requiredOrganizationSitePermission": "delivery_notes_read",
+        "tags": [
+          "delivery notes v3"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/organizationSiteKeysParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationLimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationOffsetParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationSortParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationDeliverySortByParam"
+          },
+          {
+            "$ref": "#/components/parameters/consignorDeliveryNotesFilterPropertyParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterValueParam"
+          },
+          {
+            "$ref": "#/components/parameters/paginationFilterClosedParam"
+          },
+          {
+            "$ref": "#/components/parameters/filterOnlyDiscrepanciesParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "body contains list of delivery notes metadata with enhanced pagination info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryNoteInPoolArrayV3"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organizations/{organizationKey}/users": {
+      "post": {
+        "summary": "Create new user",
+        "description": "Create a new user and add this user to the organization and the given organization sites\nand equip the new user with permissions according to the given roles.\nThe requesting user must have access to the organization the new user is added.\n",
+        "operationId": "postAdministrationOrganizationUserV3",
+        "x-dls-requiredOrganizationPermission": "administration_users_create",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserForOrganizationAdminRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The user was create and added to the organization"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organization-sites/users": {
+      "post": {
+        "summary": "Create new user for organization sites",
+        "description": "Create a new user and add this user to the organization for the specified organization sites\nand equip the new user with the rights according to the specified roles.\nThe requesting user must have access to the organization sites to which the new user is to be added.\nThe new user can have only the roles carrier, consignee, consignor, site_admin.\n",
+        "operationId": "postAdministrationOrganizationSitesUserV3",
+        "tags": [
+          "administration"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserForOrganizationSitesAdminRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The user was create and added to the organization"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organizations/{organizationKey}/users/{userKey}": {
+      "put": {
+        "summary": "Edit user with new site roles/permissions (v3)",
+        "description": "Edit a existing user and add this user to the given organization sites\nand equip the new user with permissions according to the given roles.\nThe requesting user must have access to the organization the user is added.\nAll previously set permissions and linked sites are removed.\nAll sites and roles to be set must be passed.\n",
+        "operationId": "putAdministrationOrganizationUserV3",
+        "x-dls-requiredOrganizationPermission": "administration_users_modify",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/userKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserForOrganizationAdminRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The user was edited and got new permissions"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user from the organization",
+        "description": "Deletes the specified user from Keycloak and the organization.\n",
+        "operationId": "deleteAdministrationOrganizationUserV3",
+        "x-dls-requiredOrganizationPermission": "administration_users_delete",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/userKeyParam"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The user was deleted successfully"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "409": {
+            "description": "Conflict - User cannot delete themselves"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organization-sites/users/{userKey}": {
+      "put": {
+        "summary": "Edit user with new site roles/permissions (v3)",
+        "description": "Edit a existing user and add this user to the given organization sites\nand equip the new user with permissions according to the given roles.\nThe requesting user must have access to the organization sites the user is added.\nAll previously set permissions and linked sites are removed.\nAll sites and roles to be set must be passed.\nThe optional submitted password is ignored.\nThe user can have only the roles carrier, consignee, consignor, site_admin.\n",
+        "operationId": "putAdministrationOrganizationSitesUserV3",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserForOrganizationSitesAdminRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The user was edited and got new permissions"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organizations/{organizationKey}/clients": {
+      "post": {
+        "summary": "creates a new API client",
+        "description": "Creates a new API client for the organization and the given organization sites.\nThe requesting user must have access to the organization the API client belongs to.\nBy creating an api client you agree that this api client is only used in accordance with the terms of service of this application.\n",
+        "operationId": "createClient",
+        "x-dls-requiredOrganizationPermission": "api_keys_create",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Client successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      },
+      "get": {
+        "summary": "retrieves a list of API clients",
+        "description": "Retrieves a list of API clients for the organization.\nThe requesting user must have access to the organization the API clients belong to.\n",
+        "operationId": "getClients",
+        "x-dls-requiredOrganizationPermission": "api_keys_read",
+        "tags": [
+          "administration"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Clients successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientWithRolesAndSites"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-notes/{deliveryNoteKey}/receipts/{attachmentKey}/file": {
+      "get": {
+        "summary": "Get a receipts file as consignor.",
+        "description": "Get a single receipt file for a delivery note as consignor. The bundle must be in status 'closed'.\n",
+        "operationId": "getConsignorDiscrepancyReceiptAttachmentV3",
+        "x-dls-requiredOrganizationSitePermission": "consignor_receipts_file_read",
+        "tags": [
+          "receipts"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/attachmentKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Attachment",
+            "$ref": "#/components/responses/AttachmentFileResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/consignor/delivery-notes/{deliveryNoteKey}/receipts": {
+      "get": {
+        "summary": "Get all receipt metadata for a delivery note",
+        "description": "Get a list of receipt metadata for a single delivery note as consignor. The bundle must be in status 'closed'.\n",
+        "operationId": "getConsignorReceiptsForDeliveryNoteV3",
+        "x-dls-requiredOrganizationSitePermission": "consignor_receipts_metadata_read",
+        "tags": [
+          "receipts"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Attachment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentsArrayResponseV3"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/carrier/delivery-notes/{deliveryNoteKey}/receipts/{attachmentKey}/file": {
+      "get": {
+        "summary": "Get a receipts file as carrier.",
+        "description": "Get a single receipt file for a delivery note as carrier. The bundle must be in status 'closed'.\n",
+        "operationId": "getCarrierDiscrepancyReceiptAttachmentV3",
+        "x-dls-requiredOrganizationSitePermission": "carrier_receipts_file_read",
+        "tags": [
+          "receipts",
+          "self service checkins"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/attachmentKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Attachment",
+            "$ref": "#/components/responses/AttachmentFileResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/carrier/delivery-notes/{deliveryNoteKey}/receipts": {
+      "get": {
+        "summary": "Get all receipt metadata for a delivery note as carrier.",
+        "description": "Get a list of receipt metadata for a single delivery note as carrier. The bundle must be in status 'closed'.\n",
+        "operationId": "getCarrierReceiptsForDeliveryNoteV3",
+        "x-dls-requiredOrganizationSitePermission": "carrier_receipts_metadata_read",
+        "tags": [
+          "receipts"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Attachment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentsArrayResponseV3"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/consignee/delivery-notes/{deliveryNoteKey}/receipts/{attachmentKey}/file": {
+      "get": {
+        "summary": "Get a receipts file as consignee.",
+        "description": "Get a single receipt file for a delivery note as consignee.\n",
+        "operationId": "getConsigneeDiscrepancyReceiptAttachmentV3",
+        "x-dls-requiredOrganizationSitePermission": "consignee_receipts_file_read",
+        "tags": [
+          "receipts",
+          "self service checkins"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/attachmentKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Attachment",
+            "$ref": "#/components/responses/AttachmentFileResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/organization-sites/{organizationSiteKey}/consignee/delivery-notes/{deliveryNoteKey}/receipts": {
+      "get": {
+        "summary": "Get all receipt metadata for a delivery note as consignee.",
+        "description": "Get a list of receipt metadata for a single delivery note as consignee.\n",
+        "operationId": "getConsigneeReceiptsForDeliveryNoteV3",
+        "x-dls-requiredOrganizationSitePermission": "consignee_receipts_metadata_read",
+        "tags": [
+          "receipts"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationSiteKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/deliveryNoteKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Attachment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentsArrayResponseV3"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/service-provider/organizations/{organizationKey}": {
+      "delete": {
+        "summary": "delete a organization",
+        "description": "Delete a organization. The organization is first deactivated and\nafter 10 weeks deleted.\n",
+        "operationId": "deleteServiceProviderOrganizations",
+        "x-dls-requiredUserPermission": "service_provider_organizations_delete",
+        "tags": [
+          "service provider"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The Organization was marked for deletion."
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/users/keycloak/request-password-change": {
+      "put": {
+        "summary": "Request email for password change.",
+        "description": "Request the email for password change. Keycloak will send an email\nto the user with a link to change the password.\n",
+        "operationId": "requestPasswordChangeV3",
+        "x-dls-requiredUserPermission": "user_modify",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "204": {
+            "description": "Email sent successfully"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/users/request-email-change": {
+      "post": {
+        "summary": "Change email address and request verification codes.",
+        "description": "Starts the two-factor email change flow.\nA verification code will be sent to the current email address,\nand another one to the new email address. Both codes must later\nbe provided to confirm the change.\n",
+        "operationId": "requestEmailChangeV3",
+        "x-dls-requiredUserPermission": "user_modify",
+        "tags": [
+          "users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestEmailChange"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Verification codes sent successfully"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/users/verify-email-change": {
+      "post": {
+        "summary": "Verify email change with codes.",
+        "description": "Completes the two-factor email change flow.\nRequires the 6-digit code sent to the current email address and\nthe 6-digit code sent to the new email address.\n",
+        "operationId": "verifyEmailChangeV3",
+        "x-dls-requiredUserPermission": "user_modify",
+        "tags": [
+          "users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyEmailChange"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Email change confirmed successfully"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DeliveryNotesFilterProperties": {
+        "type": "string",
+        "enum": [
+          "number",
+          "fileName",
+          "tourNumber",
+          "orderNumber",
+          "consignorName",
+          "carrierName",
+          "consigneeName",
+          "originalConsignor",
+          "originalConsignorGln",
+          "deliveryNoteBundleNumber",
+          "discrepancies",
+          "palletTickets",
+          "deliveryNoteBundleStatus",
+          "dateCreated",
+          "dateAnnounced",
+          "checkoutDate",
+          "checkinDate",
+          "properties",
+          "properties.referenceNumber",
+          "carrierNumberPlateOutgoing",
+          "carrierNumberPlateIncoming"
+        ],
+        "description": "Common filter properties for delivery notes across all roles"
+      },
+      "DeliveryNoteBundlesFilterProperties": {
+        "type": "string",
+        "enum": [
+          "name",
+          "bundleNumber",
+          "status",
+          "consignorName",
+          "carrierName",
+          "consigneeName",
+          "discrepancies",
+          "palletTickets",
+          "dateClosed",
+          "dateCreated",
+          "checkoutDate"
+        ],
+        "description": "Common filter properties for delivery note bundles"
+      },
+      "CarrierDeliveryNoteBundlesFilterProperties": {
+        "type": "string",
+        "enum": [
+          "name",
+          "bundleNumber",
+          "status",
+          "consignorName",
+          "carrierName",
+          "carrierNameOutgoing",
+          "consigneeName",
+          "discrepancies",
+          "palletTickets",
+          "dateClosed",
+          "dateCreated",
+          "checkoutDate"
+        ],
+        "description": "Filter properties specific to carrier delivery note bundles (includes carrierNameOutgoing)"
+      },
+      "ToursFilterProperties": {
+        "type": "string",
+        "enum": [
+          "status",
+          "tourNumber",
+          "externalTourName",
+          "carrierKey",
+          "dateClosed",
+          "dateCreated",
+          "checkoutDate"
+        ],
+        "description": "Common filter properties for tours across carrier and consignee roles"
+      },
+      "ClientCreateRequest": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PublicClient"
+          },
+          {
+            "$ref": "#/components/schemas/ConfidentialM2MClient"
+          },
+          {
+            "$ref": "#/components/schemas/ConfidentialUserLoginClient"
+          }
+        ]
+      },
+      "Client": {
+        "type": "object",
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "clientId": {
+            "type": "string",
+            "description": "The configured clientId in Keycloak"
+          },
+          "public": {
+            "type": "boolean",
+            "description": "Whether the client is public or confidential"
+          },
+          "m2m": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "True if confidential client is M2M, null for public clients"
+          },
+          "redirectUris": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            },
+            "description": "Redirect URIs, empty for M2M clients"
+          },
+          "webOrigins": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            },
+            "description": "Web origins, empty for M2M clients"
+          },
+          "clientSecret": {
+            "type": "string",
+            "nullable": true,
+            "description": "Secret for confidential clients, null for public"
+          }
+        },
+        "required": [
+          "_key",
+          "clientId",
+          "public",
+          "m2m",
+          "redirectUris",
+          "webOrigins",
+          "clientSecret"
+        ]
+      },
+      "ClientWithRolesAndSites": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Client"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "roles": {
+                "$ref": "#/components/schemas/UserRolesArray"
+              },
+              "sites": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationSiteWithRoles"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "PublicClient": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "public": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "redirectUris": {
+            "$ref": "#/components/schemas/UriArrayNotEmpty"
+          },
+          "webOrigins": {
+            "$ref": "#/components/schemas/UriArray"
+          },
+          "organizationSiteKeysAndRoles": {
+            "$ref": "#/components/schemas/OrganitazionSiteRolesArray"
+          }
+        },
+        "required": [
+          "clientId",
+          "public",
+          "redirectUris",
+          "webOrigins",
+          "organizationSiteKeysAndRoles"
+        ]
+      },
+      "ConfidentialM2MClient": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "public": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "m2m": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "organizationSiteKeysAndRoles": {
+            "$ref": "#/components/schemas/OrganitazionSiteRolesArray"
+          }
+        },
+        "required": [
+          "clientId",
+          "public",
+          "m2m",
+          "organizationSiteKeysAndRoles"
+        ]
+      },
+      "ConfidentialUserLoginClient": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "public": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "m2m": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "redirectUris": {
+            "$ref": "#/components/schemas/UriArrayNotEmpty"
+          },
+          "webOrigins": {
+            "$ref": "#/components/schemas/UriArray"
+          },
+          "organizationSiteKeysAndRoles": {
+            "$ref": "#/components/schemas/OrganitazionSiteRolesArray"
+          }
+        },
+        "required": [
+          "clientId",
+          "public",
+          "m2m",
+          "redirectUris",
+          "webOrigins",
+          "organizationSiteKeysAndRoles"
+        ]
+      },
+      "UriArray": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "UriArrayNotEmpty": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "PaginationInfo": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "limit",
+          "offset",
+          "totalCount",
+          "hasMore"
+        ],
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "totalCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "nextOffset": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "KeyType": {
+        "type": "string",
+        "pattern": "^\\d+$"
+      },
+      "NameType": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "SortType": {
+        "type": "string",
+        "enum": [
+          "asc",
+          "desc"
+        ]
+      },
+      "FileTypes": {
+        "type": "string",
+        "enum": [
+          "application/pdf",
+          "image/heic",
+          "image/heif",
+          "image/jpeg",
+          "image/png"
+        ]
+      },
+      "AttachmentBlobTypes": {
+        "type": "string",
+        "enum": [
+          "discrepancy",
+          "discrepancy_fine",
+          "load_carrier",
+          "pallet_ticket",
+          "receipt"
+        ]
+      },
+      "BinaryFileType": {
+        "description": "data that is encoded as binary data",
+        "type": "string",
+        "format": "binary"
+      },
+      "PositiveIntegerType": {
+        "description": "A positiv Number",
+        "type": "integer",
+        "minimum": 1
+      },
+      "UserForOrganizationAdminRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fullName",
+          "emailAddress",
+          "organizationSiteKeysAndRoles"
+        ],
+        "properties": {
+          "fullName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "emailAddress": {
+            "$ref": "#/components/schemas/EmailAddressType"
+          },
+          "organizationSiteKeysAndRoles": {
+            "$ref": "#/components/schemas/OrganizationSiteRolesArray"
+          }
+        }
+      },
+      "OrganizationSiteRolesArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/OrganizationSiteRoles"
+        }
+      },
+      "OrganizationSiteRoles": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organizationSiteKey",
+          "roles"
+        ],
+        "properties": {
+          "organizationSiteKey": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "roles": {
+            "$ref": "#/components/schemas/UserRolesArray"
+          }
+        }
+      },
+      "OrganizationSiteWithRoles": {
+        "type": "object",
+        "description": "one site of an organization",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "gln",
+          "name",
+          "phoneNumbers",
+          "consignor",
+          "carrier",
+          "consignee",
+          "roles"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "address": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "gln": {
+            "type": "string"
+          },
+          "name": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "phoneNumbers": {
+            "$ref": "#/components/schemas/PhoneNumbersArray"
+          },
+          "consignor": {
+            "type": "boolean"
+          },
+          "carrier": {
+            "type": "boolean"
+          },
+          "consignee": {
+            "type": "boolean"
+          },
+          "roles": {
+            "$ref": "#/components/schemas/UserRolesArray"
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/OrganizationSitePermissionsType"
+          }
+        }
+      },
+      "PhoneNumbersArray": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/components/schemas/NameType"
+        }
+      },
+      "Location": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "country",
+          "zipCode",
+          "city",
+          "street"
+        ],
+        "properties": {
+          "country": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "zipCode": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "city": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "street": {
+            "$ref": "#/components/schemas/NameType"
+          }
+        }
+      },
+      "UserRolesArray": {
+        "type": "array",
+        "minItems": 0,
+        "maxItems": 8,
+        "items": {
+          "$ref": "#/components/schemas/UserRoles"
+        }
+      },
+      "UserRoles": {
+        "type": "string",
+        "enum": [
+          "carrier",
+          "consignee",
+          "consignor",
+          "organization_admin",
+          "site_admin",
+          "remote_consignor",
+          "remote_consignee",
+          "remote_carrier",
+          "self_checkin",
+          "service_provider"
+        ]
+      },
+      "UserForOrganizationSitesAdminRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fullName",
+          "emailAddress",
+          "organizationSiteKeysAndRoles"
+        ],
+        "properties": {
+          "fullName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "emailAddress": {
+            "$ref": "#/components/schemas/EmailAddressType"
+          },
+          "organizationSiteKeysAndRoles": {
+            "$ref": "#/components/schemas/OrganizationSitesRolesForSiteAdminArray"
+          }
+        }
+      },
+      "OrganizationSitesRolesForSiteAdminArray": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "organizationSiteKey",
+            "roles"
+          ],
+          "properties": {
+            "organizationSiteKey": {
+              "$ref": "#/components/schemas/KeyType"
+            },
+            "roles": {
+              "$ref": "#/components/schemas/UserRolesForSiteAdminArray"
+            }
+          }
+        }
+      },
+      "UserRolesForSiteAdminArray": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 4,
+        "items": {
+          "$ref": "#/components/schemas/UserRolesForSiteAdmin"
+        }
+      },
+      "UserRolesForSiteAdmin": {
+        "type": "string",
+        "enum": [
+          "carrier",
+          "consignee",
+          "consignor",
+          "site_admin"
+        ]
+      },
+      "RequestEmailChange": {
+        "type": "object",
+        "properties": {
+          "newEmail": {
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "required": [
+          "newEmail"
+        ]
+      },
+      "VerifyEmailChange": {
+        "type": "object",
+        "properties": {
+          "codeOld": {
+            "type": "string"
+          },
+          "codeNew": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "codeOld",
+          "codeNew"
+        ]
+      },
+      "DeliveryNoteInPoolV3": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "dateCreated",
+          "dateAnnounced",
+          "checkoutDate",
+          "checkinDate",
+          "number",
+          "orderNumber",
+          "fileName",
+          "discrepancies",
+          "fineDiscrepancies",
+          "palletTickets",
+          "consignorLoadCarrierImages",
+          "consigneeLoadCarrierImages",
+          "consignorLoadCarrierExchange",
+          "consigneeLoadCarrierExchange",
+          "consignorKey",
+          "consignorName",
+          "carrierKey",
+          "carrierName",
+          "consigneeKey",
+          "consigneeName",
+          "deliveryNoteBundleKey",
+          "deliveryNoteBundleName",
+          "deliveryNoteBundleNumber",
+          "deliveryNoteBundleStatus",
+          "attachmentsCount",
+          "dateShipped",
+          "dateReceived",
+          "accessSiteKey"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateAnnounced": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "checkoutDate": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateShipped": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateReceived": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "checkinDate": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "fileName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "orderNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "number": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "discrepancies": {
+            "type": "boolean"
+          },
+          "fineDiscrepancies": {
+            "type": "boolean"
+          },
+          "palletTickets": {
+            "type": "boolean"
+          },
+          "consignorLoadCarrierImages": {
+            "type": "boolean"
+          },
+          "consigneeLoadCarrierImages": {
+            "type": "boolean"
+          },
+          "consignorLoadCarrierExchange": {
+            "type": "boolean"
+          },
+          "consigneeLoadCarrierExchange": {
+            "type": "boolean"
+          },
+          "originalConsignor": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 255
+          },
+          "originalConsignorGln": {
+            "$ref": "#/components/schemas/OriginalConsignorGln"
+          },
+          "consignorKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "carrierKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "consigneeKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "consignorName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "carrierName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "consigneeName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "deliveryNoteBundleKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "deliveryNoteBundleName": {
+            "type": "string"
+          },
+          "deliveryNoteBundleNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "deliveryNoteBundleStatus": {
+            "$ref": "#/components/schemas/BundleStatus"
+          },
+          "attachmentsCount": {
+            "$ref": "#/components/schemas/AttachmentsCount"
+          },
+          "partOfTour": {
+            "type": "boolean"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DeliveryProperties"
+          },
+          "tourNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "carrierNumberPlateOutgoing": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "accessSiteKey": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Key of the organization site that provides access to this delivery note"
+          }
+        }
+      },
+      "DeliveryNoteInPoolConsigneeV3": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "dateCreated",
+          "dateAnnounced",
+          "checkoutDate",
+          "checkinDate",
+          "number",
+          "orderNumber",
+          "fileName",
+          "discrepancies",
+          "fineDiscrepancies",
+          "palletTickets",
+          "consignorLoadCarrierImages",
+          "consigneeLoadCarrierImages",
+          "consignorLoadCarrierExchange",
+          "consigneeLoadCarrierExchange",
+          "consignorKey",
+          "consignorName",
+          "carrierKey",
+          "carrierName",
+          "consigneeKey",
+          "consigneeName",
+          "deliveryNoteBundleKey",
+          "deliveryNoteBundleName",
+          "deliveryNoteBundleNumber",
+          "deliveryNoteBundleStatus",
+          "attachmentsCount",
+          "dateShipped",
+          "dateReceived",
+          "accessSiteKey",
+          "externalTourName",
+          "organicCertificationNumberChecked"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateAnnounced": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "checkoutDate": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateShipped": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateReceived": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "checkinDate": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "fileName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "orderNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "number": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "discrepancies": {
+            "type": "boolean"
+          },
+          "fineDiscrepancies": {
+            "type": "boolean"
+          },
+          "palletTickets": {
+            "type": "boolean"
+          },
+          "consignorLoadCarrierImages": {
+            "type": "boolean"
+          },
+          "consigneeLoadCarrierImages": {
+            "type": "boolean"
+          },
+          "consignorLoadCarrierExchange": {
+            "type": "boolean"
+          },
+          "consigneeLoadCarrierExchange": {
+            "type": "boolean"
+          },
+          "originalConsignor": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 255
+          },
+          "originalConsignorGln": {
+            "$ref": "#/components/schemas/OriginalConsignorGln"
+          },
+          "consignorKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "carrierKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "consigneeKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "consignorName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "carrierName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "consigneeName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "deliveryNoteBundleKey": {
+            "$ref": "#/components/schemas/KeyXorEmptyKeyType"
+          },
+          "deliveryNoteBundleName": {
+            "type": "string"
+          },
+          "deliveryNoteBundleNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "deliveryNoteBundleStatus": {
+            "$ref": "#/components/schemas/BundleStatus"
+          },
+          "attachmentsCount": {
+            "$ref": "#/components/schemas/AttachmentsCount"
+          },
+          "partOfTour": {
+            "type": "boolean"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DeliveryProperties"
+          },
+          "tourNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "carrierNumberPlateOutgoing": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "accessSiteKey": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Key of the organization site that provides access to this delivery note"
+          },
+          "externalTourName": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "organicCertificationNumberChecked": {
+            "type": "boolean"
+          }
+        }
+      },
+      "AttachmentsCount": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "OriginalConsignorGln": {
+        "type": "string",
+        "maxLength": 13,
+        "pattern": "^(|[0-9]{13})$",
+        "description": "13 digit GLN number. Can be empty if no GLN is available."
+      },
+      "DeliveryProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "referenceNumber": {
+            "$ref": "#/components/schemas/ReferenceNumberAsStringType"
+          }
+        }
+      },
+      "ReferenceNumberAsStringType": {
+        "type": "string",
+        "maxLength": 60,
+        "pattern": "^$|^[^,]{3,60}$"
+      },
+      "TimestampType": {
+        "description": "UNIX timestamp in milliseconds",
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      },
+      "KeyXorEmptyKeyType": {
+        "type": "string",
+        "pattern": "^(?![\\s\\S])|\\d+$"
+      },
+      "DescriptionType": {
+        "type": "string",
+        "maxLength": 10000
+      },
+      "LoadCarrierOperation": {
+        "type": "string",
+        "description": "Operations for LoadCarrier",
+        "enum": [
+          "adoption",
+          "delivery"
+        ]
+      },
+      "LoadCarrier": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Load carrier for delivery note",
+        "required": [
+          "_key",
+          "name",
+          "description",
+          "operation",
+          "quantity",
+          "damaged",
+          "notice"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "name": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "description": {
+            "$ref": "#/components/schemas/DescriptionType"
+          },
+          "operation": {
+            "$ref": "#/components/schemas/LoadCarrierOperation"
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "damaged": {
+            "type": "boolean"
+          },
+          "notice": {
+            "$ref": "#/components/schemas/DescriptionType"
+          }
+        }
+      },
+      "LoadCarriers": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/LoadCarrier"
+        }
+      },
+      "DeliveryNoteInPoolArrayV3": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "paginationInfo",
+          "data"
+        ],
+        "properties": {
+          "paginationInfo": {
+            "$ref": "#/components/schemas/PaginationInfo"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryNoteInPoolV3"
+            }
+          }
+        }
+      },
+      "DeliveryNoteBundleV3": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "name",
+          "bundleNumber",
+          "dateCreated",
+          "checkoutDate",
+          "consignorKey",
+          "carrierKey",
+          "consigneeKey",
+          "consignorName",
+          "carrierName",
+          "consigneeName",
+          "status",
+          "numberOfDeliveryNotes",
+          "discrepancies",
+          "palletTickets",
+          "consignorLoadCarrierExchange",
+          "consigneeLoadCarrierExchange",
+          "dateClosed",
+          "dateShipped",
+          "accessSiteKey"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "name": {
+            "type": "string"
+          },
+          "bundleNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BundleStatus"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "checkoutDate": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateShipped": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateReceived": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateClosed": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "consignorName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "consigneeName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "carrierName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "numberOfDeliveryNotes": {
+            "type": "integer"
+          },
+          "dateAnnounced": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "discrepancies": {
+            "type": "boolean"
+          },
+          "palletTickets": {
+            "type": "boolean"
+          },
+          "consignorLoadCarrierExchange": {
+            "type": "boolean"
+          },
+          "consigneeLoadCarrierExchange": {
+            "type": "boolean"
+          },
+          "allDeliveryNotesInTours": {
+            "type": "boolean"
+          },
+          "consignorKey": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "carrierKey": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "consigneeKey": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "carrierNameOutgoing": {
+            "type": "string"
+          },
+          "accessSiteKey": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Key of the organization site that provides access to this bundle"
+          },
+          "accessToken": {
+            "$ref": "#/components/schemas/Token64LengthXorEmptyType"
+          }
+        }
+      },
+      "CarrierDeliveryNoteBundlesArrayV3": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "paginationInfo",
+          "data"
+        ],
+        "properties": {
+          "paginationInfo": {
+            "$ref": "#/components/schemas/PaginationInfo"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryNoteBundleV3"
+            }
+          }
+        }
+      },
+      "ConsigneeDeliveryNoteBundlesArrayV3": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "paginationInfo",
+          "data"
+        ],
+        "properties": {
+          "paginationInfo": {
+            "$ref": "#/components/schemas/PaginationInfo"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryNoteBundleV3"
+            }
+          }
+        }
+      },
+      "ConsignorDeliveryNoteBundlesArrayV3": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "paginationInfo",
+          "data"
+        ],
+        "properties": {
+          "paginationInfo": {
+            "$ref": "#/components/schemas/PaginationInfo"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryNoteBundleV3"
+            }
+          }
+        }
+      },
+      "CarrierDeliveryNotesArrayV3": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "paginationInfo",
+          "data"
+        ],
+        "properties": {
+          "paginationInfo": {
+            "$ref": "#/components/schemas/PaginationInfo"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryNoteInPoolV3"
+            }
+          }
+        }
+      },
+      "ConsigneeDeliveryNotesArrayV3": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "paginationInfo",
+          "data"
+        ],
+        "properties": {
+          "paginationInfo": {
+            "$ref": "#/components/schemas/PaginationInfo"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryNoteInPoolConsigneeV3"
+            }
+          }
+        }
+      },
+      "TourV3": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "dateCreated",
+          "checkoutDate",
+          "tourNumber",
+          "externalTourName",
+          "carrierKey",
+          "deliveryNoteKeys",
+          "status",
+          "hasDiscrepancies",
+          "hasFineDiscrepancies",
+          "dateShipped",
+          "dateClosed",
+          "accessSiteKey"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "checkoutDate": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateShipped": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateReceived": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateClosed": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "tourNumber": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "externalTourName": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "carrierKey": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "deliveryNoteKeys": {
+            "$ref": "#/components/schemas/KeyArrayType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TourStatus"
+          },
+          "hasDiscrepancies": {
+            "type": "boolean"
+          },
+          "hasFineDiscrepancies": {
+            "type": "boolean"
+          },
+          "accessToken": {
+            "$ref": "#/components/schemas/Token64LengthXorEmptyType"
+          },
+          "accessSiteKey": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Key of the organization site that provides access to this tour"
+          }
+        }
+      },
+      "AttachmentsArrayResponseV3": {
+        "type": "array",
+        "additionalProperties": false,
+        "items": {
+          "$ref": "#/components/schemas/AttachmentResponseV3"
+        }
+      },
+      "AttachmentResponseV3": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "dateCreated",
+          "contentType",
+          "fileName",
+          "fileSize",
+          "type",
+          "includes_discrepancies"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "contentType": {
+            "$ref": "#/components/schemas/FileTypes"
+          },
+          "fileName": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "fileSize": {
+            "$ref": "#/components/schemas/PositiveIntegerType"
+          },
+          "type": {
+            "$ref": "#/components/schemas/AttachmentBlobTypes"
+          },
+          "includes_discrepancies": {
+            "type": "boolean"
+          }
+        }
+      },
+      "KeyArrayType": {
+        "type": "array",
+        "description": "array of _keys",
+        "items": {
+          "$ref": "#/components/schemas/KeyType"
+        }
+      },
+      "Token64LengthXorEmptyType": {
+        "type": "string",
+        "pattern": "^(?![\\s\\S])$|^[a-f0-9]{64}$"
+      },
+      "TourStatus": {
+        "type": "string",
+        "enum": [
+          "open",
+          "sent",
+          "closed"
+        ]
+      },
+      "BundleStatus": {
+        "type": "string",
+        "enum": [
+          "open",
+          "sent",
+          "closed"
+        ]
+      },
+      "CarrierToursArrayV3": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "paginationInfo",
+          "data"
+        ],
+        "properties": {
+          "paginationInfo": {
+            "$ref": "#/components/schemas/PaginationInfo"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TourV3"
+            }
+          }
+        }
+      },
+      "ConsigneeToursArrayV3": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "paginationInfo",
+          "data"
+        ],
+        "properties": {
+          "paginationInfo": {
+            "$ref": "#/components/schemas/PaginationInfo"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TourV3"
+            }
+          }
+        }
+      },
+      "EmailAddressType": {
+        "description": "String pattern for email address",
+        "type": "string",
+        "maxLength": 1024
+      },
+      "PasswordType": {
+        "type": "string",
+        "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d\\S]{10,}$",
+        "maxLength": 1000
+      },
+      "OrganitazionSiteRoles": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organizationSiteKey",
+          "roles"
+        ],
+        "properties": {
+          "organizationSiteKey": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "roles": {
+            "$ref": "#/components/schemas/UserRolesArray"
+          }
+        }
+      },
+      "OrganitazionSiteRolesArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/OrganitazionSiteRoles"
+        }
+      },
+      "UserRole": {
+        "type": "string",
+        "enum": [
+          "carrier",
+          "consignee",
+          "consignor",
+          "organization_administrator",
+          "site_admin"
+        ]
+      },
+      "UserRoleForSiteAdmin": {
+        "type": "string",
+        "enum": [
+          "carrier",
+          "consignee",
+          "consignor",
+          "site_admin"
+        ]
+      },
+      "OrganizationPermissionsType": {
+        "description": "all organization permissions. If set to true user has this permission for the organization",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "administration_users_delete": {
+            "type": "boolean",
+            "description": "This permission is needed to delete a user from the calling user's organization",
+            "x-roles": [
+              "organization_admin"
+            ]
+          }
+        }
+      },
+      "OrganizationSitePermissionsType": {
+        "description": "all organization site permissions. If set to true user has this permission for the organization site",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "administration_organization_sites_archive": {
+            "type": "boolean",
+            "description": "This permission is needed to archive the specified organization site",
+            "x-roles": [
+              "organization_admin"
+            ]
+          },
+          "administration_organization_sites_modify": {
+            "type": "boolean",
+            "description": "This permission is needed for modifying the site of an organization",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_remote_access_create": {
+            "type": "boolean",
+            "description": "This permission is needed to authorize remote sites to access a site",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_remote_access_read": {
+            "type": "boolean",
+            "description": "This permissions is needed to get a list with all remote sites that have access to this site",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_remote_access_delete": {
+            "type": "boolean",
+            "description": "This permission is needed to remove authorization of remote sites to access a site",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_users_read": {
+            "type": "boolean",
+            "description": "This permission is needed to read all users of sites of an organization",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_users_create": {
+            "type": "boolean",
+            "description": "This permission is needed to create a users for a organization site",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_users_modify": {
+            "type": "boolean",
+            "description": "This permission is needed to modify a users for a organization site",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_report_load_carriers_csv_read": {
+            "type": "boolean",
+            "description": "This permission is needed to get the load carriers report as csv",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_self_checkin_config_read": {
+            "type": "boolean",
+            "description": "This permission is needed to get the self checkin configuration",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_self_checkin_config_modify": {
+            "type": "boolean",
+            "description": "This permission is needed to modify the self checkin configuration",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_self_checkin_tokens_create": {
+            "type": "boolean",
+            "description": "This permission is needed to create a new self checkin token",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_self_checkin_tokens_read": {
+            "type": "boolean",
+            "description": "This permission is needed to read all self checkin tokens",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_organization_sites_self_checkin_tokens_delete": {
+            "type": "boolean",
+            "description": "This permission is needed to delete a self checkin token",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "administration_legal_document_create": {
+            "type": "boolean",
+            "description": "This permission is needed to upload the legal PDF document",
+            "x-roles": [
+              "organization_admin",
+              "site_admin"
+            ]
+          },
+          "legal_document_read": {
+            "type": "boolean",
+            "description": "This permission is needed to read the legal PDF document",
+            "x-roles": [
+              "organization_admin",
+              "site_admin",
+              "consignee",
+              "self_checkin"
+            ]
+          },
+          "loadcarrier_read": {
+            "type": "boolean",
+            "description": "This permission is needed for getting all permitted load carriers",
+            "x-roles": [
+              "consignor",
+              "remote_consignor"
+            ]
+          },
+          "loadcarrier_create": {
+            "type": "boolean",
+            "description": "This permission is needed for creating a new load carrier",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "loadcarrier_delete": {
+            "type": "boolean",
+            "description": "This permission is needed for deleting a load carrier",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "loadcarrier_modify": {
+            "type": "boolean",
+            "description": "This permission is needed for modifying a load carrier",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "consignee_load_carriers_create": {
+            "type": "boolean",
+            "description": "This permission is needed to create new consignee load carriers",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_load_carriers_replace": {
+            "type": "boolean",
+            "description": "This permission is needed to replace all consignee load carriers with new ones",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_load_carriers_read": {
+            "type": "boolean",
+            "description": "This permission is needed to get all consignee load carriers",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "consignor_discrepancies_read": {
+            "type": "boolean",
+            "description": "This permission is needed to read consignor discrepancies",
+            "x-roles": [
+              "consignor",
+              "remote_consignor"
+            ]
+          },
+          "carrier_discrepancies_read": {
+            "type": "boolean",
+            "description": "This permission is needed to read carrier discrepancies",
+            "x-roles": [
+              "carrier",
+              "remote_carrier"
+            ]
+          },
+          "consignee_discrepancies_create": {
+            "type": "boolean",
+            "description": "This permission is needed to create new consignee discrepancies",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_discrepancies_read": {
+            "type": "boolean",
+            "description": "This permission is needed to read consignee discrepancies",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "consignee_discrepancies_update": {
+            "type": "boolean",
+            "description": "This permission is needed to update consignee discrepancies",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_discrepancies_replace": {
+            "type": "boolean",
+            "description": "This permission is needed to replace all consignee discrepancies with new ones",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_discrepancies_delete": {
+            "type": "boolean",
+            "description": "This permission is needed to delete consignee discrepancies",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "attachment_create": {
+            "type": "boolean",
+            "description": "This permission is needed for creating a new attachment",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "attachment_read": {
+            "type": "boolean",
+            "description": "This permission is needed for getting all permitted attachments",
+            "x-roles": [
+              "consignor",
+              "remote_consignor"
+            ]
+          },
+          "attachment_delete": {
+            "type": "boolean",
+            "description": "This permission is needed for deleting a attachment",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "consignee_discrepancy_images_create": {
+            "type": "boolean",
+            "description": "This permission is needed for creating a new discrepancy image",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_discrepancy_images_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a discrepancy image",
+            "x-roles": [
+              "consignee",
+              "remote_consignee",
+              "self_checkin"
+            ]
+          },
+          "consignee_discrepancy_images_delete": {
+            "type": "boolean",
+            "description": "This permission is needed for deleting a discrepancy image",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_load_carrier_file_create": {
+            "type": "boolean",
+            "description": "This permission is needed for creating a new load carrier file",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_load_carrier_file_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a load carrier file",
+            "x-roles": [
+              "consignee",
+              "remote_consignee",
+              "self_checkin"
+            ]
+          },
+          "consignee_load_carrier_file_delete": {
+            "type": "boolean",
+            "description": "This permission is needed for deleting a load carrier file",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_receipts_create": {
+            "type": "boolean",
+            "description": "This permission is needed for creating a new consignee receipts",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_receipts_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a consignee receipts",
+            "x-roles": [
+              "consignee",
+              "remote_consignee",
+              "self_checkin"
+            ]
+          },
+          "consignee_receipts_delete": {
+            "type": "boolean",
+            "description": "This permission is needed for deleting a consignee receipts",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignor_receipts_file_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a consignor receipts file",
+            "x-roles": [
+              "consignor",
+              "remote_consignor"
+            ]
+          },
+          "consignor_receipts_metadata_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a consignor receipts metadata",
+            "x-roles": [
+              "consignor",
+              "remote_consignor"
+            ]
+          },
+          "carrier_receipts_file_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a carrier receipts file",
+            "x-roles": [
+              "carrier",
+              "remote_carrier"
+            ]
+          },
+          "carrier_receipts_metadata_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a carrier receipts metadata",
+            "x-roles": [
+              "carrier",
+              "remote_carrier"
+            ]
+          },
+          "consignee_receipts_file_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a consignee receipts file",
+            "x-roles": [
+              "consignee",
+              "remote_consignee",
+              "self_checkin"
+            ]
+          },
+          "consignee_receipts_metadata_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a consignee receipts metadata",
+            "x-roles": [
+              "consignee",
+              "remote_consignee",
+              "self_checkin"
+            ]
+          },
+          "consignee_fine_discrepancies_create": {
+            "type": "boolean",
+            "description": "This permission is needed for creating a new fine discrepancy",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_fine_discrepancies_read": {
+            "type": "boolean",
+            "description": "This permission is needed for getting all permitted fine discrepancies",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "delivery_note_bundles_create": {
+            "type": "boolean",
+            "description": "user can create delivery note bundles",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_note_bundles_read": {
+            "type": "boolean",
+            "description": "user can read delivery note bundles",
+            "x-roles": [
+              "consignor",
+              "carrier",
+              "consignee",
+              "remote_consignor",
+              "remote_carrier",
+              "remote_consignee"
+            ]
+          },
+          "delivery_note_bundles_update": {
+            "type": "boolean",
+            "description": "user can update delivery note bundles",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_note_bundles_delete": {
+            "type": "boolean",
+            "description": "user can delete delivery note bundles",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_note_bundles_merge": {
+            "type": "boolean",
+            "description": "User can merge multiple delivery note bundles into a new one",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_note_bundles_checkout_multiple": {
+            "type": "boolean",
+            "description": "User can checkout multiple delivery note bundles at once",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "send_wallet_invite_emails": {
+            "type": "boolean",
+            "description": "User can send the wallet invite link to an email address.",
+            "x-roles": [
+              "consignor",
+              "carrier"
+            ]
+          },
+          "carrier_tours_create": {
+            "type": "boolean",
+            "description": "user can create a new tour",
+            "x-roles": [
+              "carrier"
+            ]
+          },
+          "carrier_tours_read": {
+            "type": "boolean",
+            "description": "user can read site tours",
+            "x-roles": [
+              "carrier",
+              "remote_carrier"
+            ]
+          },
+          "carrier_tours_update": {
+            "type": "boolean",
+            "description": "user can update a tour",
+            "x-roles": [
+              "carrier"
+            ]
+          },
+          "carrier_tours_delete": {
+            "type": "boolean",
+            "description": "user can delete a tour",
+            "x-roles": [
+              "carrier"
+            ]
+          },
+          "carrier_tours_checkout": {
+            "type": "boolean",
+            "description": "user can checkout a tour",
+            "x-roles": [
+              "carrier"
+            ]
+          },
+          "consignee_tour_read": {
+            "type": "boolean",
+            "description": "consignee can read incoming tours",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "carrier_delivery_notes_share_rights": {
+            "type": "boolean",
+            "description": "Shares the rights of delivery notes to another carrier site",
+            "x-roles": [
+              "carrier"
+            ]
+          },
+          "delivery_notes_create": {
+            "type": "boolean",
+            "description": "user can add new pdf file to a delivery note bundle",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_notes_read": {
+            "type": "boolean",
+            "description": "user can read pdf file from a delivery note bundle",
+            "x-roles": [
+              "consignor",
+              "carrier",
+              "consignee",
+              "remote_consignor",
+              "remote_carrier",
+              "remote_consignee",
+              "self_checkin"
+            ]
+          },
+          "delivery_notes_update": {
+            "type": "boolean",
+            "description": "user can update the metadata from a delivery note",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "reference_number_update": {
+            "type": "boolean",
+            "description": "user can update the referenceNumber from a delivery note",
+            "x-roles": [
+              "consignor",
+              "carrier"
+            ]
+          },
+          "delivery_notes_delete": {
+            "type": "boolean",
+            "description": "user can delete delivery notes (pdfs)",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_notes_add_to_bundle": {
+            "type": "boolean",
+            "description": "User can add existing delivery notes to an existing delivery note bundle.",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "delivery_notes_in_bundles_delete": {
+            "type": "boolean",
+            "description": "user can delete delivery notes (pdf) in bundles",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "consignor_delivery_notes_complete_pdf_read": {
+            "type": "boolean",
+            "description": "User can read a compelte pdf from a delivery note.",
+            "x-roles": [
+              "consignor",
+              "remote_consignor"
+            ]
+          },
+          "carrier_delivery_notes_complete_pdf_read": {
+            "type": "boolean",
+            "description": "User can read a compelte pdf from a delivery note.",
+            "x-roles": [
+              "carrier",
+              "remote_carrier"
+            ]
+          },
+          "consignee_delivery_notes_complete_pdf_read": {
+            "type": "boolean",
+            "description": "User can read a compelte pdf from a delivery note.",
+            "x-roles": [
+              "consignee",
+              "remote_consignee"
+            ]
+          },
+          "consignee_delivery_notes_organic_certification_number_controls_modify": {
+            "type": "boolean",
+            "description": "User can update the 'organicCertificationNumberChecked' flag whether it has been checked or not.",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "carrier_delivery_note_keys_lookup": {
+            "type": "boolean",
+            "description": "User can lookup as a carrier organization site delivery note keys by consignor gln, deliveryNote number and optional deliveryNote orderNumber",
+            "x-roles": [
+              "carrier"
+            ]
+          },
+          "consignor_delivery_notes_archive_lookup": {
+            "type": "boolean",
+            "description": "User can lookup delivery notes that are ready to be archived",
+            "x-roles": [
+              "consignor"
+            ]
+          },
+          "consignee_checkins_create": {
+            "type": "boolean",
+            "description": "User can create a checkin",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_checkins_read": {
+            "type": "boolean",
+            "description": "User can get a checkin document.",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_checkins_finish": {
+            "type": "boolean",
+            "description": "User can finish a checkin",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_checkins_self_checkin": {
+            "type": "boolean",
+            "description": "User can sign a self checkin",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_checkin_driver_details_update": {
+            "type": "boolean",
+            "description": "User can set driver information of checkins",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_delivery_notes_lookup_with_token": {
+            "type": "boolean",
+            "description": "User can get a list of checkinable delivery notes by wallet token",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_checkins_lookup": {
+            "type": "boolean",
+            "description": "User can lookup checkins associated with specified delivery note keys",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "self_checkin_config_read": {
+            "type": "boolean",
+            "description": "User can read the self checkin configuration",
+            "x-roles": [
+              "self_checkin"
+            ]
+          },
+          "self_checkins_create": {
+            "type": "boolean",
+            "description": "User can create a self checkin",
+            "x-roles": [
+              "self_checkin"
+            ]
+          },
+          "consignee_pallet_tickets_create": {
+            "type": "boolean",
+            "description": "This permission is needed to create a pallet ticket",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "consignee_pallet_tickets_read": {
+            "type": "boolean",
+            "description": "This permission is needed to read a pallet ticket",
+            "x-roles": [
+              "consignee",
+              "remote_consignee",
+              "self_checkin"
+            ]
+          },
+          "consignee_pallet_tickets_delete": {
+            "type": "boolean",
+            "description": "This permission is needed to delete a pallet ticket",
+            "x-roles": [
+              "consignee"
+            ]
+          },
+          "signature_pads_create": {
+            "type": "boolean",
+            "description": "create a new signature pad for checkout or checkin",
+            "x-roles": [
+              "consignor",
+              "consignee"
+            ]
+          },
+          "signature_pads_read": {
+            "type": "boolean",
+            "description": "read data from a signature pad",
+            "x-roles": [
+              "consignor",
+              "consignee"
+            ]
+          },
+          "self_checkin_information": {
+            "type": "boolean",
+            "description": "get detailed information of a self checkin",
+            "x-roles": [
+              "self_checkin"
+            ]
+          },
+          "self_checkins_finish": {
+            "type": "boolean",
+            "description": "finish a self checkin",
+            "x-roles": [
+              "self_checkin"
+            ]
+          },
+          "consignee_lookup_bundles_and_tours": {
+            "type": "boolean",
+            "description": "This permission is needed to get bundles and tours by last four places of number",
+            "x-roles": [
+              "consignee",
+              "self_checkin"
+            ]
+          },
+          "events_trigger": {
+            "type": "boolean",
+            "description": "Generic permission to trigger site events",
+            "x-roles": [
+              "self_checkin"
+            ]
+          }
+        }
+      }
+    },
+    "parameters": {
+      "userKeyParam": {
+        "name": "userKey",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/KeyType"
+        },
+        "description": "The user key"
+      },
+      "organizationKeyParam": {
+        "name": "organizationKey",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/KeyType"
+        },
+        "description": "The organization key"
+      },
+      "organizationSiteKeyParam": {
+        "name": "organizationSiteKey",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/KeyType"
+        },
+        "description": "The organization site key"
+      },
+      "deliveryNoteKeyParam": {
+        "in": "path",
+        "name": "deliveryNoteKey",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/KeyType"
+        }
+      },
+      "attachmentKeyParam": {
+        "in": "path",
+        "name": "attachmentKey",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/KeyType"
+        }
+      },
+      "paginationLimitParam": {
+        "name": "limit",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 50
+        },
+        "description": "Maximum number of items to return"
+      },
+      "paginationOffsetParam": {
+        "name": "offset",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        },
+        "description": "Number of items to skip"
+      },
+      "paginationSortParam": {
+        "name": "sort",
+        "in": "query",
+        "schema": {
+          "$ref": "#/components/schemas/SortType"
+        },
+        "description": "Sort direction (asc or desc)"
+      },
+      "organizationSiteKeysParam": {
+        "name": "organizationSiteKeys",
+        "in": "query",
+        "description": "Array of organization site keys to fetch data from (max 10). If provided, overrides the path parameter.",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "maxItems": 10
+        }
+      },
+      "paginationDeliverySortByParam": {
+        "name": "sortBy",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "dateCreated",
+            "checkoutDate",
+            "checkinDate",
+            "dateAnnounced",
+            "tourNumber",
+            "number",
+            "orderNumber",
+            "deliveryNoteBundleNumber",
+            "deliveryNoteBundleStatus",
+            "consignorName",
+            "carrierName",
+            "consigneeName",
+            "carrierNumberPlateOutgoing",
+            "carrierNumberPlateIncoming",
+            "consignorLoadCarrierExchange",
+            "originalConsignor",
+            "originalConsignorGln",
+            "discrepancies",
+            "palletTickets",
+            "properties",
+            "properties.referenceNumber"
+          ],
+          "default": "dateCreated"
+        },
+        "description": "Field to sort by"
+      },
+      "paginationBundleSortByParam": {
+        "name": "sortBy",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "dateCreated",
+            "checkoutDate",
+            "dateClosed",
+            "name",
+            "bundleNumber",
+            "consignorLoadCarrierExchange",
+            "status",
+            "consignorName",
+            "consigneeName",
+            "carrierName",
+            "discrepancies",
+            "palletTickets"
+          ],
+          "default": "dateCreated"
+        },
+        "description": "Field to sort by for bundles"
+      },
+      "paginationTourSortByParam": {
+        "name": "sortBy",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "dateCreated",
+            "dateClosed",
+            "checkoutDate",
+            "tourNumber",
+            "externalTourName",
+            "status",
+            "consignorName",
+            "consigneeName",
+            "carrierName"
+          ],
+          "default": "dateCreated"
+        },
+        "description": "Field to sort by for tours"
+      },
+      "consignorDeliveryNotesFilterPropertyParam": {
+        "name": "filterProperty",
+        "in": "query",
+        "schema": {
+          "$ref": "#/components/schemas/DeliveryNotesFilterProperties"
+        },
+        "description": "Field to filter consignor delivery notes by"
+      },
+      "carrierDeliveryNotesFilterPropertyParam": {
+        "name": "filterProperty",
+        "in": "query",
+        "schema": {
+          "$ref": "#/components/schemas/DeliveryNotesFilterProperties"
+        },
+        "description": "Field to filter carrier delivery notes by"
+      },
+      "consigneeDeliveryNotesFilterPropertyParam": {
+        "name": "filterProperty",
+        "in": "query",
+        "schema": {
+          "$ref": "#/components/schemas/DeliveryNotesFilterProperties"
+        },
+        "description": "Field to filter consignee delivery notes by"
+      },
+      "consignorDeliveryNoteBundlesFilterPropertyParam": {
+        "name": "filterProperty",
+        "in": "query",
+        "schema": {
+          "$ref": "#/components/schemas/DeliveryNoteBundlesFilterProperties"
+        },
+        "description": "Field to filter consignor delivery note bundles by"
+      },
+      "carrierDeliveryNoteBundlesFilterPropertyParam": {
+        "name": "filterProperty",
+        "in": "query",
+        "schema": {
+          "$ref": "#/components/schemas/CarrierDeliveryNoteBundlesFilterProperties"
+        },
+        "description": "Field to filter carrier delivery note bundles by"
+      },
+      "consigneeDeliveryNoteBundlesFilterPropertyParam": {
+        "name": "filterProperty",
+        "in": "query",
+        "schema": {
+          "$ref": "#/components/schemas/DeliveryNoteBundlesFilterProperties"
+        },
+        "description": "Field to filter consignee delivery note bundles by"
+      },
+      "carrierToursFilterPropertyParam": {
+        "name": "filterProperty",
+        "in": "query",
+        "schema": {
+          "$ref": "#/components/schemas/ToursFilterProperties"
+        },
+        "description": "Field to filter carrier tours by"
+      },
+      "consigneeToursFilterPropertyParam": {
+        "name": "filterProperty",
+        "in": "query",
+        "schema": {
+          "$ref": "#/components/schemas/ToursFilterProperties"
+        },
+        "description": "Field to filter consignee tours by"
+      },
+      "paginationFilterValueParam": {
+        "name": "filterValue",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Value to filter by (partial match)"
+      },
+      "paginationFilterClosedParam": {
+        "name": "filterNotClosed",
+        "in": "query",
+        "schema": {
+          "type": "boolean"
+        },
+        "description": "Filter for not closed items only (bundles, tours, delivery notes)"
+      },
+      "filterOnlyDiscrepanciesParam": {
+        "name": "filterOnlyDiscrepancies",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "boolean"
+        },
+        "description": "If true, only return bundles where at least one delivery note has a discrepancy (normal or fine). Uses the bundle.discrepancies flag for efficient filtering."
+      }
+    },
+    "responses": {
+      "DefaultErrorResponse": {
+        "description": "Default error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "AttachmentFileResponse": {
+        "description": "Returns a attachment file",
+        "content": {
+          "application/pdf": {
+            "schema": {
+              "$ref": "#/components/schemas/BinaryFileType"
+            }
+          },
+          "image/heic": {
+            "schema": {
+              "$ref": "#/components/schemas/BinaryFileType"
+            }
+          },
+          "image/heif": {
+            "schema": {
+              "$ref": "#/components/schemas/BinaryFileType"
+            }
+          },
+          "image/jpeg": {
+            "schema": {
+              "$ref": "#/components/schemas/BinaryFileType"
+            }
+          },
+          "image/png": {
+            "schema": {
+              "$ref": "#/components/schemas/BinaryFileType"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "KeyCloakAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "dlssessionid"
+      }
+    }
+  },
+  "tags": []
+}
