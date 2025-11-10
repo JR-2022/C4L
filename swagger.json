@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "2.0.1",
+    "version": "2.2.0",
     "description": "The documented API is used for cloud4log.com.\n\nIf you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}.\n\nFor Information about your current user see /me endpoint. The technical keys of the application are referenced as \"_key\" (For example the deliveryNoteKey is referenced as _key on GET /organization-sites/{organizationSiteKey}/carrier/delivery-notes).\n\nEndpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -188,7 +188,7 @@
     "/administration/organizations/{organizationKey}/api-users-keys": {
       "post": {
         "summary": "creates a API key",
-        "description": "Create a new api user and add this api user to the organization and the given organization sites\nand equip the new api user with permissions according to the given roles for each site.\nThe requesting user must have access to the organization the api new user is added.\nReturns a sessionId that can't received a second time.\n",
+        "description": "Create a new api user and add this api user to the organization and the given organization sites\nand equip the new api user with permissions according to the given roles for each site.\nThe requesting user must have access to the organization the api new user is added.\nReturns a sessionId that can't received a second time.\nBy creating an api key you agree that this api key is only used in accordance with the terms of service of this application.\n",
         "operationId": "createApiKeyForOrganizationSitesWithRoles",
         "x-dls-requiredOrganizationPermission": "api_keys_create",
         "tags": [
@@ -921,7 +921,7 @@
     "/administration/organization-sites/{organizationSiteKey}/self-checkin-tokens": {
       "post": {
         "summary": "Creates a self service checkin token for self-checkin on an organization site.",
-        "description": "This is an admin endpoint. The user must be an organization admin or site admin.\nThe endpoint creates an token, this token can be used as a\ndlssessionId for all endpoints with 'self_checkin' role set as\npermission on the organization site.\n",
+        "description": "This is an admin endpoint. The user must be an organization admin or site admin.\nThe endpoint creates an token, this token can be used as a\ndlssessionId for all endpoints with 'self_checkin' role set as\npermission on the organization site.\nBy creating a self checkin you agree that this self checkin is only used in accordance with the terms of service of this application.\n",
         "operationId": "postGenerateSelfCheckinToken",
         "x-dls-requiredOrganizationSitePermission": "administration_organization_sites_self_checkin_tokens_create",
         "tags": [
@@ -1509,9 +1509,10 @@
     "/organization-sites/{organizationSiteKey}/consignee/delivery-notes/{deliveryNoteKey}/receipts/{attachmentKey}": {
       "get": {
         "summary": "Get a receipts file",
-        "description": "get a single receipt for a delivery note for consignee\n",
+        "description": "get a single receipt for a delivery note for consignee. DEPRECATED! Use v3 endpoint instead\nGET /organization-sites/{organizationSiteKey}/consignee/delivery-notes/{deliveryNoteKey}/receipts/{attachmentKey}/file\n",
         "operationId": "getConsigneeDiscrepancyReceiptAttachment",
         "x-dls-requiredOrganizationSitePermission": "consignee_receipts_read",
+        "deprecated": true,
         "tags": [
           "receipts",
           "self service checkins"
@@ -5248,7 +5249,7 @@
     "/organization-sites/{organizationSiteKey}/self-checkin/information": {
       "get": {
         "summary": "Get detailed information about a self checkin",
-        "description": "Get detailed information about a self checkin by tourKey xor\nbundleKey xor checkinToken. It returns especially the state\nof the self checkin and the associated delivery notes.\n",
+        "description": "Get detailed information about a self checkin by providing exactly\none of the following query parameters: checkinToken,\nbundleNumber or tourNumber. It returns especially the state of the self\ncheckin and the associated delivery notes.\n",
         "operationId": "getSelfCheckinInformation",
         "x-dls-requiredOrganizationSitePermission": "self_checkin_information",
         "tags": [
@@ -5262,10 +5263,10 @@
             "$ref": "#/components/parameters/CheckinTokenTypeParam"
           },
           {
-            "$ref": "#/components/parameters/TourNumberTypeParam"
+            "$ref": "#/components/parameters/BundleNumberTypeParam"
           },
           {
-            "$ref": "#/components/parameters/BundleNumberTypeParam"
+            "$ref": "#/components/parameters/TourNumberTypeParam"
           }
         ],
         "responses": {
@@ -5425,7 +5426,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Organizations"
+                  "$ref": "#/components/schemas/OrganizationsForServiceProvider"
                 }
               }
             }
@@ -5659,7 +5660,7 @@
       },
       "put": {
         "summary": "Update a carrier tour.",
-        "description": "Update a tour. This is only possible when the tour is not in the checkin. The delivery note keys are alwas needed.\nWhen all delivery notes from a tour are removed and the tour is in status 'sent' the tour will be deleted.\n",
+        "description": "Update a tour. This is only possible when the tour is not in the checkin. The delivery note keys are always needed.\nWhen all delivery notes from a tour are removed and the tour is in status 'sent' the tour will be deleted.\n",
         "operationId": "updateTour",
         "x-dls-requiredOrganizationSitePermission": "carrier_tours_update",
         "tags": [
@@ -6423,30 +6424,7 @@
             "$ref": "#/components/schemas/Base64Type"
           },
           "termsOfService": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "version",
-              "accepted",
-              "dateAccepted",
-              "dateAcceptUntil"
-            ],
-            "properties": {
-              "version": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 1
-              },
-              "accepted": {
-                "type": "boolean"
-              },
-              "dateAccepted": {
-                "$ref": "#/components/schemas/TimestampType"
-              },
-              "dateAcceptUntil": {
-                "$ref": "#/components/schemas/TimestampType"
-              }
-            }
+            "$ref": "#/components/schemas/TermsOfService"
           },
           "organizations": {
             "$ref": "#/components/schemas/Organizations"
@@ -6464,6 +6442,32 @@
             "$ref": "#/components/schemas/UserRolesArray"
           },
           "dateLastFeedback": {
+            "$ref": "#/components/schemas/TimestampType"
+          }
+        }
+      },
+      "TermsOfService": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "version",
+          "accepted",
+          "dateAccepted",
+          "dateAcceptUntil"
+        ],
+        "properties": {
+          "version": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1
+          },
+          "accepted": {
+            "type": "boolean"
+          },
+          "dateAccepted": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "dateAcceptUntil": {
             "$ref": "#/components/schemas/TimestampType"
           }
         }
@@ -8341,6 +8345,90 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/Organization"
+        }
+      },
+      "OrganizationForServiceProvider": {
+        "type": "object",
+        "description": "one organization the user belongs to",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "dateCreated",
+          "name",
+          "gln",
+          "phoneNumbers",
+          "sites",
+          "dateDeleteAt"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "dateCreated": {
+            "$ref": "#/components/schemas/TimestampType"
+          },
+          "name": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "address": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "gln": {
+            "$ref": "#/components/schemas/NameType"
+          },
+          "phoneNumbers": {
+            "$ref": "#/components/schemas/PhoneNumbersArray"
+          },
+          "sites": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrganizationSite"
+            }
+          },
+          "contact": {
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "emailAddress",
+              "phoneNumbers"
+            ],
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/NameType"
+              },
+              "address": {
+                "$ref": "#/components/schemas/NameType"
+              },
+              "location": {
+                "$ref": "#/components/schemas/Location"
+              },
+              "emailAddress": {
+                "$ref": "#/components/schemas/EmailAddressType",
+                "default": ""
+              },
+              "phoneNumbers": {
+                "$ref": "#/components/schemas/PhoneNumbersArray"
+              }
+            }
+          },
+          "quotas": {
+            "$ref": "#/components/schemas/Quotas"
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/OrganizationPermissionsType"
+          },
+          "dateDeleteAt": {
+            "$ref": "#/components/schemas/TimestampType"
+          }
+        }
+      },
+      "OrganizationsForServiceProvider": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/OrganizationForServiceProvider"
         }
       },
       "OrganizationKeysAndNames": {
@@ -11864,7 +11952,8 @@
             "carrier",
             "consignee",
             "organizationName",
-            "weight"
+            "weight",
+            "active"
           ],
           "properties": {
             "_key": {
@@ -11895,6 +11984,9 @@
               "type": "integer",
               "minimum": 0,
               "maximum": 100
+            },
+            "active": {
+              "type": "boolean"
             }
           }
         }
@@ -12233,6 +12325,13 @@
               "service_provider"
             ]
           },
+          "service_provider_organizations_delete": {
+            "type": "boolean",
+            "description": "This permission is needed to delete organizations",
+            "x-roles": [
+              "service_provider"
+            ]
+          },
           "organization_read": {
             "type": "boolean",
             "description": "This permission is needed for reading all own organizations",
@@ -12335,6 +12434,13 @@
           "administration_users_modify": {
             "type": "boolean",
             "description": "This permission is needed to modify a user for the calling user's organization",
+            "x-roles": [
+              "organization_admin"
+            ]
+          },
+          "administration_users_delete": {
+            "type": "boolean",
+            "description": "This permission is needed to delete a user from the calling user's organization",
             "x-roles": [
               "organization_admin"
             ]
@@ -12745,6 +12851,56 @@
             "description": "This permission is needed for deleting a consignee receipts",
             "x-roles": [
               "consignee"
+            ]
+          },
+          "consignor_receipts_file_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a consignor receipts file",
+            "x-roles": [
+              "consignor",
+              "remote_consignor"
+            ]
+          },
+          "consignor_receipts_metadata_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a consignor receipts metadata",
+            "x-roles": [
+              "consignor",
+              "remote_consignor"
+            ]
+          },
+          "carrier_receipts_file_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a carrier receipts file",
+            "x-roles": [
+              "carrier",
+              "remote_carrier"
+            ]
+          },
+          "carrier_receipts_metadata_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a carrier receipts metadata",
+            "x-roles": [
+              "carrier",
+              "remote_carrier"
+            ]
+          },
+          "consignee_receipts_file_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a consignee receipts file",
+            "x-roles": [
+              "consignee",
+              "remote_consignee",
+              "self_checkin"
+            ]
+          },
+          "consignee_receipts_metadata_read": {
+            "type": "boolean",
+            "description": "This permission is needed for reading a consignee receipts metadata",
+            "x-roles": [
+              "consignee",
+              "remote_consignee",
+              "self_checkin"
             ]
           },
           "consignee_fine_discrepancies_create": {
@@ -13198,7 +13354,8 @@
           "remote_consignor",
           "remote_consignee",
           "remote_carrier",
-          "self_checkin"
+          "self_checkin",
+          "service_provider"
         ]
       },
       "UserRolesArray": {
