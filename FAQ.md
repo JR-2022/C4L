@@ -47,7 +47,6 @@ If you want to test the APIs through the Swagger-UI or Scalar-UI, you can author
    - **Remove the `Bearer ` prefix** before pasting it into the authorization field.  
    - Keep in mind: **Bearer tokens are valid for only 5 minutes**.
 
-### Wie kann auf die API zugegriffen werden?
 ---
 Solution overview:
 
