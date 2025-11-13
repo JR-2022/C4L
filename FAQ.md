@@ -2,13 +2,12 @@
 ## Frequently Ask Questions
 ### Wie kann auf die API zugegriffen werden?
 
-### **Option 1: Zugriff über Bearer Token (empfohlene Methode)**
+#### **Option 1: Zugriff über Bearer Token (empfohlene Methode)**
 
 1. Im **Frontend** anmelden.  
 2. Im **Admin Panel** des **Org Admins** unter **„API-Clients“** einen neuen **Keycloak Client** erstellen.  
 3. Dabei auswählen, für welche **Standorte** der Client gelten soll.  
 
-#### Client-Typen  
 Der Typ des Clients hängt vom **Anwendungsfall** ab:
 
 - **Public Client:** Für Frontend-Anwendungen von Drittanbietern.  
@@ -22,7 +21,7 @@ Mit dem erstellten Client kann eine **Authentifizierung an der Keycloak-Instanz*
 Weitere Informationen sind in der Dokumentation zu finden:  
 - **[API Documentation: OAuth2](https://github.com/JR-2022/C4L/blob/main/OAuth2-Authentication.md)**  
 
-### **Option 2: Zugriff über Legacy API Key (veraltete Methode)**
+#### **Option 2: Zugriff über Legacy API Key (veraltete Methode)**
 
 Alternativ kann ein **Legacy API Key** erzeugt werden:
 
