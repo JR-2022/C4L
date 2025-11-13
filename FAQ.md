@@ -14,13 +14,14 @@ Mit dem erstellten Client kann eine Authentifizierung an der Keycloak-Instanz er
 Weitere Informationen sind in der Dokumentation zu finden:
 **
 - **[API Documementation OAuth2](https://github.com/JR-2022/C4L/blob/main/OAuth2-Authentication.md)**  
+
 Option 2: Zugriff über Legacy API Key (veraltete Methode)
 Alternativ kann ein Legacy API Key erzeugt werden
 1.	Als Org Admin im Admin Panel anmelden.
 2.	Zum Bereich „Legacy-API-Schlüssel“ wechseln.
 3.	Einen neuen Legacy API Key erstellen und die gewünschten Standorte auswählen.
 Dieser API Key (auch bekannt als sessionid oder dlssessionid) kann ebenfalls verwendet werden, um Requests an die API zu senden.
-⚠️ Hinweis: Diese Methode ist nur für bestehende Integrationen vorgesehen und wird langfristig durch die OAuth2-Authentifizierung ersetzt.
+⚠️ Hinweis: Diese Methode ist nur für bestehende Integrationen vorgesehen und wird ab 1.11.2026 durch die OAuth2-Authentifizierung ersetzt.
 
 ---
 
