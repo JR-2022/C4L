@@ -8,7 +8,7 @@
 2. Im **Admin Panel** des **Org Admins** unter **„API-Clients“** einen neuen **Keycloak Client** erstellen.  
 3. Dabei auswählen, für welche **Standorte** der Client gelten soll.  
 
-#### 🔧 Client-Typen  
+#### Client-Typen  
 Der Typ des Clients hängt vom **Anwendungsfall** ab:
 
 - **Public Client:** Für Frontend-Anwendungen von Drittanbietern.  
@@ -19,7 +19,7 @@ Der Typ des Clients hängt vom **Anwendungsfall** ab:
 
 Mit dem erstellten Client kann eine **Authentifizierung an der Keycloak-Instanz** erfolgen, um anschließend per **Bearer Token** mit der API zu kommunizieren.  
 
-👉 Weitere Informationen sind in der Dokumentation zu finden:  
+Weitere Informationen sind in der Dokumentation zu finden:  
 - **[API Documentation: OAuth2](https://github.com/JR-2022/C4L/blob/main/OAuth2-Authentication.md)**  
 
 ### **Option 2: Zugriff über Legacy API Key (veraltete Methode)**
@@ -32,8 +32,9 @@ Alternativ kann ein **Legacy API Key** erzeugt werden:
 
 Dieser **API Key** (auch bekannt als `sessionid` oder `dlssessionid`) kann ebenfalls verwendet werden, um Requests an die API zu senden.  
 
-⚠️ **Hinweis:** Diese Methode ist nur für bestehende Integrationen vorgesehen und wird **ab dem 01.11.2026** durch die **OAuth2-Authentifizierung** ersetzt.  
+⚠️ **Hinweis:** Diese Methode ist nur für bestehende Integrationen vorgesehen und wird **ab dem 01.11.2026** durch die **OAuth2-Authentifizierung** ersetzt.
 
+---
 ### Wie kann ich über die neue Authentifizierung Keycloak SSO meines Unternehmens anbinden?
 todo
 
