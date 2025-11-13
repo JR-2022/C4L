@@ -53,21 +53,3 @@ Solution overview:
 - **[Solution Overview Diagram](https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1&title=C4l%20Systemüberblick.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1ZgyjjVKgR4EoMwbgwfXX4AM-fBNV5M0A%26export%3Ddownload)**  
   High-level architecture diagram of the Cloud4Log system.
 
----
-
-In the API, you can set up and use the following roles and functions:
- 
-### Organizational units (OU) (company or location).
-1. consignor/ manufacturer
-2. carrier / forwarder, contract logistics provider
-3. consignee/ receiver, stationary trade
-### Functions of a company or location:
-- Outgoing goods (consignor)
-- Carrier / contract logistics
-- Logistician / Driver
-- Incoming goods (consignee)
-### Roles: 
-* Admin Organizational Unit (OU)
-* Admin Location
-* User OU or location
-* Driver / carrier
