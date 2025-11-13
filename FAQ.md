@@ -35,7 +35,7 @@ Dieser **API Key** (auch bekannt als `sessionid` oder `dlssessionid`) kann ebenf
 
 ---
 ### Wie kann ich über die neue Authentifizierung Keycloak SSO meines Unternehmens anbinden?
-todo
+**[Einbindung externer Identity Provider (IDP)](https://github.com/JR-2022/C4L/blob/main/setup-external-idp.md)** 
 
 ---
 ### Wo finde ich Informationen über die API?
