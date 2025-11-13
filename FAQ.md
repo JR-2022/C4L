@@ -23,6 +23,8 @@ Weitere Informationen sind in der Dokumentation zu finden:
 
 ### **Option 2: Zugriff über Legacy API Key (veraltete Methode)**
 
+⚠️ **Hinweis:** Diese Methode ist nur für bestehende Integrationen vorgesehen und wird **ab dem 01.11.2026** durch die **OAuth2-Authentifizierung** ersetzt.
+
 Alternativ kann ein **Legacy API Key** erzeugt werden:
 
 1. Als **Org Admin** im **Admin Panel** anmelden.  
@@ -30,8 +32,6 @@ Alternativ kann ein **Legacy API Key** erzeugt werden:
 3. Einen neuen **Legacy API Key** erstellen und die gewünschten **Standorte** auswählen.  
 
 Dieser **API Key** (auch bekannt als `sessionid` oder `dlssessionid`) kann ebenfalls verwendet werden, um Requests an die API zu senden.  
-
-⚠️ **Hinweis:** Diese Methode ist nur für bestehende Integrationen vorgesehen und wird **ab dem 01.11.2026** durch die **OAuth2-Authentifizierung** ersetzt.
 
 ---
 ### Wie kann ich über die neue Authentifizierung Keycloak SSO meines Unternehmens anbinden?
