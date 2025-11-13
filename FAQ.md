@@ -1,7 +1,5 @@
 # C4L- Cloud4Log FAQ
-## Frequently Ask Questions
-
----
+## Frequently Asked Questions
 ### Wie kann auf die API zugegriffen werden?
 
 ### **Option 1: Zugriff über Bearer Token (empfohlene Methode)**
