@@ -47,9 +47,3 @@ If you want to test the APIs through the Swagger-UI or Scalar-UI, you can author
    - **Remove the `Bearer ` prefix** before pasting it into the authorization field.  
    - Keep in mind: **Bearer tokens are valid for only 5 minutes**.
 
----
-Solution overview:
-
-- **[Solution Overview Diagram](https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1&title=C4l%20Systemüberblick.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1ZgyjjVKgR4EoMwbgwfXX4AM-fBNV5M0A%26export%3Ddownload)**  
-  High-level architecture diagram of the Cloud4Log system.
-
