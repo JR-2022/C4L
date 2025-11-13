@@ -23,8 +23,11 @@ Alternativ kann ein Legacy API Key erzeugt werden
 Dieser API Key (auch bekannt als sessionid oder dlssessionid) kann ebenfalls verwendet werden, um Requests an die API zu senden.
 ⚠️ Hinweis: Diese Methode ist nur für bestehende Integrationen vorgesehen und wird ab 1.11.2026 durch die OAuth2-Authentifizierung ersetzt.
 
----
+### Wie kann ich über die neue Authentifizierung Keycloak SSO meines Unternehmens anbinden?
+todo
 
+---
+### Wo finde ich Informationen über die API?
 Here are the available API documentation versions:
 
 - **[API Documentation v2](https://api.cloud4log.com/api-docs/)**  
@@ -44,8 +47,8 @@ If you want to test the APIs through the Swagger-UI or Scalar-UI, you can author
    - **Remove the `Bearer ` prefix** before pasting it into the authorization field.  
    - Keep in mind: **Bearer tokens are valid for only 5 minutes**.
 
+### Wie kann auf die API zugegriffen werden?
 ---
-
 Solution overview:
 
 - **[Solution Overview Diagram](https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1&title=C4l%20Systemüberblick.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1ZgyjjVKgR4EoMwbgwfXX4AM-fBNV5M0A%26export%3Ddownload)**  
