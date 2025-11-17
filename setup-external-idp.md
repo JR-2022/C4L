@@ -1,7 +1,7 @@
 # Einbindung externer Identity Provider (IDP)
 
 Dieser Abschnitt beschreibt den Prozess zur Integration externer Identity Provider (IDPs) in Cloud4Log.
-Für die Einrichtung und Integration des externen IDP wird die Unterstützung eines Entwicklers auf Kundenseite benötigt.
+Für die Einrichtung wird die Unterstützung durch einen Entwickler des externen IDPs benötigt.
 
 ## Unterstützte IDP-Protokolle:
 
@@ -32,7 +32,7 @@ Cloud4Log nutzt diese Endpunkte, um den Authorization-Code-Flow durchzuführen u
 
 ## OpenID Connect 1.0
 
-Für eine Integration über OAuth 2.0 werden die Standard-OAuth-Parameter benötigt:
+Für eine Integration über OpenID Connect 1.0 werden die Standard-OAuth-Parameter benötigt:
 
 - Discovery Endpoint
 - Client ID und Client Secret
