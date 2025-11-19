@@ -58,3 +58,17 @@ If you want to test the APIs through the Swagger-UI or Scalar-UI, you can author
    - **Remove the `Bearer ` prefix** before pasting it into the authorization field.  
    - Keep in mind: **Bearer tokens are valid for only 5 minutes**.
 
+---
+### How do I upload articles?
+Article data can be uploaded to the Addons System in three main ways:
+
+1. **Direct Upload via API**  
+  Articles can be managed in the addons environment using the article endpoints. Refer to the **[API Documentation](https://dls.addons.cloud4log.dev/api-docs/#/articles)**.  
+  For uploading articles, you can use the `POST /organization-sites/{organizationSiteKey}/consignor/delivery-notes/{deliveryNoteKey}/articles` endpoint.  
+  You also have the option to add or modify articles as an 'edit' if you want to preserve the original article data. This can be done using the `POST /organization-sites/{organizationSiteKey}/consignee/delivery-notes/{deliveryNoteKey}/articles/edit` or `PATCH /organization-sites/{organizationSiteKey}/consignee/articles/{articleKey}/edit` endpoints.
+
+2. **Using the Addons AI Service**  
+  The Addons AI Service can extract article data from delivery notes using Azure OpenAI. After the article extraction, the articles are automatically uploaded to the Addons System. This is a service that can be enabled for your organization.
+
+3. **Manual Upload via Frontend**  
+  Articles can also be manually added or edited through the Addons Frontend. To do this, navigate to the consignee view and check in a delivery note bundle that has a 'sent' status. Once in the bundle's check-in view, you can add or edit articles under the 'Articles & Discrepancies' (German: 'Artikel & Abweichungen') tab. (This frontend is essentially a user interface wrapper for the same API endpoints mentioned in option 1.)
