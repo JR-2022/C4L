@@ -1,44 +1,44 @@
 # C4L- Cloud4Log FAQ
 ## Frequently Asked Questions
-### Wie kann auf die API zugegriffen werden?
+### How can the API be accessed?
 
-### **Option 1: Zugriff über Bearer Token (empfohlene Methode)**
+### **Option 1: Access via Bearer Token (recommended method)**
 
-1. Im **Frontend** anmelden.  
-2. Im **Admin Panel** des **Org Admins** unter **„API-Clients“** einen neuen **Keycloak Client** erstellen.  
-3. Dabei auswählen, für welche **Standorte** der Client gelten soll.  
+1. Log in to the **frontend**. 
+2. In the **Org Admin’s** Admin Panel, create a new **Keycloak Client** under **“API Clients”**. 
+3. Select the **organization sites** for which the client should be valid. 
 
-Der Typ des Clients hängt vom **Anwendungsfall** ab:
+The type of client depends on the **use case**:
 
-- **Public Client:** Für Frontend-Anwendungen von Drittanbietern.  
-- **Confidential Client:** Für serverseitige Anwendungen, die ein Client-Secret sicher speichern und sich damit beim Authorization Server authentifizieren.  
-  *(Flow: Authorization Code mit Client-Authentifizierung)*  
-- **M2M Client:** Für Maschinen-zu-Maschinen-Kommunikation ohne Benutzerkontext.  
+- **Public Client:** For third-party frontend applications.  
+- **Confidential Client:** For server-side applications that can securely store a client secret and authenticate with the authorization server.  
+  *(Flow: Authorization Code with Client Authentication)*  
+- **M2M Client:** For machine-to-machine communication without user context.  
   *(Flow: Client Credentials)*  
 
-Mit dem erstellten Client kann eine **Authentifizierung an der Keycloak-Instanz** erfolgen, um anschließend per **Bearer Token** mit der API zu kommunizieren.  
+With the created client, authentication can be performed on the Keycloak instance, and then communication with the API can be done using a Bearer Token.  
 
-Weitere Informationen sind in der Dokumentation zu finden:  
+More information can be found in the documentation:  
 - **[API Documentation: OAuth2](https://github.com/JR-2022/C4L/blob/main/OAuth2-Authentication.md)**  
 
-### **Option 2: Zugriff über Legacy API Key (veraltete Methode)**
+### **Option 2: Access via Legacy API Key (deprecated method)**
 
-⚠️ **Hinweis:** Diese Methode ist nur für bestehende Integrationen vorgesehen und wird **ab dem 01.11.2026** durch die **OAuth2-Authentifizierung** ersetzt.
+Alternatively, a **Legacy API Key** can be generated: 
 
-Alternativ kann ein **Legacy API Key** erzeugt werden:
+⚠️ **Note:** This method is only intended for existing integrations and will be **replaced by OAuth2 authentication from 01.11.2026**.
 
-1. Als **Org Admin** im **Admin Panel** anmelden.  
-2. Zum Bereich **„Legacy-API-Schlüssel“** wechseln.  
-3. Einen neuen **Legacy API Key** erstellen und die gewünschten **Standorte** auswählen.  
+1. Log in as an **Org Admin** in the **Admin Panel**.  
+2. Navigate to the **“Legacy API Keys”** section.  
+3. Create a new **Legacy API Key** and select the desired **organization sites**.  
 
-Dieser **API Key** (auch bekannt als `sessionid` oder `dlssessionid`) kann ebenfalls verwendet werden, um Requests an die API zu senden.  
-
----
-### Wie kann ich über die neue Authentifizierung Keycloak SSO meines Unternehmens anbinden?
-**[Einbindung externer Identity Provider (IDP)](https://github.com/JR-2022/C4L/blob/main/setup-external-idp.md)** 
+This **API Key** (also known as `sessionid` or `dlssessionid`) can also be used to send requests to the API.  
 
 ---
-### Wo finde ich Informationen über die API?
+### How can I integrate my company's Keycloak SSO with the new authentication?
+**[Integration of external Identity Provider (IDP)](https://github.com/JR-2022/C4L/blob/main/setup-external-idp.md)** 
+
+---
+### Where can I find information about the API?
 Here are the available API documentation versions:
 
 - **[API Documentation v2](https://api.cloud4log.com/api-docs/)**  
