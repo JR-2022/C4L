@@ -72,3 +72,7 @@ Article data can be uploaded to the Addons System in three main ways:
 
 3. **Manual Upload via Frontend**  
   Articles can also be manually added or edited through the Addons Frontend. To do this, navigate to the consignee view and check in a delivery note bundle that has a 'sent' status. Once in the bundle's check-in view, you can add or edit articles under the 'Articles & Discrepancies' (German: 'Artikel & Abweichungen') tab. (This frontend is essentially a user interface wrapper for the same API endpoints mentioned in option 1.)
+
+### As of Release 2.3.0, Webhook is used for pushing information (events). How does webhook work?
+https://github.com/JR-2022/C4L/blob/main/webhook.png
+
