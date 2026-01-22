@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API v3",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "description": "The v3 API for cloud4log.com.\n\nThis is the new version of the Cloud4Log API with improved pagination, enhanced features, and better performance.\n\nIf you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}.\n\nFor Information about your current user see /me endpoint. The technical keys of the application are referenced as \"_key\" (For example the deliveryNoteKey is referenced as _key on GET /organization-sites/{organizationSiteKey}/carrier/delivery-notes).\n\nEndpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -913,6 +913,83 @@
         }
       }
     },
+    "/external/delivery-note-bundles/{deliveryNoteBundleKey}/reference-number": {
+      "patch": {
+        "summary": "Update the reference number of a delivery note bundle",
+        "description": "This will overwrite all of the existing reference numbers on the\ndelivery notes linked to this bundle. Use the\n'carrierAccessToken' if the bundle is in status\n'open'. This makes it possible to update the reference number before\nthe checkout has been finished. Use the 'accessToken' if the\nbundle is in status 'sent'.\nThe 'carrierAccessToken' is generated when creating the\nsignature pad for checkout. The 'accessToken' is generated\nwhen finishing the checkout of the delivery note bundle.\n",
+        "operationId": "patchExternalReferenceNumberBundle",
+        "security": [],
+        "tags": [
+          "external"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/deliveryNoteBundleKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/accessTokenParam"
+          },
+          {
+            "$ref": "#/components/parameters/carrierAccessTokenParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReferenceNumberRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The reference number was updated successfully"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/external/tours/{tourKey}/reference-number": {
+      "patch": {
+        "summary": "Update the reference number of a tour",
+        "description": "This will overwrite all of the existing reference numbers on the\ndelivery notes linked to this tour. You need to pass the\n'accessToken' as query parameter. The 'accessToken' is generated\nwhen finishing the checkout of the tour.\n",
+        "operationId": "patchExternalReferenceNumberTour",
+        "security": [],
+        "tags": [
+          "external"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tourKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/accessTokenParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReferenceNumberRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The reference number was updated successfully"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
     "/service-provider/organizations/{organizationKey}": {
       "delete": {
         "summary": "delete a organization",
@@ -1007,6 +1084,137 @@
         "responses": {
           "204": {
             "description": "Email change confirmed successfully"
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organizations/{organizationKey}/webhooks": {
+      "post": {
+        "summary": "Create a new webhook for the organization",
+        "description": "Create a new webhook for the organization.\nCurrently only the webhook event type \"reference_number_updated\" is officially supported.\n",
+        "operationId": "postAdministrationOrganizationWebhook",
+        "x-dls-requiredOrganizationPermission": "administration_webhooks_create",
+        "tags": [
+          "webhooks"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebhookConfiguration"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The webhook was created for the organization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookCreatedResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all webhooks for the organization",
+        "description": "Get all webhooks for the organization\n",
+        "operationId": "getAdministrationOrganizationWebhooks",
+        "x-dls-requiredOrganizationPermission": "administration_webhooks_list",
+        "tags": [
+          "webhooks"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of webhooks for the organization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookConfigurationsArray"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organizations/{organizationKey}/webhooks/{webhookKey}/rotate": {
+      "post": {
+        "summary": "Rotate the secret of a webhook for the organization",
+        "description": "Rotate the secret of a webhook for the organization. The old secret will no longer be valid.\n",
+        "operationId": "rotateAdministrationOrganizationWebhook",
+        "x-dls-requiredOrganizationPermission": "administration_webhooks_rotate",
+        "tags": [
+          "webhooks"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/webhookKeyParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The secret of the webhook was rotated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookCreatedResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/administration/organizations/{organizationKey}/webhooks/{webhookKey}": {
+      "delete": {
+        "summary": "Delete a webhook for the organization",
+        "description": "Delete a webhook for the organization\n",
+        "operationId": "deleteAdministrationOrganizationWebhook",
+        "x-dls-requiredOrganizationPermission": "administration_webhooks_delete",
+        "tags": [
+          "webhooks"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationKeyParam"
+          },
+          {
+            "$ref": "#/components/parameters/webhookKeyParam"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The webhook was deleted."
           },
           "default": {
             "$ref": "#/components/responses/DefaultErrorResponse"
@@ -1372,6 +1580,18 @@
         "type": "integer",
         "minimum": 1
       },
+      "ReferenceNumberRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "referenceNumber"
+        ],
+        "properties": {
+          "referenceNumber": {
+            "$ref": "#/components/schemas/ReferenceNumberAsStringType"
+          }
+        }
+      },
       "UserForOrganizationAdminRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -1608,6 +1828,7 @@
           "_key",
           "dateCreated",
           "dateAnnounced",
+          "showDateAnnouncedTime",
           "checkoutDate",
           "checkinDate",
           "number",
@@ -1644,6 +1865,9 @@
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "showDateAnnouncedTime": {
+            "type": "boolean"
           },
           "checkoutDate": {
             "$ref": "#/components/schemas/TimestampType"
@@ -1755,6 +1979,7 @@
           "_key",
           "dateCreated",
           "dateAnnounced",
+          "showDateAnnouncedTime",
           "checkoutDate",
           "checkinDate",
           "number",
@@ -1793,6 +2018,9 @@
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "showDateAnnouncedTime": {
+            "type": "boolean"
           },
           "checkoutDate": {
             "$ref": "#/components/schemas/TimestampType"
@@ -2389,6 +2617,99 @@
           }
         }
       },
+      "WebhookConfiguration": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key",
+          "targetUrl",
+          "eventTypes",
+          "siteKeys"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "targetUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "siteKeys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/KeyType"
+            }
+          },
+          "eventTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventType"
+            }
+          }
+        }
+      },
+      "WebhookConfigurationsArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/WebhookConfiguration"
+        }
+      },
+      "CreateWebhookConfiguration": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "targetUrl",
+          "eventTypes",
+          "siteKeys"
+        ],
+        "properties": {
+          "targetUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "siteKeys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/KeyType"
+            }
+          },
+          "eventTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventType"
+            }
+          }
+        }
+      },
+      "WebhookCreatedResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "_key"
+        ],
+        "properties": {
+          "_key": {
+            "$ref": "#/components/schemas/KeyType"
+          },
+          "secret": {
+            "type": "string",
+            "minLength": 64,
+            "maxLength": 64,
+            "description": "Secret to be used to verify webhook payloads"
+          }
+        }
+      },
+      "EventType": {
+        "type": "string",
+        "enum": [
+          "self_checkin_registration_completed",
+          "self_checkin_checkin_finished",
+          "self_checkin_driver_waiting",
+          "checkout_finished",
+          "checkin_finished",
+          "reference_number_updated"
+        ]
+      },
       "EmailAddressType": {
         "description": "String pattern for email address",
         "type": "string",
@@ -2440,6 +2761,11 @@
           "site_admin"
         ]
       },
+      "Token64LengthType": {
+        "description": "Token with length 64. Used in different requests.",
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
       "OrganizationPermissionsType": {
         "description": "all organization permissions. If set to true user has this permission for the organization",
         "type": "object",
@@ -2448,6 +2774,34 @@
           "administration_users_delete": {
             "type": "boolean",
             "description": "This permission is needed to delete a user from the calling user's organization",
+            "x-roles": [
+              "organization_admin"
+            ]
+          },
+          "administration_webhooks_create": {
+            "type": "boolean",
+            "description": "This permission is needed to create webhooks for the organization",
+            "x-roles": [
+              "organization_admin"
+            ]
+          },
+          "administration_webhooks_list": {
+            "type": "boolean",
+            "description": "This permission is needed to list all webhooks for the organization",
+            "x-roles": [
+              "organization_admin"
+            ]
+          },
+          "administration_webhooks_rotate": {
+            "type": "boolean",
+            "description": "This permission is needed to rotate webhook secrets for the organization",
+            "x-roles": [
+              "organization_admin"
+            ]
+          },
+          "administration_webhooks_delete": {
+            "type": "boolean",
+            "description": "This permission is needed to delete webhooks for the organization",
             "x-roles": [
               "organization_admin"
             ]
@@ -3216,9 +3570,25 @@
         },
         "description": "The organization site key"
       },
+      "deliveryNoteBundleKeyParam": {
+        "in": "path",
+        "name": "deliveryNoteBundleKey",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/KeyType"
+        }
+      },
       "deliveryNoteKeyParam": {
         "in": "path",
         "name": "deliveryNoteKey",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/KeyType"
+        }
+      },
+      "tourKeyParam": {
+        "in": "path",
+        "name": "tourKey",
         "required": true,
         "schema": {
           "$ref": "#/components/schemas/KeyType"
@@ -3273,6 +3643,15 @@
           },
           "maxItems": 10
         }
+      },
+      "webhookKeyParam": {
+        "name": "webhookKey",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/KeyType"
+        },
+        "description": "The webhook key"
       },
       "paginationDeliverySortByParam": {
         "name": "sortBy",
@@ -3437,6 +3816,22 @@
           "type": "boolean"
         },
         "description": "If true, only return bundles where at least one delivery note has a discrepancy (normal or fine). Uses the bundle.discrepancies flag for efficient filtering."
+      },
+      "accessTokenParam": {
+        "in": "query",
+        "required": false,
+        "name": "accessToken",
+        "schema": {
+          "$ref": "#/components/schemas/Token64LengthXorEmptyType"
+        }
+      },
+      "carrierAccessTokenParam": {
+        "in": "query",
+        "required": false,
+        "name": "carrierAccessToken",
+        "schema": {
+          "$ref": "#/components/schemas/Token64LengthType"
+        }
       }
     },
     "responses": {
