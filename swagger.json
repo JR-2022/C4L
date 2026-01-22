@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Cloud4Log API",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "description": "The documented API is used for cloud4log.com.\n\nIf you have valid login credentials you can start right away by using the button \"Authorize\". You can then start to call the API. The login request will respond with a organisation side-ID. You need this and ID for most of the requests, for example upload a delivery note into the sites delivery note pool: POST /organization-sites/{organizationSiteKey}/delivery-notes/pdf/{fileName}.\n\nFor Information about your current user see /me endpoint. The technical keys of the application are referenced as \"_key\" (For example the deliveryNoteKey is referenced as _key on GET /organization-sites/{organizationSiteKey}/carrier/delivery-notes).\n\nEndpoints can appear multiple times, when they have more than one tag. See this Github repository to import the API directly into swagger and to see releases and changelogs: https://github.com/JR-2022/C4L"
   },
   "servers": [
@@ -6655,6 +6655,9 @@
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
           },
+          "showDateAnnouncedTime": {
+            "type": "boolean"
+          },
           "originalConsignor": {
             "$ref": "#/components/schemas/OriginalConsignor"
           },
@@ -7375,6 +7378,7 @@
           "_key",
           "dateCreated",
           "dateAnnounced",
+          "showDateAnnouncedTime",
           "fileName",
           "number",
           "orderNumber",
@@ -7389,6 +7393,9 @@
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "showDateAnnouncedTime": {
+            "type": "boolean"
           },
           "fileName": {
             "$ref": "#/components/schemas/NameType"
@@ -7449,6 +7456,9 @@
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "showDateAnnouncedTime": {
+            "type": "boolean"
           },
           "orderNumber": {
             "$ref": "#/components/schemas/OrderNoteNumberAsStringType"
@@ -7524,6 +7534,7 @@
           "originalConsignor",
           "originalConsignorGln",
           "dateAnnounced",
+          "showDateAnnouncedTime",
           "consignorName",
           "carrierName",
           "consigneeName",
@@ -7547,6 +7558,9 @@
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "showDateAnnouncedTime": {
+            "type": "boolean"
           },
           "orderNumber": {
             "$ref": "#/components/schemas/OrderNoteNumberAsStringType"
@@ -7614,6 +7628,7 @@
           "_key",
           "dateCreated",
           "dateAnnounced",
+          "showDateAnnouncedTime",
           "dateShipped",
           "dateReceived",
           "number",
@@ -7648,6 +7663,9 @@
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "showDateAnnouncedTime": {
+            "type": "boolean"
           },
           "dateShipped": {
             "$ref": "#/components/schemas/TimestampType"
@@ -7750,6 +7768,7 @@
           "_key",
           "dateCreated",
           "dateAnnounced",
+          "showDateAnnouncedTime",
           "dateShipped",
           "dateReceived",
           "fileName",
@@ -7800,6 +7819,9 @@
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "showDateAnnouncedTime": {
+            "type": "boolean"
           },
           "dateShipped": {
             "$ref": "#/components/schemas/TimestampType"
@@ -7942,6 +7964,7 @@
           "_key",
           "dateCreated",
           "dateAnnounced",
+          "showDateAnnouncedTime",
           "dateShipped",
           "dateReceived",
           "fileName",
@@ -7981,6 +8004,9 @@
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "showDateAnnouncedTime": {
+            "type": "boolean"
           },
           "dateShipped": {
             "$ref": "#/components/schemas/TimestampType"
@@ -8100,6 +8126,7 @@
           "_key",
           "dateCreated",
           "dateAnnounced",
+          "showDateAnnouncedTime",
           "dateShipped",
           "dateReceived",
           "fileName",
@@ -8140,6 +8167,9 @@
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "showDateAnnouncedTime": {
+            "type": "boolean"
           },
           "dateShipped": {
             "$ref": "#/components/schemas/TimestampType"
@@ -9857,7 +9887,8 @@
                   "consigneeName",
                   "number",
                   "consignorGln",
-                  "orderNumber"
+                  "orderNumber",
+                  "properties"
                 ],
                 "properties": {
                   "_key": {
@@ -9877,6 +9908,9 @@
                   },
                   "consignorGln": {
                     "$ref": "#/components/schemas/NameType"
+                  },
+                  "properties": {
+                    "$ref": "#/components/schemas/DeliveryProperties"
                   }
                 }
               }
@@ -9919,7 +9953,8 @@
                   "fileName",
                   "number",
                   "orderNumber",
-                  "consignorGln"
+                  "consignorGln",
+                  "properties"
                 ],
                 "properties": {
                   "_key": {
@@ -9936,6 +9971,9 @@
                   },
                   "consignorGln": {
                     "$ref": "#/components/schemas/NameType"
+                  },
+                  "properties": {
+                    "$ref": "#/components/schemas/DeliveryProperties"
                   }
                 }
               }
@@ -10057,7 +10095,8 @@
           "orderNumber",
           "loadCarriers",
           "loadCarriersAttachments",
-          "attachmentsCount"
+          "attachmentsCount",
+          "properties"
         ],
         "properties": {
           "_key": {
@@ -10083,6 +10122,9 @@
           },
           "attachmentsCount": {
             "$ref": "#/components/schemas/AttachmentsCount"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/DeliveryProperties"
           }
         }
       },
@@ -10662,7 +10704,8 @@
             "self_checkin_checkin_finished": "#/components/schemas/SelfCheckinCheckinFinishedEventPayload",
             "self_checkin_driver_waiting": "#/components/schemas/SelfCheckinDriverWaitingEventPayload",
             "checkout_finished": "#/components/schemas/CheckoutFinishedEventPayload",
-            "checkin_finished": "#/components/schemas/CheckinFinishedEventPayload"
+            "checkin_finished": "#/components/schemas/CheckinFinishedEventPayload",
+            "reference_number_updated": "#/components/schemas/ReferenceNumberUpdatedEventPayload"
           }
         }
       },
@@ -10941,6 +10984,53 @@
           }
         ]
       },
+      "ReferenceNumberUpdatedEventPayload": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasicEventPayload"
+          },
+          {
+            "type": "object",
+            "required": [
+              "referenceNumber",
+              "deliveryNotes"
+            ],
+            "properties": {
+              "tourKey": {
+                "$ref": "#/components/schemas/KeyType"
+              },
+              "deliveryNoteBundleKey": {
+                "$ref": "#/components/schemas/KeyType"
+              },
+              "referenceNumber": {
+                "$ref": "#/components/schemas/NameType"
+              },
+              "deliveryNotes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "_key",
+                    "number"
+                  ],
+                  "properties": {
+                    "_key": {
+                      "$ref": "#/components/schemas/NameType"
+                    },
+                    "number": {
+                      "$ref": "#/components/schemas/NameType"
+                    },
+                    "previousReferenceNumber": {
+                      "$ref": "#/components/schemas/NameType"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
       "Event": {
         "type": "object",
         "required": [
@@ -10986,6 +11076,9 @@
           },
           {
             "$ref": "#/components/schemas/CheckinFinishedEventPayload"
+          },
+          {
+            "$ref": "#/components/schemas/ReferenceNumberUpdatedEventPayload"
           }
         ]
       },
@@ -11206,6 +11299,9 @@
           },
           "dateAnnounced": {
             "$ref": "#/components/schemas/TimestampType"
+          },
+          "showDateAnnouncedTime": {
+            "type": "boolean"
           },
           "originalConsignor": {
             "$ref": "#/components/schemas/OriginalConsignor"
@@ -12445,6 +12541,34 @@
               "organization_admin"
             ]
           },
+          "administration_webhooks_create": {
+            "type": "boolean",
+            "description": "This permission is needed to create webhooks for the organization",
+            "x-roles": [
+              "organization_admin"
+            ]
+          },
+          "administration_webhooks_list": {
+            "type": "boolean",
+            "description": "This permission is needed to list all webhooks for the organization",
+            "x-roles": [
+              "organization_admin"
+            ]
+          },
+          "administration_webhooks_rotate": {
+            "type": "boolean",
+            "description": "This permission is needed to rotate webhook secrets for the organization",
+            "x-roles": [
+              "organization_admin"
+            ]
+          },
+          "administration_webhooks_delete": {
+            "type": "boolean",
+            "description": "This permission is needed to delete webhooks for the organization",
+            "x-roles": [
+              "organization_admin"
+            ]
+          },
           "administration_organization_sites_create": {
             "type": "boolean",
             "description": "This permission is needed to create new sites for the organization",
@@ -13382,7 +13506,8 @@
           "self_checkin_checkin_finished",
           "self_checkin_driver_waiting",
           "checkout_finished",
-          "checkin_finished"
+          "checkin_finished",
+          "reference_number_updated"
         ]
       },
       "TriggerEventType": {
