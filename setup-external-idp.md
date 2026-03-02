@@ -28,6 +28,8 @@ Für eine Integration über OAuth 2.0 werden die Standard-OAuth-Parameter benöt
 - Client ID und Client Secret
 - ID-Claim, Username-Claim, Email-Claim
 
+Im nächsten Schritt übermitteln wir euch die konkrete Redirect-URI, die anschließend in eurem Client zu hinterlegen ist.
+
 Cloud4Log nutzt diese Endpunkte, um den Authorization-Code-Flow durchzuführen und Access Tokens zu beziehen.
 
 ## OpenID Connect 1.0
@@ -36,6 +38,8 @@ Für eine Integration über OpenID Connect 1.0 werden die Standard-OAuth-Paramet
 
 - Discovery Endpoint
 - Client ID und Client Secret
+  
+Im nächsten Schritt übermitteln wir euch die konkrete Redirect-URI, die anschließend in eurem Client zu hinterlegen ist.
 
 Cloud4Log nutzt diese Endpunkte, um den Authorization-Code-Flow durchzuführen und Access Tokens zu beziehen.
 
