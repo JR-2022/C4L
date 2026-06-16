@@ -10,7 +10,7 @@ With **Cloud4Log Basic v2.0.0**, **OAuth 2.1** was introduced as the new standar
 
 ## Environments
 
-| Environment    | OpenID Configuration (Discovery Endpoint)                                              | API Base URL                     | only for GS1                    |
+| Environment    | OpenID Configuration (Discovery Endpoint)                                              | API Base URL                     | Valid for                       |
 | -------------- | -------------------------------------------------------------------------------------- | -------------------------------- |-------------------------------- |
 | **API Test**   | https://auth.nonprod.cloud4log.dev/realms/dls-apitest/.well-known/openid-configuration | https://api.cloud4log-apitest.de | for all companies using it      |
 | **Test**       | https://auth.nonprod.cloud4log.dev/realms/dls-test/.well-known/openid-configuration    | https://api.cloud4log-test.de    | only for GS1                    |
