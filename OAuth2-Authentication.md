@@ -10,12 +10,12 @@ With **Cloud4Log Basic v2.0.0**, **OAuth 2.1** was introduced as the new standar
 
 ## Environments
 
-| Environment    | OpenID Configuration (Discovery Endpoint)                                              | API Base URL                     |
-| -------------- | -------------------------------------------------------------------------------------- | -------------------------------- |
-| **API Test**   | https://auth.nonprod.cloud4log.dev/realms/dls-apitest/.well-known/openid-configuration | https://api.cloud4log-apitest.de |
-| **Test**       | https://auth.nonprod.cloud4log.dev/realms/dls-test/.well-known/openid-configuration    | https://api.cloud4log-test.de    |
-| **UAT**        | https://auth.nonprod.cloud4log.dev/realms/dls-uat/.well-known/openid-configuration     | https://api.cloud4log-uat.de     |
-| **Production** | https://auth.cloud4log.com/realms/dls/.well-known/openid-configuration                 | https://api.cloud4log.com        |
+| Environment    | OpenID Configuration (Discovery Endpoint)                                              | API Base URL                     | only for GS1                    |
+| -------------- | -------------------------------------------------------------------------------------- | -------------------------------- |-------------------------------- |
+| **API Test**   | https://auth.nonprod.cloud4log.dev/realms/dls-apitest/.well-known/openid-configuration | https://api.cloud4log-apitest.de | for all companies using it                    |
+| **Test**       | https://auth.nonprod.cloud4log.dev/realms/dls-test/.well-known/openid-configuration    | https://api.cloud4log-test.de    | only for GS1                    |
+| **UAT**        | https://auth.nonprod.cloud4log.dev/realms/dls-uat/.well-known/openid-configuration     | https://api.cloud4log-uat.de     | only for GS1                    |
+| **Production** | https://auth.cloud4log.com/realms/dls/.well-known/openid-configuration                 | https://api.cloud4log.com        |for all companies using it                 |
 
 All important authentication endpoints (token endpoint, authorization endpoint, JWKS URI, etc.) can be obtained from the OpenID Configuration (Discovery Endpoint) for the respective environment.
 
